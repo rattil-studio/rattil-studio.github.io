@@ -128,6 +128,38 @@ footer{padding:50px 0 70px;text-align:center;color:var(--soft);font-size:.9rem}
   .order{padding:24px 18px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+
+.hint{font-size:.82rem;color:var(--soft);line-height:1.7;margin-bottom:10px}
+select{width:100%;font:400 1rem "Readex Pro";color:var(--text);background:var(--plum) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cdb6d6' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat left 12px center/16px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px 12px 34px;-webkit-appearance:none;appearance:none}
+select:focus{outline:none;border-color:var(--glow)}
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.th{border:0;background:none;color:var(--text);cursor:pointer;text-align:center;font:400 .8rem "Readex Pro";padding:0}
+.th .card{aspect-ratio:9/13;border-radius:14px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;padding:8px;border:2px solid transparent;transition:border-color .2s,transform .3s var(--ease)}
+.th .card .q{font-family:"Amiri Quran",serif;font-size:1.05rem;line-height:1.6}
+.th .card .t{font-size:.55rem;opacity:.9}
+.th .nm{display:block;margin-top:6px;color:var(--soft)}
+.th[aria-pressed="true"] .card{border-color:var(--glow);transform:translateY(-2px)}
+.th[aria-pressed="true"] .nm{color:var(--text);font-weight:600}
+.drop{display:flex;align-items:center;gap:14px;border:1.5px dashed var(--line);border-radius:16px;padding:18px;cursor:pointer;background:var(--plum);transition:border-color .2s}
+.drop:hover,.drop.on{border-color:var(--glow)}
+.drop input{position:absolute;width:1px;height:1px;opacity:0}
+.drop svg{flex:none;width:30px;height:30px;color:var(--glow)}
+.drop span{font-size:.88rem;color:var(--soft);line-height:1.6}
+.drop b{color:var(--text)}
+.drop.has b{color:var(--glow)}
+.mini{border-radius:16px;padding:22px 14px;text-align:center;margin-top:14px;transition:background .4s}
+.mini .mq{font-family:"Amiri Quran",serif;font-size:1.35rem;line-height:2}
+.mini .mt{font-size:.75rem;margin-top:4px}
+.bar{height:8px;border-radius:8px;background:var(--plum-3);margin-top:16px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--glow);transition:width .3s}
+.wa[hidden]{display:none}
+button.wa:disabled{opacity:.6;cursor:wait}
+.reel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin-top:28px;padding-bottom:10px}
+.reel figure{flex:none;scroll-snap-align:start;width:220px}
+.reel figure.wide{width:390px}
+.reel video{width:100%;border-radius:20px;background:#000;display:block;cursor:pointer}
+.reel figcaption{font-size:.85rem;color:var(--soft);margin-top:8px}
+@media (max-width:820px){.reel figure{width:62vw}.reel figure.wide{width:86vw}}
 </style>
 </head>
 <body>
@@ -165,19 +197,27 @@ footer{padding:50px 0 70px;text-align:center;color:var(--soft);font-size:.9rem}
     <h2>ثلاث خطوات وبس</h2>
     <div class="steps">
       <div class="step"><h3>اختار الشكل</h3><p>ريلز أو مربع أو يوتيوب، واللون اللي يناسب حسابك، ونوع التفسير.</p></div>
-      <div class="step"><h3>أرسل التلاوة</h3><p>بالواتساب: فويس، أو ملف صوت، أو فيديو مصوّر. صوتك أو صوت ولدك أو معلّمك.</p></div>
+      <div class="step"><h3>أرسل التلاوة</h3><p>ارفعها من الموقع وأنت تطلب، أو أرسلها بالواتساب: فويس، أو ملف صوت، أو فيديو. صوتك، أو صوت ولدك أو معلّمك، أو صوت أي قارئ.</p></div>
       <div class="step"><h3>استلم وانشر</h3><p>يوصلك الفيديو جاهز للنشر، والآيات متزامنة مع النَّفَس والوقف.</p></div>
     </div>
     <div class="who" aria-label="لمن الخدمة">
-      <span>أهالي الحفّاظ الصغار</span><span>مراكز التحفيظ</span><span>القرّاء وأصحاب الحسابات</span><span>هدية لشخص تحبه</span>
+      <span>أهالي الحفّاظ الصغار</span><span>مراكز التحفيظ</span><span>القرّاء وأصحاب الحسابات</span><span>محبّي تلاوات القرّاء المشهورين</span><span>هدية لشخص تحبه</span>
     </div>
+  </div>
+</section>
+
+<section id="samples">
+  <div class="wrap">
+    <h2>من شغلنا</h2>
+    <p class="lead">مقاطع حقيقية سويناها. اضغط على أي مقطع عشان تسمعه بالصوت.</p>
+    <div class="reel" id="reel"></div>
   </div>
 </section>
 
 <section id="order">
   <div class="wrap">
     <h2>صمّم طلبك</h2>
-    <p class="lead">اختار اللي تبيه، وبعدين اضغط زر الواتساب. الرسالة بتنكتب لك جاهزة.</p>
+    <p class="lead">اختار اللي تبيه وارفع التلاوة، وبعدين كمّل الطلب بالواتساب.</p>
     <form class="order" id="form" style="margin-top:30px">
       <div>
         <div class="f"><span class="lbl">المقاس</span>
@@ -202,36 +242,46 @@ footer{padding:50px 0 70px;text-align:center;color:var(--soft);font-size:.9rem}
             <button type="button" class="opt" data-v="بدون">الآيات بس</button>
           </div>
         </div>
-        <div class="f"><span class="lbl" id="clr-l">اللون</span>
-          <div class="opts" data-k="color" aria-labelledby="clr-l">
-            <button type="button" class="opt swatch" data-v="ليلي ذهبي" aria-label="ليلي ذهبي" aria-pressed="true" style="background:linear-gradient(135deg,#2a1232,#ffd27a)"></button>
-            <button type="button" class="opt swatch" data-v="أخضر هادئ" aria-label="أخضر هادئ" style="background:linear-gradient(135deg,#0f3b33,#9fe0c8)"></button>
-            <button type="button" class="opt swatch" data-v="أزرق بحري" aria-label="أزرق بحري" style="background:linear-gradient(135deg,#0a2540,#7fc8ff)"></button>
-            <button type="button" class="opt swatch" data-v="رملي" aria-label="رملي" style="background:linear-gradient(135deg,#6b4a2b,#f4d9b0)"></button>
-            <button type="button" class="opt swatch" data-v="أسود وأبيض" aria-label="أسود وأبيض" style="background:linear-gradient(135deg,#111,#eee)"></button>
-          </div>
+        <div class="f"><span class="lbl">ألوان المقطع</span>
+          <p class="hint">كل بطاقة توريك شكل اللون بالضبط. إذا كانت تلاوتك فيديو، لون الآيات والتوهج بس يتغيّر فوق الفيديو. وإذا كانت صوت بس، الخلفية كلها تطلع بهاللون.</p>
+          <div class="themes" id="themes" role="group" aria-label="ألوان المقطع"></div>
         </div>
         <div class="f two">
-          <div><label for="surah">السورة</label><input id="surah" placeholder="مثلاً: الملك"></div>
-          <div><label for="ayat">الآيات</label><input id="ayat" placeholder="مثلاً: ١ إلى ١٠"></div>
+          <div><label for="surah">السورة</label><select id="surah"></select></div>
+          <div class="two" style="gap:8px">
+            <div><label for="from">من آية</label><select id="from"></select></div>
+            <div><label for="to">إلى آية</label><select id="to"></select></div>
+          </div>
+        </div>
+        <div class="f">
+          <span class="lbl">التلاوة</span>
+          <label class="drop" id="drop" for="file">
+            <input type="file" id="file" accept="audio/*,video/*,.m4a,.mp3,.mov,.mp4,.opus,.ogg,.wav,.aac">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+            <span id="dropTxt"><b>ارفع ملف التلاوة</b><br>صوت أو فيديو، لين ٢٥ ميجا. صوتك أو صوت أي قارئ.</span>
+          </label>
+          <p class="hint" style="margin-top:8px">ملفك أكبر من كذا؟ عادي، كمّل الطلب وأرسله لنا بالواتساب.</p>
         </div>
         <div class="f two">
           <div><label for="reader">اسم القارئ (يطلع على المقطع)</label><input id="reader" placeholder="اختياري"></div>
           <div><label for="cname">اسمك</label><input id="cname" placeholder="عشان نعرفك"></div>
         </div>
-        <div class="f"><label for="notes">ملاحظات</label><textarea id="notes" placeholder="أي شي تبي نعرفه: اسم الحساب، هدية لأحد، وقت معيّن…"></textarea></div>
+        <div class="f"><label for="notes">ملاحظات</label><textarea id="notes" placeholder="أي شي تبي نعرفه: الرواية، اسم الحساب، هدية لأحد…"></textarea></div>
       </div>
 
       <aside class="summary" aria-live="polite">
         <h3>ملخص طلبك</h3>
+        <div class="mini" id="mini"><div class="mq">فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</div><div class="mt">فإن مع الضيق فرجًا</div></div>
         <dl id="sum"></dl>
         <div class="total"><span>المجموع</span><b id="total"></b></div>
-        <a class="wa" id="wa" href="#" target="_blank" rel="noopener">
+        <div class="bar" id="bar" hidden><i id="barFill"></i></div>
+        <button type="submit" class="wa" id="send">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a.9.9 0 0 0-.7.3 2.8 2.8 0 0 0-.9 2.1 4.9 4.9 0 0 0 1 2.6 11.2 11.2 0 0 0 4.3 3.8c1.6.7 2.2.7 3 .6a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg>
-          اطلب بالواتساب
-        </a>
+          <span id="sendTxt">أرسل الطلب</span>
+        </button>
+        <a class="wa" id="wa" href="#" target="_blank" rel="noopener" hidden>كمّل بالواتساب</a>
         <p class="err" id="err" role="status"></p>
-        <p class="note">بعد ما ترسل الطلب، أرسل التلاوة بنفس المحادثة. ونتفق معك على الدفع وموعد التسليم هناك.</p>
+        <p class="note" id="note">نحفظ طلبك ونرفع التلاوة، وبعدها تكمّل معنا بالواتساب عشان نتفق على الدفع وموعد التسليم.</p>
       </aside>
     </form>
   </div>
@@ -263,61 +313,151 @@ footer{padding:50px 0 70px;text-align:center;color:var(--soft);font-size:.9rem}
   <p style="margin-top:6px">واتساب: <span dir="ltr">+965 9938 4032</span></p>
 </footer>
 
-<script>
+<script type="module">
 const WA='96599384032';
+const FB={apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya",storageBucket:"ad3eya.firebasestorage.app",messagingSenderId:"1021494775776",appId:"1:1021494775776:web:938c4b98379299073de585"};
+const MAXB=25*1024*1024, CHUNK=900000;
 const ar=n=>Number(n).toLocaleString('ar-EG',{maximumFractionDigits:3});
 const $=id=>document.getElementById(id);
+const file=$('file'),drop=$('drop');
+let ready=false;
 
-// demo ayah, word-by-word glow
+// ---------- demo ayah in hero ----------
 const words=['أَلَا','بِذِكْرِ','ٱللَّهِ','تَطْمَئِنُّ','ٱلْقُلُوبُ'];
-const q=document.getElementById('q');
-q.innerHTML=words.map(w=>`<span>${w}</span>`).join(' ');
+const q=$('q');q.innerHTML=words.map(w=>`<span>${w}</span>`).join(' ');
 const spans=[...q.children];let wi=0;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(reduce)spans.forEach(s=>s.classList.add('on'));
 else setInterval(()=>{if(wi===spans.length){spans.forEach(s=>s.classList.remove('on'));wi=0;return}spans[wi++].classList.add('on')},750);
 
-// order builder
+// ---------- samples ----------
+const SAMPLES=[['sample1','سورة غافر'],['sample2','سورة ص · مع ترجمة'],['sample3','سورة فصلت · مع ترجمة'],['sample4','سورة الفاتحة · مع ترجمة'],['sample5','سورة الصافات · يوتيوب',true]];
+const reel=$('reel');
+SAMPLES.forEach(([f,cap,wide])=>{
+  const fig=document.createElement('figure');if(wide)fig.className='wide';
+  const v=document.createElement('video');v.src=`media/${f}.mp4`;v.poster=`media/${f}.jpg`;v.preload='none';v.playsInline=true;v.controls=true;
+  v.addEventListener('play',()=>reel.querySelectorAll('video').forEach(o=>{if(o!==v)o.pause()}));
+  const fc=document.createElement('figcaption');fc.textContent=cap;
+  fig.append(v,fc);reel.appendChild(fig);
+});
+
+// ---------- themes (real colors) ----------
+const TH=[["navy_gold","كحلي وذهبي","#FFF8E6","#F0B446","#FFFFFF","#050A24","#14234F"],["royal_blue","أزرق ملكي","#FFFFFF","#4D8CFF","#F4F7FF","#030A2A","#0C2A7A"],["emerald","زمردي وذهبي","#F3FFF7","#3FD18A","#EAF7EF","#02140E","#0B3B2A"],["ramadan","رمضاني","#FFF4DC","#FFB347","#FFF6E8","#12062B","#3A1A5E"],["turquoise","فيروزي","#F0FFFF","#2EC4C6","#EFFFFF","#021A22","#0B4650"],["burgundy","عنابي وذهبي","#FFF3E8","#E9A23B","#FFF5EE","#22050C","#5A1023"],["silver_night","فضي ليلي","#F4F7FF","#9DB4FF","#EEF2FF","#05070F","#1A2240"],["white_soft","أبيض هادئ","#FFFFFF","#FFFFFF","#F2F2F2","#0B0B0E","#26262E"],["rose","وردي ناعم","#FFF5F8","#FF8FB1","#FFF0F5","#1E0710","#4A1630"],["sand","رملي","#FFF8EC","#E8B07A","#FFF9F0","#1F140A","#4E3520"],["mono","أبيض وأسود","#FFFFFF","#FFFFFF","#FFFFFF","#000000","#1A1A1A"],["mushaf","مصحف ورقي (بدون توهج)","#2B1D0E","#000000","#3A2A16","#F3EAD3","#E2D1A6"]];
 const state={};
+const paint=(el,t)=>{const glow=t[0]==='mushaf'?'none':`0 0 10px ${t[3]},0 0 22px ${t[3]}88`;el.style.background=`radial-gradient(120% 80% at 50% 0%,${t[6]},${t[5]})`;el.querySelector('.q,.mq').style.cssText=`color:${t[2]};text-shadow:${glow}`;el.querySelector('.t,.mt').style.color=t[4]};
+const tw=$('themes');
+TH.forEach((t,i)=>{
+  const b=document.createElement('button');b.type='button';b.className='th';b.setAttribute('aria-pressed',i===0);
+  b.innerHTML=`<div class="card"><div class="q">يُسْرًا</div><div class="t">فرجًا وسعة</div></div><span class="nm"></span>`;
+  b.querySelector('.nm').textContent=t[1];paint(b.querySelector('.card'),t);
+  b.onclick=()=>{tw.querySelectorAll('.th').forEach(x=>x.setAttribute('aria-pressed',x===b));state.theme=t;paint($('mini'),t);render()};
+  tw.appendChild(b);
+});
+state.theme=TH[0];paint($('mini'),TH[0]);
+
+// ---------- option groups ----------
 document.querySelectorAll('.opts').forEach(g=>{
   const k=g.dataset.k;
   const pick=b=>{g.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));state[k]={v:b.dataset.v,p:+b.dataset.p||0};render()};
   g.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>pick(b)));
   pick(g.querySelector('[aria-pressed="true"]')||g.querySelector('.opt'));
 });
-['surah','ayat','reader','cname','notes'].forEach(id=>$(id).addEventListener('input',render));
 
-function msg(){
-  const L=[
-    'السلام عليكم، أبي أطلب مقطع من «رتّل»:',
-    `• المقاس: ${state.size.v}`,
-    `• الطول: ${state.len.v}`,
-    `• تحت الآيات: ${state.taf.v}`,
-    `• اللون: ${state.color.v}`,
-    `• السورة: ${$('surah').value.trim()||'—'}`,
-    `• الآيات: ${$('ayat').value.trim()||'—'}`
-  ];
+// ---------- surah / ayah selects ----------
+const N="الفاتحة البقرة آل_عمران النساء المائدة الأنعام الأعراف الأنفال التوبة يونس هود يوسف الرعد إبراهيم الحجر النحل الإسراء الكهف مريم طه الأنبياء الحج المؤمنون النور الفرقان الشعراء النمل القصص العنكبوت الروم لقمان السجدة الأحزاب سبأ فاطر يس الصافات ص الزمر غافر فصلت الشورى الزخرف الدخان الجاثية الأحقاف محمد الفتح الحجرات ق الذاريات الطور النجم القمر الرحمن الواقعة الحديد المجادلة الحشر الممتحنة الصف الجمعة المنافقون التغابن الطلاق التحريم الملك القلم الحاقة المعارج نوح الجن المزمل المدثر القيامة الإنسان المرسلات النبأ النازعات عبس التكوير الانفطار المطففين الانشقاق البروج الطارق الأعلى الغاشية الفجر البلد الشمس الليل الضحى الشرح التين العلق القدر البينة الزلزلة العاديات القارعة التكاثر العصر الهمزة الفيل قريش الماعون الكوثر الكافرون النصر المسد الإخلاص الفلق الناس".split(" ").map(s=>s.replace("_"," "));
+const A=[7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+const sS=$('surah'),sF=$('from'),sT=$('to');
+sS.innerHTML='<option value="">اختار السورة</option>'+N.map((n,i)=>`<option value="${i}">${ar(i+1)}. ${n}</option>`).join('');
+const fill=(sel,a,b,val)=>{let h='';for(let i=a;i<=b;i++)h+=`<option value="${i}">${ar(i)}</option>`;sel.innerHTML=h;sel.value=val};
+function ayat(){
+  if(sS.value===''){sF.innerHTML=sT.innerHTML='<option>—</option>';sF.disabled=sT.disabled=true;render();return}
+  sF.disabled=sT.disabled=false;const max=A[sS.value];
+  const f=Math.min(+sF.value||1,max);fill(sF,1,max,f);
+  const t=Math.max(f,Math.min(+sT.value||f,max));fill(sT,f,max,t);render();
+}
+sS.onchange=()=>{sF.value='';sT.value='';ayat();$('err').textContent=''};sF.onchange=ayat;sT.onchange=render;ayat();
+
+// ---------- file ----------
+const fmtMB=b=>ar((b/1048576).toFixed(1))+' ميجا';
+function setFile(){
+  const f=file.files[0];
+  if(!f){drop.classList.remove('has');$('dropTxt').innerHTML='<b>ارفع ملف التلاوة</b><br>صوت أو فيديو، لين ٢٥ ميجا. صوتك أو صوت أي قارئ.';render();return}
+  if(f.size>MAXB){$('err').textContent=`الملف ${fmtMB(f.size)}، أكبر من ٢٥ ميجا. كمّل الطلب بدونه وأرسله بالواتساب.`;file.value='';return setFile()}
+  $('err').textContent='';drop.classList.add('has');
+  const t=$('dropTxt');t.textContent='';const b=document.createElement('b');b.textContent=f.name;t.append(b,document.createElement('br'),`${fmtMB(f.size)} · اضغط عشان تغيّره`);render();
+}
+file.onchange=setFile;
+['dragover','dragenter'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('on')}));
+['dragleave','drop'].forEach(e=>drop.addEventListener(e,()=>drop.classList.remove('on')));
+drop.addEventListener('drop',ev=>{ev.preventDefault();if(ev.dataTransfer.files.length){file.files=ev.dataTransfer.files;setFile()}});
+
+['reader','cname','notes'].forEach(id=>$(id).addEventListener('input',render));
+
+// ---------- summary ----------
+const surahTxt=()=>sS.value===''?'—':`${N[sS.value]} (${sF.value===sT.value?'آية '+ar(sF.value):'الآيات '+ar(sF.value)+'–'+ar(sT.value)})`;
+function render(){
+  if(!ready)return;
+  if(!state.size||!state.len||!state.taf||!state.theme)return;
+  const f=file.files[0];
+  const rows=[['المقاس',state.size.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الألوان',state.theme[1]],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
+  const dl=$('sum');dl.innerHTML='';
+  rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
+  $('total').textContent=`${ar(state.len.p)} د.ك`;
+}
+function waText(code,uploaded){
+  const L=[`السلام عليكم، طلب جديد من «رتّل» رقم ${code}:`,
+    `• المقاس: ${state.size.v}`,`• الطول: ${state.len.v}`,`• تحت الآيات: ${state.taf.v}`,`• الألوان: ${state.theme[1]}`,`• السورة: ${surahTxt()}`];
   if($('reader').value.trim())L.push(`• القارئ: ${$('reader').value.trim()}`);
   if($('notes').value.trim())L.push(`• ملاحظات: ${$('notes').value.trim()}`);
   L.push(`• المجموع: ${ar(state.len.p)} د.ك`);
   if($('cname').value.trim())L.push(`\nاسمي: ${$('cname').value.trim()}`);
-  L.push('\nبرسل لكم التلاوة الحين.');
+  L.push(uploaded?'\nرفعت التلاوة من الموقع.':'\nبرسل لكم التلاوة الحين.');
   return L.join('\n');
 }
-function render(){
-  if(!state.size||!state.len||!state.taf||!state.color)return;
-  const rows=[['المقاس',state.size.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['اللون',state.color.v],['السورة',$('surah').value.trim()||'—']];
-  const dl=$('sum');dl.innerHTML='';
-  rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
-  $('total').textContent=`${ar(state.len.p)} د.ك`;
-  $('wa').href=`https://wa.me/${WA}?text=${encodeURIComponent(msg())}`;
+
+// ---------- submit ----------
+let fb=null;
+async function getFB(){
+  if(fb)return fb;
+  const {initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+  const fs=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+  fb={fs,db:fs.getFirestore(initializeApp(FB))};return fb;
 }
-$('wa').addEventListener('click',e=>{
-  if(!$('surah').value.trim()){e.preventDefault();$('err').textContent='اكتب اسم السورة أول.';$('surah').focus();return}
-  $('err').textContent='';
+const code=()=>{const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<5;i++)s+=c[Math.floor(Math.random()*c.length)];return s};
+$('form').addEventListener('submit',async e=>{
+  e.preventDefault();const err=$('err');err.textContent='';
+  if(sS.value===''){err.textContent='اختار السورة أول.';sS.focus();return}
+  const btn=$('send');btn.disabled=true;
+  const f=file.files[0];const id=code();
+  try{
+    const {fs,db}=await getFB();
+    let chunks=0;
+    if(f){
+      $('bar').hidden=false;$('sendTxt').textContent='يرفع التلاوة…';
+      const buf=new Uint8Array(await f.arrayBuffer());chunks=Math.ceil(buf.length/CHUNK);
+      for(let i=0;i<chunks;i++){
+        await fs.setDoc(fs.doc(db,'orders',id,'chunks',String(i).padStart(3,'0')),{i,data:fs.Bytes.fromUint8Array(buf.subarray(i*CHUNK,(i+1)*CHUNK))});
+        $('barFill').style.width=Math.round((i+1)/chunks*100)+'%';
+      }
+    }
+    $('sendTxt').textContent='يحفظ الطلب…';
+    await fs.setDoc(fs.doc(db,'orders',id),{
+      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.theme[1],
+      surah:sS.value===''?'':N[sS.value],from:+sF.value||0,to:+sT.value||0,
+      reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),notes:$('notes').value.trim().slice(0,500),
+      price:state.len.p,fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
+      createdAt:fs.serverTimestamp()
+    });
+    btn.hidden=true;const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,!!f))}`;
+    wa.innerHTML=btn.querySelector('svg').outerHTML+' كمّل بالواتساب';
+    $('note').textContent=`انحفظ طلبك برقم ${id}${f?' والتلاوة وصلتنا':''}. اضغط الزر الأخضر عشان ترسل الطلب بالواتساب.`;
+  }catch(x){
+    console.error(x);err.textContent='صار خطأ بالرفع. جرّب مرة ثانية، أو كمّل بالواتساب وأرسل التلاوة هناك.';
+    const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,false))}`;wa.textContent='كمّل بالواتساب';
+    btn.disabled=false;$('sendTxt').textContent='جرّب مرة ثانية';
+  }
 });
-$('form').addEventListener('submit',e=>e.preventDefault());
-render();
+ready=true;render();
 </script>
 </body>
 </html>
