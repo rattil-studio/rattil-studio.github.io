@@ -23,12 +23,18 @@ h1{font-family:"Alexandria";font-size:2rem}
 dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin-top:10px;font-size:.92rem}
 dt{color:var(--soft)}
 .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.dz{font-size:.85rem;color:var(--soft);margin-top:10px}.dz b{color:var(--glow)}
+.design{margin-top:14px;border-top:1px solid var(--line);padding-top:14px}
+.design select{font:400 .9rem "Readex Pro";color:var(--text);background:var(--plum);border:1.5px solid var(--line);border-radius:10px;padding:8px}
+.prog{font-size:.85rem;color:var(--soft);white-space:pre-wrap;max-height:90px;overflow:hidden;direction:ltr;text-align:left;margin-top:8px}
+.qa{width:100%;border-radius:12px;margin-top:10px}
 audio,video{width:100%;margin-top:12px;border-radius:12px;max-height:360px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top"><h1>طلبات رتّل</h1><button class="btn" id="login">دخول بجوجل</button></div>
+  <p class="dz" id="dz">المصمم: يفحص…</p>
   <p class="msg" id="msg">سجّل دخولك بحساب جوجل حقك عشان تشوف الطلبات.</p>
   <div id="list"></div>
 </div>
@@ -41,6 +47,53 @@ const auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id);
 const ar=n=>Number(n).toLocaleString('ar-EG');
 let signedIn=false;
+const WK='http://127.0.0.1:8765';
+const N="الفاتحة البقرة آل_عمران النساء المائدة الأنعام الأعراف الأنفال التوبة يونس هود يوسف الرعد إبراهيم الحجر النحل الإسراء الكهف مريم طه الأنبياء الحج المؤمنون النور الفرقان الشعراء النمل القصص العنكبوت الروم لقمان السجدة الأحزاب سبأ فاطر يس الصافات ص الزمر غافر فصلت الشورى الزخرف الدخان الجاثية الأحقاف محمد الفتح الحجرات ق الذاريات الطور النجم القمر الرحمن الواقعة الحديد المجادلة الحشر الممتحنة الصف الجمعة المنافقون التغابن الطلاق التحريم الملك القلم الحاقة المعارج نوح الجن المزمل المدثر القيامة الإنسان المرسلات النبأ النازعات عبس التكوير الانفطار المطففين الانشقاق البروج الطارق الأعلى الغاشية الفجر البلد الشمس الليل الضحى الشرح التين العلق القدر البينة الزلزلة العاديات القارعة التكاثر العصر الهمزة الفيل قريش الماعون الكوثر الكافرون النصر المسد الإخلاص الفلق الناس".split(" ").map(s=>s.replace("_"," "));
+const THK={"كحلي وذهبي":"navy_gold","أزرق ملكي":"royal_blue","زمردي وذهبي":"emerald","رمضاني":"ramadan","فيروزي":"turquoise","عنابي وذهبي":"burgundy","فضي ليلي":"silver_night","أبيض هادئ":"white_soft","وردي ناعم":"rose","رملي":"sand","أبيض وأسود":"mono","مصحف ورقي (بدون توهج)":"mushaf"};
+const TAFK={"التفسير الميسر":"muyassar","التفسير المختصر":"mukhtasar","ترجمة إنجليزية":"en","بدون":"none"};
+const modeOf=s=>s.startsWith('ريلز')?'reel':s.startsWith('مربع')?'square':s.startsWith('يوتيوب')?'youtube':'reel';
+const RIW=[['hafs','حفص'],['shouba','شعبة'],['warsh','ورش'],['qaloon','قالون'],['doori','الدوري'],['soosi','السوسي'],['bazzi','البزي'],['qumbul','قنبل']];
+let wkOn=false;
+async function ping(){try{const r=await fetch(WK+'/ping',{cache:'no-store'});wkOn=r.ok}catch(e){wkOn=false}
+  $('dz').innerHTML=wkOn?'المصمم: <b>شغّال</b> على اللابتوب':'المصمم: مو شغّال. شغّل <b>start.bat</b> في مجلد rattil-worker عشان تقدر تصمم.'}
+ping();setInterval(ping,15000);
+function designUI(o,id,c,getBlob){
+  const box=document.createElement('div');box.className='design';
+  const sel=document.createElement('select');sel.innerHTML=RIW.map(([k,n])=>`<option value="${k}">رواية ${n}</option>`).join('');
+  const go=document.createElement('button');go.className='btn';go.textContent='صمّم';
+  const prog=document.createElement('div');prog.className='prog';
+  const acts=document.createElement('div');acts.className='acts';acts.append(sel,go);box.append(acts,prog);
+  go.onclick=async()=>{
+    if(!wkOn){await ping();if(!wkOn){prog.textContent='المصمم مو شغّال. شغّل start.bat وجرّب مرة ثانية.';return}}
+    go.disabled=true;go.textContent='يجهّز…';prog.textContent='';
+    try{
+      const blob=await getBlob();
+      const sn=N.indexOf(o.surah)+1;
+      const q=new URLSearchParams({code:o.code,mode:modeOf(o.size||''),theme:THK[o.theme]||'navy_gold',tafsir:TAFK[o.taf]||'muyassar',riwayah:sel.value,reciter:o.reader||''});
+      if(sn>0&&o.from&&o.to)q.set('range',`${sn}:${o.from}-${o.to}`);
+      const r=await fetch(`${WK}/design?${q}`,{method:'POST',body:blob,headers:{'X-Filename':(o.fileName||'tilawa.m4a').replace(/[^\w.\-]/g,'_')}});
+      const {id:jid,error}=await r.json();if(error)throw new Error(error);
+      go.textContent='يصمم…';
+      const t0=Date.now();
+      const tick=async()=>{
+        const st=await (await fetch(`${WK}/status/${jid}`,{cache:'no-store'})).json();
+        const mins=Math.floor((Date.now()-t0)/60000);
+        if(st.state==='done'){
+          prog.textContent='جاهز. راجعه قبل لا ترسله للزبون: الآيات والتوقيت والتفسير.';
+          if(st.qa){const im=document.createElement('img');im.className='qa';im.src=`${WK}/file/${jid}/${st.qa}`;box.appendChild(im)}
+          const v=document.createElement('video');v.controls=true;v.src=`${WK}/file/${jid}/${st.video}`;box.appendChild(v);
+          const a=document.createElement('a');a.className='btn';a.textContent='نزّل الفيديو';a.href=`${WK}/file/${jid}/${st.video}`;a.download=`rattil-${o.code}.mp4`;
+          const ac=document.createElement('div');ac.className='acts';ac.appendChild(a);box.appendChild(ac);
+          go.textContent='صمّم مرة ثانية';go.disabled=false;return}
+        if(st.state==='failed'){prog.textContent='ما زبط التصميم. آخر سطور السجل:\n'+(st.tail||'').slice(-400);go.textContent='جرّب مرة ثانية';go.disabled=false;return}
+        prog.textContent=`يصمم… (${mins} د)${st.state==='retry'?' — يعيد المحاولة بالسورة والآيات اللي اختارها الزبون':''}`;
+        setTimeout(tick,5000);
+      };tick();
+    }catch(e){prog.textContent='صار خطأ: '+e.message;go.disabled=false;go.textContent='صمّم'}
+  };
+  return box;
+}
+
 $('login').onclick=async()=>{if(signedIn){await signOut(auth);return}try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){$('msg').textContent='ما تم الدخول: '+e.code}};
 onAuthStateChanged(auth,u=>{signedIn=!!u;$('login').textContent=u?'خروج':'دخول بجوجل';$('login').className=u?'btn ghost':'btn';if(u)load();else{$('list').innerHTML='';$('msg').textContent='سجّل دخولك بحساب جوجل حقك عشان تشوف الطلبات.'}});
 async function chunksOf(id){const s=await getDocs(query(collection(db,'orders',id,'chunks'),orderBy('i')));return s.docs}
@@ -56,11 +109,12 @@ async function load(){
     c.querySelector('h2 span').textContent='طلب '+o.code;c.querySelector('h2 small').textContent=when;
     const dl=c.querySelector('dl');rows.forEach(([a,b])=>{const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;dl.append(t,v)});
     const acts=c.querySelector('.acts');
+    let blobP=null;
+    const getBlob=()=>blobP||(blobP=chunksOf(d.id).then(xs=>new Blob(xs.map(x=>x.data().data.toUint8Array()),{type:o.mime||'application/octet-stream'})));
     if(o.chunks){
       const get=document.createElement('button');get.className='btn';get.textContent='افتح التلاوة';
       get.onclick=async()=>{get.disabled=true;get.textContent='يحمّل…';
-        const parts=(await chunksOf(d.id)).map(x=>x.data().data.toUint8Array());
-        const blob=new Blob(parts,{type:o.mime||'application/octet-stream'}),url=URL.createObjectURL(blob);
+        const blob=await getBlob(),url=URL.createObjectURL(blob);
         const m=document.createElement((o.mime||'').startsWith('video')?'video':'audio');m.controls=true;m.src=url;c.appendChild(m);
         const a=document.createElement('a');a.className='btn ghost';a.href=url;a.download=o.fileName||('tilawa-'+o.code);a.textContent='نزّل الملف';get.replaceWith(a);};
       acts.appendChild(get);
@@ -69,6 +123,7 @@ async function load(){
     del.onclick=async()=>{if(del.dataset.sure!=='1'){del.dataset.sure='1';del.textContent='متأكد؟ اضغط مرة ثانية';return}
       del.disabled=true;for(const x of await chunksOf(d.id))await deleteDoc(x.ref);await deleteDoc(d.ref);c.remove();};
     acts.appendChild(del);
+    if(o.chunks)c.appendChild(designUI(o,d.id,c,getBlob));
     $('list').appendChild(c);
   });
 }
