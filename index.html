@@ -262,7 +262,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <label class="drop" id="drop" for="file">
             <input type="file" id="file" accept="audio/*,video/*,.m4a,.mp3,.mov,.mp4,.opus,.ogg,.wav,.aac">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-            <span id="dropTxt"><b>ارفع ملف التلاوة</b><br>صوت أو فيديو، لين ٢٥ ميجا. صوتك أو صوت أي قارئ.</span>
+            <span id="dropTxt"><b>ارفع ملف التلاوة</b><br>صوت أو فيديو، لين ١٠٠ ميجا. صوتك أو صوت أي قارئ.</span>
           </label>
           <p class="hint" style="margin-top:8px">ملفك أكبر من كذا؟ عادي، كمّل الطلب وأرسله لنا بالواتساب.</p>
           <div class="rule" role="note"><b>تنبيه مهم:</b> نقبل التلاوة إذا كانت سليمة. إذا كان فيها خطأ في التشكيل، أو لحن جلي، أو أي خطأ يغيّر المعنى، ما نقدر نقبل الطلب، ونبلغك عشان تعيد التسجيل.</div>
@@ -323,7 +323,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
 <script type="module">
 const WA='96599384032';
 const FB={apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya",storageBucket:"ad3eya.firebasestorage.app",messagingSenderId:"1021494775776",appId:"1:1021494775776:web:938c4b98379299073de585"};
-const MAXB=25*1024*1024, CHUNK=900000;
+const MAXB=100*1024*1024, CHUNK=900000;
 const ar=n=>Number(n).toLocaleString('ar-EG',{maximumFractionDigits:3});
 const $=id=>document.getElementById(id);
 const file=$('file'),drop=$('drop');
@@ -388,8 +388,8 @@ sS.onchange=()=>{sF.value='';sT.value='';ayat();$('err').textContent=''};sF.onch
 const fmtMB=b=>ar((b/1048576).toFixed(1))+' ميجا';
 function setFile(){
   const f=file.files[0];
-  if(!f){drop.classList.remove('has');$('dropTxt').innerHTML='<b>ارفع ملف التلاوة</b><br>صوت أو فيديو، لين ٢٥ ميجا. صوتك أو صوت أي قارئ.';render();return}
-  if(f.size>MAXB){$('err').textContent=`الملف ${fmtMB(f.size)}، أكبر من ٢٥ ميجا. كمّل الطلب بدونه وأرسله بالواتساب.`;file.value='';return setFile()}
+  if(!f){drop.classList.remove('has');$('dropTxt').innerHTML='<b>ارفع ملف التلاوة</b><br>صوت أو فيديو، لين ١٠٠ ميجا. صوتك أو صوت أي قارئ.';render();return}
+  if(f.size>MAXB){$('err').textContent=`الملف ${fmtMB(f.size)}، أكبر من ١٠٠ ميجا. كمّل الطلب بدونه وأرسله بالواتساب.`;file.value='';return setFile()}
   $('err').textContent='';drop.classList.add('has');
   const t=$('dropTxt');t.textContent='';const b=document.createElement('b');b.textContent=f.name;t.append(b,document.createElement('br'),`${fmtMB(f.size)} · اضغط عشان تغيّره`);render();
 }
