@@ -98,7 +98,7 @@ function designUI(o,id,c,getBlob){
       const {id:jid,error}=await r.json();if(error)throw new Error(error);job=jid;
       const t0=Date.now();
       const tick=async()=>{const st=await (await fetch(`${WK}/status/${jid}`,{cache:'no-store'})).json();
-        if(st.state==='ready'){prog.textContent='';head.remove();buildStudio(st);return}
+        if(st.state==='ready'){const u='studio.html?job='+jid;prog.innerHTML='';const a=document.createElement('a');a.href=u;a.target='_blank';a.className='btn';a.textContent='افتح المحرر';prog.appendChild(a);open.disabled=false;open.textContent='جهّز من جديد';window.open(u,'_blank');return}
         if(st.state==='failed'){prog.textContent='ما قدر يتعرّف على التلاوة:\n'+(st.tail||'').slice(-300);open.disabled=false;open.textContent='جرّب مرة ثانية';return}
         prog.textContent=`يسمع التلاوة ويرتّب الآيات… (${Math.floor((Date.now()-t0)/60000)} د)`;setTimeout(tick,4000)};tick();
     }catch(e){prog.textContent='صار خطأ: '+e.message;open.disabled=false;open.textContent='افتح الاستوديو'}
