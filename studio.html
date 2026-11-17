@@ -313,7 +313,7 @@ function exportSec(){
 function layerCanvas(){const c=document.createElement('canvas');c.width=W;c.height=H;return[c,c.getContext('2d')]}
 const toBlob=c=>new Promise(r=>c.toBlob(r,'image/png'));
 async function doExport(btn,st,out){
-  btn.disabled=true;out.innerHTML='';st.className='status';geometry();
+  btn.disabled=true;out.innerHTML='';st.className='status';geometry();await Promise.all([S.title.font,S.rec.font,S.taf.font,'IBM Plex Sans Arabic','IBM Plex Mono'].map(f=>document.fonts.load(`40px "${f}"`,(S.rec.text||D.reciter||'')+' سورة '+(D.surah||'')+' '+Object.values(D.groups).join(' ').slice(0,400)+' abc ١٢')));
   try{
     const L=[];let n=0;
     const push=async(draw,s,e,fi,fo)=>{const[c,x]=layerCanvas();draw(x);const id='L'+(n++);st.textContent=`يجهّز الطبقات… ${n}`;
@@ -347,7 +347,7 @@ async function doExport(btn,st,out){
   try{
     const r=await fetch(`${WK}/layout/${job}`,{cache:'no-store'});D=await r.json();if(D.error)throw new Error(D.error);
     const ff=new FontFace('Hafs',`url(${WK}/font/${job})`);await ff.load();document.fonts.add(ff);
-    await Promise.all([...FONTS_AR,...FONTS_T].map(([f])=>document.fonts.load(`40px "${f}"`)));
+    await Promise.all([...FONTS_AR,...FONTS_T].map(([f])=>document.fonts.load(`40px "${f}"`,'سورة غافر ١٢abc')));
     DUR=D.trim[1]-D.trim[0];$('dur').textContent=fmt(DUR);
     $('ttl').textContent='سورة '+(D.surah||'');$('meta').textContent=`${D.riwayah||''} · ${D.tafsir_label||''}`;
     if(!D.has_video&&S.bgType==='video')S.bgType='gradient';
