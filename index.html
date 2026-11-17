@@ -160,6 +160,10 @@ button.wa:disabled{opacity:.6;cursor:wait}
 .reel video{width:100%;border-radius:20px;background:#000;display:block;cursor:pointer}
 .reel figcaption{font-size:.85rem;color:var(--soft);margin-top:8px}
 @media (max-width:820px){.reel figure{width:62vw}.reel figure.wide{width:86vw}}
+.rule{margin-top:12px;background:#3d1c22;border:1.5px solid #8a3a46;border-radius:14px;padding:12px 14px;font-size:.88rem;line-height:1.8;color:#ffdede}
+.rule b{color:#ffb4b4}
+.agree{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:.9rem;color:var(--text);cursor:pointer}
+.agree input{width:18px;height:18px;accent-color:var(--glow)}
 </style>
 </head>
 <body>
@@ -261,6 +265,8 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <span id="dropTxt"><b>ارفع ملف التلاوة</b><br>صوت أو فيديو، لين ٢٥ ميجا. صوتك أو صوت أي قارئ.</span>
           </label>
           <p class="hint" style="margin-top:8px">ملفك أكبر من كذا؟ عادي، كمّل الطلب وأرسله لنا بالواتساب.</p>
+          <div class="rule" role="note"><b>تنبيه مهم:</b> نقبل التلاوة إذا كانت سليمة. إذا كان فيها خطأ في التشكيل، أو لحن جلي، أو أي خطأ يغيّر المعنى، ما نقدر نقبل الطلب، ونبلغك عشان تعيد التسجيل.</div>
+          <label class="agree"><input type="checkbox" id="agree"> قريت التنبيه وأتأكد إن التلاوة سليمة</label>
         </div>
         <div class="f two">
           <div><label for="reader">اسم القارئ (يطلع على المقطع)</label><input id="reader" placeholder="اختياري"></div>
@@ -303,6 +309,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
     <h2>أسئلة تتكرر</h2>
     <details><summary>وش أرسل لكم بالضبط؟</summary><p>أي تسجيل للتلاوة: فويس واتساب، أو ملف صوت، أو فيديو مصوّر. إذا كان فيديو نقدر نخلي الكابشن فوقه، وإذا كان صوت بس نسوي له خلفية هادئة.</p></details>
     <details><summary>الآيات تطلع صحيحة؟</summary><p>الآيات تنكتب بالرسم العثماني لمصحف المدينة، وتتراجع قبل التسليم.</p></details>
+    <details><summary>متى ما ينقبل الطلب؟</summary><p>إذا كان في التلاوة خطأ في التشكيل، أو لحن جلي، أو أي خطأ يغيّر المعنى. نراجع كل تلاوة قبل التصميم، وإذا لقينا خطأ نبلغك عشان تعيد التسجيل، وما نصمم المقطع.</p></details>
     <details><summary>تقدرون تسوون روايات غير حفص؟</summary><p>إي، اكتب الرواية في الملاحظات.</p></details>
     <details><summary>شلون أدفع؟</summary><p>داخل الكويت: ومض أو رابط دفع بالكي نت. وبرّا الكويت: نرسل لك رابط دفع بالبطاقة أو Apple Pay. ونتفق على التفاصيل بالواتساب بعد ما يوصلنا طلبك.</p></details>
   </div>
@@ -427,6 +434,7 @@ const code=()=>{const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i
 $('form').addEventListener('submit',async e=>{
   e.preventDefault();const err=$('err');err.textContent='';
   if(sS.value===''){err.textContent='اختار السورة أول.';sS.focus();return}
+  if(!$('agree').checked){err.textContent='أكّد إنك قريت تنبيه سلامة التلاوة.';$('agree').focus();return}
   const btn=$('send');btn.disabled=true;
   const f=file.files[0];const id=code();
   try{
