@@ -62,7 +62,7 @@ audio,video{width:100%;margin-top:12px;border-radius:12px;max-height:360px}
 <script type="module">
 import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import {getFirestore,collection,query,orderBy,getDocs,deleteDoc,doc,setDoc,addDoc,updateDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import {getFirestore,collection,query,orderBy,getDocs,getDoc,deleteDoc,doc,setDoc,addDoc,updateDoc,serverTimestamp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 const app=initializeApp({apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya",storageBucket:"ad3eya.firebasestorage.app",messagingSenderId:"1021494775776",appId:"1:1021494775776:web:938c4b98379299073de585"});
 const auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id);
@@ -230,8 +230,18 @@ async function load(){loadExtras();
       del.disabled=true;for(const x of await chunksOf(d.id))await deleteDoc(x.ref);await deleteDoc(d.ref);c.remove();};
     acts.appendChild(del);
     const rv=document.createElement('button');rv.className='btn ghost';rv.textContent='رابط التقييم';
-    rv.onclick=async()=>{rv.disabled=true;try{await setDoc(doc(db,'delivered',o.code),{at:serverTimestamp()});const u=new URL(`review.html?c=${o.code}`,location.href).href;
-      const m=`شكرًا لثقتك برتّل 🌙\nيسعدنا رأيك في مقطعك، يأخذ منك دقيقة:\n${u}`;try{await navigator.clipboard.writeText(m)}catch(e){}const p=document.createElement('p');p.className='msg';p.style.whiteSpace='pre-line';p.textContent='نُسخت الرسالة، الصقها للعميل في واتساب:\n'+m;acts.after(p);rv.textContent='نُسخت الرسالة ✓'}catch(e){rv.textContent='لم ينجح';rv.disabled=false}};
+    let rvp=null;
+    rv.onclick=async()=>{rv.disabled=true;
+      try{
+        // the marker lets the customer submit a review; it may already exist from an earlier click
+        try{await setDoc(doc(db,'delivered',o.code),{at:serverTimestamp()})}catch(e){if(!(await getDoc(doc(db,'delivered',o.code))).exists())throw e}
+        const u=new URL(`review.html?c=${o.code}`,location.href).href;
+        const m=`شكرًا لثقتك برتّل 🌙\nيسعدنا رأيك في مقطعك، يأخذ منك دقيقة:\n${u}`;
+        try{await navigator.clipboard.writeText(m)}catch(e){}
+        if(!rvp){rvp=document.createElement('p');rvp.className='msg';rvp.style.whiteSpace='pre-line';acts.after(rvp)}
+        rvp.textContent='نُسخت الرسالة، الصقها للعميل في واتساب:\n'+m;rv.textContent='نُسخت ✓ (اضغط لنسخها مرة أخرى)'
+      }catch(e){rv.textContent='لم ينجح، حاول مرة أخرى'}
+      rv.disabled=false};
     acts.appendChild(rv);
     if(o.chunks)c.appendChild(designUI(o,d.id,c,getBlob));
     $('list').appendChild(c);
