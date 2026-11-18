@@ -302,10 +302,6 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <button type="button" class="opt" data-v="ترجمة بنغالية">بنغالي</button>
           </div>
         </div>
-        <div class="f"><span class="lbl">معاني الكلمات الصعبة</span>
-          <p class="hint">حين يقرأ القارئ كلمة غريبة، يظهر معناها فوق الآية للحظات، مثل «مُتْرَفِينَ»: متنعّمين منهمكين في الشهوات. بلا زيادة في السعر.</p>
-          <label class="agree" style="margin-top:0"><input type="checkbox" id="mean"> أضف معاني الكلمات</label>
-        </div>
         <div class="f"><span class="lbl">التصميم</span>
           <p class="hint">٢٨ تصميمًا، لكلٍّ منها شكل مختلف. ما عليه ★ من تصاميم رتّل الخاصة. تُريك الصورة شكل المقطع تمامًا، وعند اختيار فلتر يظهر عليها.</p>
           <div class="tpls" id="tpls" role="group" aria-label="التصميم"></div>
@@ -499,14 +495,14 @@ function render(){
   if(!ready)return;
   if(!state.size||!state.len||!state.taf||!state.tpl||!state.qual)return;
   const f=file.files[0];
-  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['التفسير',state.taf.v],['الترجمة',state.lang?state.lang.v:'بدون'],['معاني الكلمات',$('mean').checked?'نعم':'لا'],['الرواية',riwTxt()],['خلفية الصوت',state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'ستُرسَل عبر واتساب']];
+  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['التفسير',state.taf.v],['الترجمة',state.lang?state.lang.v:'بدون'],['الرواية',riwTxt()],['خلفية الصوت',state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'ستُرسَل عبر واتساب']];
   const dl=$('sum');dl.innerHTML='';
   rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
   $('total').textContent=`${ar(total())} د.ك`;
 }
 function waText(code,uploaded){
   const L=[`السلام عليكم، طلب جديد من «رتّل» رقم ${code}:`,
-    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• التفسير: ${state.taf.v}`,`• الترجمة: ${state.lang?state.lang.v:'بدون'}`,`• معاني الكلمات: ${$('mean').checked?'نعم':'لا'}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${state.bga?state.bga.v:'—'}`,`• الغلاف: ${$('pack').checked&&state.cover?state.cover.v:'بدون'}`,`• السورة: ${surahTxt()}`];
+    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• التفسير: ${state.taf.v}`,`• الترجمة: ${state.lang?state.lang.v:'بدون'}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${state.bga?state.bga.v:'—'}`,`• الغلاف: ${$('pack').checked&&state.cover?state.cover.v:'بدون'}`,`• السورة: ${surahTxt()}`];
   if($('handle').value.trim())L.push(`• اسم الحساب: ${$('handle').value.trim()}`);
   if($('reader').value.trim())L.push(`• القارئ: ${$('reader').value.trim()}`);
   if($('notes').value.trim())L.push(`• ملاحظات: ${$('notes').value.trim()}`);
@@ -520,7 +516,6 @@ function waText(code,uploaded){
 const SUBQ={"التفسير الميسر":"muyassar","التفسير المختصر":"muyassar","تفسير السعدي":"muyassar","ترجمة إنجليزية":"tr","تفسير إنجليزي":"tr","بدون":"none"};
 const total=()=>state.len.p+(state.size&&state.size.p||0)+(state.qual&&state.qual.p||0)+($('pack').checked?.5:0);
 let COV=null;
-$('mean').addEventListener('change',()=>render());
 $('pack').addEventListener('change',async()=>{const on=$('pack').checked;$('covers').hidden=$('covHint').hidden=!on;
   if(on&&!COV){try{COV=await (await fetch('media/covers.json?v=1')).json();chooser($('covers'),'tp cv',Object.entries(COV).map(([k,v])=>[k,v.n,v.img]),'cover')}catch(e){}}render()});
 const MODEQ=v=>v.startsWith('ريلز')?'reel':v.startsWith('مربع')?'square':v.startsWith('يوتيوب')?'youtube':'original';
@@ -581,7 +576,7 @@ $('form').addEventListener('submit',async e=>{
     }
     $('sendTxt').textContent='جارٍ حفظ الطلب…';
     await fs.setDoc(fs.doc(db,'orders',id),{
-      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,lang:state.lang?state.lang.v:'بدون',theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,bga:state.bga?state.bga.a:'sky',cover:$('pack').checked&&state.cover?state.cover.k:'',mean:$('mean').checked,qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
+      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,lang:state.lang?state.lang.v:'بدون',theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,bga:state.bga?state.bga.a:'sky',cover:$('pack').checked&&state.cover?state.cover.k:'',qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
       surah:sS.value===''?'':N[sS.value],from:+sF.value||0,to:+sT.value||0,
       reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),notes:$('notes').value.trim().slice(0,500),
       price:total(),fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
