@@ -259,11 +259,11 @@ button.wa:disabled{opacity:.6;cursor:wait}
           </div>
         </div>
         <div class="f"><span class="lbl">التصميم</span>
-          <p class="hint">١٤ تصميم، كل واحد شكل مختلف. الصورة توريك شكل المقطع بالضبط.</p>
+          <p class="hint">٢٢ تصميم، كل واحد شكل مختلف. الصورة توريك شكل المقطع بالضبط، ولما تختار فلتر تشوفه عليها.</p>
           <div class="tpls" id="tpls" role="group" aria-label="التصميم"></div>
         </div>
         <div class="f"><span class="lbl">الفلتر</span>
-          <p class="hint">يغيّر ألوان الفيديو نفسه.</p>
+          <p class="hint">يغيّر ألوان الفيديو نفسه. اختار واحد وشوف الصور فوق وفي الملخص كيف تتغيّر.</p>
           <div class="filts" id="filts" role="group" aria-label="الفلتر"></div>
         </div>
         <div class="f"><span class="lbl">الجودة</span>
@@ -377,7 +377,9 @@ SAMPLES.forEach(([f,cap,wide])=>{
 
 // ---------- designs + filters (real previews rendered by our editor) ----------
 const state={};
-const TPL_ORDER=['hadi','mutarjam','tabeea','tawahhoj','wasat','kalima','mushaf','sinema','bitaqa','layl','neon','sharit','mihrab','abyad'];
+const TPL_ORDER=['hadi','mutarjam','tiktok','mushghil','polaroid','fakhm','tabeea','tawahhoj','tatabu','sundooq','mawja','aswad','wasat','kalima','mushaf','sinema','bitaqa','layl','neon','sharit','mihrab','abyad'];
+const FCSS={none:'',warm:'sepia(.28) saturate(1.15) contrast(1.05)',cool:'saturate(.9) hue-rotate(12deg) brightness(1.02)',cine:'contrast(1.18) saturate(.8) sepia(.12) brightness(.95)',gold:'sepia(.45) saturate(1.25) brightness(1.03)',soft:'contrast(.88) brightness(1.07) saturate(.88)',strong:'contrast(1.3) saturate(1.25)',bw:'grayscale(1) contrast(1.15)'};
+const applyF=()=>{const f=FCSS[state.filt&&state.filt.k]||'';$('mini').style.filter=f;document.querySelectorAll('#tpls img').forEach(i=>i.style.filter=f)};
 function chooser(box,cls,items,key,onpick){
   items.forEach(([k,n,img],i)=>{const b=document.createElement('button');b.type='button';b.className=cls;b.setAttribute('aria-pressed',i===0);
     const im=document.createElement('img');im.alt='';im.loading='lazy';im.src=img;const sp=document.createElement('span');sp.textContent=n;b.append(im,sp);
@@ -386,7 +388,7 @@ function chooser(box,cls,items,key,onpick){
 }
 fetch('media/tpl.json').then(r=>r.json()).then(J=>{
   chooser($('tpls'),'tp',TPL_ORDER.filter(k=>J.tpl[k]).map(k=>[k,J.tpl[k].n,J.tpl[k].img]),'tpl',()=>{$('mini').src=state.tpl.img});
-  chooser($('filts'),'fl',Object.entries(J.filt).map(([k,v])=>[k,v.n,v.img]),'filt');$('mini').src=state.tpl.img;render();
+  chooser($('filts'),'fl',Object.entries(J.filt).map(([k,v])=>[k,v.n,v.img]),'filt',applyF);$('mini').src=state.tpl.img;render();
 }).catch(()=>{state.tpl={k:'hadi',v:'هادي'};state.filt={k:'none',v:'بدون'};render()});
 
 // ---------- option groups ----------
