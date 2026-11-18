@@ -386,7 +386,7 @@ function chooser(box,cls,items,key,onpick){
     b.onclick=()=>{box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));state[key]={k,v:n,img};onpick&&onpick();render()};box.appendChild(b)});
   state[key]={k:items[0][0],v:items[0][1],img:items[0][2]};
 }
-fetch('media/tpl.json').then(r=>r.json()).then(J=>{
+fetch('media/tpl.json?v=22').then(r=>r.json()).then(J=>{
   chooser($('tpls'),'tp',TPL_ORDER.filter(k=>J.tpl[k]).map(k=>[k,J.tpl[k].n,J.tpl[k].img]),'tpl',()=>{$('mini').src=state.tpl.img});
   chooser($('filts'),'fl',Object.entries(J.filt).map(([k,v])=>[k,v.n,v.img]),'filt',applyF);$('mini').src=state.tpl.img;render();
 }).catch(()=>{state.tpl={k:'hadi',v:'هادي'};state.filt={k:'none',v:'بدون'};render()});
@@ -487,9 +487,9 @@ $('form').addEventListener('submit',async e=>{
       price:state.len.p,fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
       createdAt:fs.serverTimestamp()
     });
-    btn.hidden=true;const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,!!f))}`;
+    btn.hidden=true;const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,!!f))}`;setTimeout(()=>{location.href=wa.href},400); // open WhatsApp straight away; the green button stays in case it did not open
     wa.innerHTML=btn.querySelector('svg').outerHTML+' كمّل بالواتساب';
-    $('note').textContent=`انحفظ طلبك برقم ${id}${f?' والتلاوة وصلتنا':''}. اضغط الزر الأخضر عشان ترسل الطلب بالواتساب.`;
+    $('note').textContent=`انحفظ طلبك برقم ${id}${f?' والتلاوة وصلتنا':''}. يفتح لك الواتساب الحين، وإذا ما فتح اضغط الزر الأخضر.`;
   }catch(x){
     console.error(x);err.textContent='صار خطأ بالرفع. جرّب مرة ثانية، أو كمّل بالواتساب وأرسل التلاوة هناك.';
     const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,false))}`;wa.textContent='كمّل بالواتساب';
