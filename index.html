@@ -175,6 +175,9 @@ button.wa:disabled{opacity:.6;cursor:wait}
 .tp{position:relative}.tp .play{position:absolute;top:8px;left:8px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.6);display:grid;place-items:center;color:#fff}.tp .play svg{width:14px;height:14px}.prevbtn svg{width:20px;height:20px;color:var(--glow)}
 .pmodal{position:fixed;inset:0;z-index:100;background:#0b0b0e;display:none;flex-direction:column}.pmodal.on{display:flex}
 .pbox{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px;overflow:auto}#pimg{max-width:100%;max-height:calc(100vh - 120px);aspect-ratio:9/16;object-fit:contain;border-radius:18px;background:#16161b;box-shadow:0 20px 60px rgba(0,0,0,.5)}#pcap{color:#cfc8d6;font:500 .95rem "Readex Pro"}.pclose{min-height:46px;border:0;background:#1d1d24;color:#fff;font:600 .95rem "Readex Pro";cursor:pointer}
+.revs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:24px}
+.rv{background:var(--plum-2,#2a1630);border:1.5px solid var(--line);border-radius:18px;padding:18px}.rv .st{color:var(--glow);letter-spacing:2px}.rv p{margin:10px 0;line-height:1.8}.rv b{color:var(--soft);font-weight:500;font-size:.9rem}
+.reel figure iframe{width:100%;aspect-ratio:9/16;border:0;border-radius:20px;background:#000;display:block}
 .rule{margin-top:12px;background:#3d1c22;border:1.5px solid #8a3a46;border-radius:14px;padding:12px 14px;font-size:.88rem;line-height:1.8;color:#ffdede}
 .rule b{color:#ffb4b4}
 .agree{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:.9rem;color:var(--text);cursor:pointer}
@@ -233,6 +236,20 @@ button.wa:disabled{opacity:.6;cursor:wait}
   </div>
 </section>
 
+<section id="gallery" hidden>
+  <div class="wrap">
+    <h2>من أعمال عملائنا</h2>
+    <p class="lead">مقاطع سويناها لعملائنا ونشروها.</p>
+    <div class="reel" id="galReel"></div>
+  </div>
+</section>
+<section id="reviews" hidden>
+  <div class="wrap">
+    <h2>وش قالوا عنا</h2>
+    <div class="revs" id="revList"></div>
+  </div>
+</section>
+
 <section id="order">
   <div class="wrap">
     <h2>صمّم طلبك</h2>
@@ -245,6 +262,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <button type="button" class="opt" data-v="مربع">مربع<small>للبوستات ١:١</small></button>
             <button type="button" class="opt" data-v="يوتيوب (عرضي)">يوتيوب<small>عرضي ١٦:٩</small></button>
             <button type="button" class="opt" data-v="مثل الأصلي">مثل الأصلي<small>نفس مقاس فيديوك</small></button>
+            <button type="button" class="opt" data-v="الثلاث مقاسات" data-p="1">الثلاث مقاسات<small>ريلز ومربع ويوتيوب +١ د.ك</small></button>
           </div>
         </div>
         <div class="f"><span class="lbl">طول التلاوة</span>
@@ -261,6 +279,10 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <button type="button" class="opt" data-v="تفسير السعدي">تفسير السعدي</button>
             <button type="button" class="opt" data-v="ترجمة إنجليزية">ترجمة إنجليزية</button>
             <button type="button" class="opt" data-v="تفسير إنجليزي">تفسير إنجليزي</button>
+            <button type="button" class="opt" data-v="ترجمة أردو">أردو</button>
+            <button type="button" class="opt" data-v="ترجمة إندونيسية">إندونيسي</button>
+            <button type="button" class="opt" data-v="ترجمة فرنسية">فرنسي</button>
+            <button type="button" class="opt" data-v="ترجمة تركية">تركي</button>
             <button type="button" class="opt" data-v="بدون">الآيات بس</button>
           </div>
         </div>
@@ -293,7 +315,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
             <span id="dropTxt"><b>ارفع ملف التلاوة</b><br>صوت أو فيديو، لين ١٠٠ ميجا. صوتك أو صوت أي قارئ.</span>
           </label>
-          <p class="hint" style="margin-top:8px">ملفك أكبر من كذا؟ عادي، كمّل الطلب وأرسله لنا بالواتساب.</p>
+          <p class="hint" style="margin-top:8px">ملفك أكبر من كذا؟ عادي، كمّل الطلب وأرسله لنا بالواتساب. تلاوتك صوت بس بدون فيديو؟ نسويها لك بخلفية متحركة (سماء ونجوم أو أضواء أو صورة تختارها).</p>
           <div class="rule" role="note"><b>تنبيه مهم:</b> نقبل التلاوة إذا كانت سليمة. إذا كان فيها خطأ في التشكيل، أو لحن جلي، أو أي خطأ يغيّر المعنى، ما نقدر نقبل الطلب.</div>
           <label class="agree"><input type="checkbox" id="agree"> قريت التنبيه وأتأكد إن التلاوة سليمة</label>
         </div>
@@ -447,7 +469,7 @@ function render(){
   const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الرواية',riwTxt()],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
   const dl=$('sum');dl.innerHTML='';
   rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
-  $('total').textContent=`${ar(state.len.p)} د.ك`;
+  $('total').textContent=`${ar(total())} د.ك`;
 }
 function waText(code,uploaded){
   const L=[`السلام عليكم، طلب جديد من «رتّل» رقم ${code}:`,
@@ -455,7 +477,7 @@ function waText(code,uploaded){
   if($('handle').value.trim())L.push(`• اسم الحساب: ${$('handle').value.trim()}`);
   if($('reader').value.trim())L.push(`• القارئ: ${$('reader').value.trim()}`);
   if($('notes').value.trim())L.push(`• ملاحظات: ${$('notes').value.trim()}`);
-  L.push(`• المجموع: ${ar(state.len.p)} د.ك`);
+  L.push(`• المجموع: ${ar(total())} د.ك`);
   if($('cname').value.trim())L.push(`\nاسمي: ${$('cname').value.trim()}`);
   L.push(uploaded?'\nرفعت التلاوة من الموقع.':'\nبرسل لكم التلاوة الحين.');
   return L.join('\n');
@@ -463,6 +485,7 @@ function waText(code,uploaded){
 
 // ---------- live preview of the chosen design on the customer's own file ----------
 const SUBQ={"التفسير الميسر":"muyassar","التفسير المختصر":"muyassar","تفسير السعدي":"muyassar","ترجمة إنجليزية":"tr","تفسير إنجليزي":"tr","بدون":"none"};
+const total=()=>state.len.p+(state.size&&state.size.p||0);
 const MODEQ=v=>v.startsWith('ريلز')?'reel':v.startsWith('مربع')?'square':v.startsWith('يوتيوب')?'youtube':'original';
 let purl=null;
 let BIG=null;
@@ -478,6 +501,19 @@ const _ownPreview=()=>{const err=$('err');err.textContent='';
   $('pframe').src='preview.html?'+q;$('pmodal').classList.add('on');document.body.style.overflow='hidden'};
 $('pclose').onclick=()=>{$('pmodal').classList.remove('on');document.body.style.overflow=''};
 $('pmodal').addEventListener('click',e=>{if(e.target.id==='pmodal'||e.target.classList.contains('pbox'))$('pclose').click()});
+
+// ---------- gallery + reviews (from the database, public read) ----------
+function embedOf(u){let m;
+  if(m=u.match(/youtube\.com\/shorts\/([\w-]{6,})/)||u.match(/youtu\.be\/([\w-]{6,})/)||u.match(/[?&]v=([\w-]{6,})/))return`https://www.youtube.com/embed/${m[1]}`;
+  if(m=u.match(/instagram\.com\/(?:reel|p|tv)\/([\w-]+)/))return`https://www.instagram.com/reel/${m[1]}/embed`;
+  if(m=u.match(/tiktok\.com\/.*\/video\/(\d+)/))return`https://www.tiktok.com/embed/v2/${m[1]}`;return null}
+setTimeout(async()=>{try{const {fs,db}=await getFB();
+  const g=await fs.getDocs(fs.query(fs.collection(db,'gallery'),fs.orderBy('createdAt','desc'),fs.limit(12)));const gr=$('galReel');
+  g.forEach(d=>{const x=d.data(),e=embedOf(x.url||'');if(!e)return;const f=document.createElement('figure');const i=document.createElement('iframe');i.src=e;i.loading='lazy';i.allow='encrypted-media; picture-in-picture';i.title=x.title||'مقطع';const c=document.createElement('figcaption');c.textContent=x.title||'';f.append(i,c);gr.appendChild(f)});
+  if(gr.children.length)$('gallery').hidden=false;
+  const r=await fs.getDocs(fs.query(fs.collection(db,'reviews'),fs.where('approved','==',true),fs.limit(30)));const rl=$('revList');
+  r.forEach(d=>{const x=d.data(),c=document.createElement('div');c.className='rv';c.innerHTML='<div class="st"></div><p></p><b></b>';c.querySelector('.st').textContent='★'.repeat(x.stars)+'☆'.repeat(5-x.stars);c.querySelector('p').textContent=x.text;c.querySelector('b').textContent=x.name||'عميل';rl.appendChild(c)});
+  if(rl.children.length)$('reviews').hidden=false}catch(e){console.warn(e)}},0);
 
 // ---------- submit ----------
 let fb=null;
@@ -510,7 +546,7 @@ $('form').addEventListener('submit',async e=>{
       code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
       surah:sS.value===''?'':N[sS.value],from:+sF.value||0,to:+sT.value||0,
       reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),notes:$('notes').value.trim().slice(0,500),
-      price:state.len.p,fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
+      price:total(),fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
       createdAt:fs.serverTimestamp()
     });
     btn.hidden=true;const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,!!f))}`;setTimeout(()=>{location.href=wa.href},400); // open WhatsApp straight away; the green button stays in case it did not open
