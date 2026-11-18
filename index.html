@@ -160,6 +160,15 @@ button.wa:disabled{opacity:.6;cursor:wait}
 .reel video{width:100%;border-radius:20px;background:#000;display:block;cursor:pointer}
 .reel figcaption{font-size:.85rem;color:var(--soft);margin-top:8px}
 @media (max-width:820px){.reel figure{width:62vw}.reel figure.wide{width:86vw}}
+.tpls{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.tp,.fl{border:0;background:none;color:var(--text);cursor:pointer;text-align:center;font:400 .8rem "Readex Pro";padding:0}
+.tp img,.fl img{width:100%;display:block;border-radius:12px;border:2px solid transparent;transition:border-color .2s,transform .3s var(--ease);background:var(--plum-3)}
+.tp img{aspect-ratio:9/16;object-fit:cover}.fl img{aspect-ratio:1;object-fit:cover}
+.tp span,.fl span{display:block;margin-top:6px;color:var(--soft)}
+.tp[aria-pressed="true"] img,.fl[aria-pressed="true"] img{border-color:var(--glow);transform:translateY(-2px)}
+.tp[aria-pressed="true"] span,.fl[aria-pressed="true"] span{color:var(--text);font-weight:600}
+.filts{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px}
+.miniimg{display:block;width:150px;aspect-ratio:9/16;object-fit:cover;border-radius:14px;margin:14px auto 0;background:var(--plum-3)}
 .rule{margin-top:12px;background:#3d1c22;border:1.5px solid #8a3a46;border-radius:14px;padding:12px 14px;font-size:.88rem;line-height:1.8;color:#ffdede}
 .rule b{color:#ffb4b4}
 .agree{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:.9rem;color:var(--text);cursor:pointer}
@@ -229,6 +238,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <button type="button" class="opt" data-v="ريلز وستوري (طولي)" aria-pressed="true">ريلز وستوري<small>طولي ٩:١٦</small></button>
             <button type="button" class="opt" data-v="مربع">مربع<small>للبوستات ١:١</small></button>
             <button type="button" class="opt" data-v="يوتيوب (عرضي)">يوتيوب<small>عرضي ١٦:٩</small></button>
+            <button type="button" class="opt" data-v="مثل الأصلي">مثل الأصلي<small>نفس مقاس فيديوك</small></button>
           </div>
         </div>
         <div class="f"><span class="lbl">طول التلاوة</span>
@@ -242,13 +252,26 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <div class="opts" data-k="taf">
             <button type="button" class="opt" data-v="التفسير الميسر" aria-pressed="true">التفسير الميسر</button>
             <button type="button" class="opt" data-v="التفسير المختصر">التفسير المختصر</button>
+            <button type="button" class="opt" data-v="تفسير السعدي">تفسير السعدي</button>
             <button type="button" class="opt" data-v="ترجمة إنجليزية">ترجمة إنجليزية</button>
+            <button type="button" class="opt" data-v="تفسير إنجليزي">تفسير إنجليزي</button>
             <button type="button" class="opt" data-v="بدون">الآيات بس</button>
           </div>
         </div>
-        <div class="f"><span class="lbl">ألوان المقطع</span>
-          <p class="hint">كل بطاقة توريك شكل اللون بالضبط. إذا كانت تلاوتك فيديو، لون الآيات والتوهج بس يتغيّر فوق الفيديو. وإذا كانت صوت بس، الخلفية كلها تطلع بهاللون.</p>
-          <div class="themes" id="themes" role="group" aria-label="ألوان المقطع"></div>
+        <div class="f"><span class="lbl">التصميم</span>
+          <p class="hint">١٤ تصميم، كل واحد شكل مختلف. الصورة توريك شكل المقطع بالضبط.</p>
+          <div class="tpls" id="tpls" role="group" aria-label="التصميم"></div>
+        </div>
+        <div class="f"><span class="lbl">الفلتر</span>
+          <p class="hint">يغيّر ألوان الفيديو نفسه.</p>
+          <div class="filts" id="filts" role="group" aria-label="الفلتر"></div>
+        </div>
+        <div class="f"><span class="lbl">الجودة</span>
+          <div class="opts" data-k="qual">
+            <button type="button" class="opt" data-v="Full HD" data-q="1" aria-pressed="true">Full HD<small>1080p</small></button>
+            <button type="button" class="opt" data-v="2K" data-q="1.3334">2K<small>أوضح</small></button>
+            <button type="button" class="opt" data-v="4K" data-q="2">4K<small>أعلى جودة</small></button>
+          </div>
         </div>
         <div class="f two">
           <div><label for="surah">السورة</label><select id="surah"></select></div>
@@ -269,15 +292,19 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <label class="agree"><input type="checkbox" id="agree"> قريت التنبيه وأتأكد إن التلاوة سليمة</label>
         </div>
         <div class="f two">
+          <div><label for="riw">الرواية</label><select id="riw"><option value="hafs">حفص عن عاصم</option><option value="shouba">شعبة عن عاصم</option><option value="warsh">ورش عن نافع</option><option value="qaloon">قالون عن نافع</option><option value="doori">الدوري عن أبي عمرو</option><option value="soosi">السوسي عن أبي عمرو</option><option value="bazzi">البزي عن ابن كثير</option><option value="qumbul">قنبل عن ابن كثير</option></select></div>
+          <div><label for="handle">اسم حسابك (يطلع في آخر المقطع)</label><input id="handle" placeholder="اختياري، مثلاً ‎@quran_kw" dir="auto"></div>
+        </div>
+        <div class="f two">
           <div><label for="reader">اسم القارئ (يطلع على المقطع)</label><input id="reader" placeholder="اختياري"></div>
           <div><label for="cname">اسمك</label><input id="cname" placeholder="عشان نعرفك"></div>
         </div>
-        <div class="f"><label for="notes">ملاحظات</label><textarea id="notes" placeholder="أي شي تبي نعرفه: الرواية، اسم الحساب، هدية لأحد…"></textarea></div>
+        <div class="f"><label for="notes">ملاحظات</label><textarea id="notes" placeholder="أي شي تبي نعرفه: هدية لأحد، لون تحبه، شعار تبيه…"></textarea></div>
       </div>
 
       <aside class="summary" aria-live="polite">
         <h3>ملخص طلبك</h3>
-        <div class="mini" id="mini"><div class="mq">فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</div><div class="mt">فإن مع الضيق فرجًا</div></div>
+        <img class="miniimg" id="mini" alt="شكل التصميم المختار">
         <dl id="sum"></dl>
         <div class="total"><span>المجموع</span><b id="total"></b></div>
         <div class="bar" id="bar" hidden><i id="barFill"></i></div>
@@ -348,24 +375,24 @@ SAMPLES.forEach(([f,cap,wide])=>{
   fig.append(v,fc);reel.appendChild(fig);
 });
 
-// ---------- themes (real colors) ----------
-const TH=[["navy_gold","كحلي وذهبي","#FFF8E6","#F0B446","#FFFFFF","#050A24","#14234F"],["royal_blue","أزرق ملكي","#FFFFFF","#4D8CFF","#F4F7FF","#030A2A","#0C2A7A"],["emerald","زمردي وذهبي","#F3FFF7","#3FD18A","#EAF7EF","#02140E","#0B3B2A"],["ramadan","رمضاني","#FFF4DC","#FFB347","#FFF6E8","#12062B","#3A1A5E"],["turquoise","فيروزي","#F0FFFF","#2EC4C6","#EFFFFF","#021A22","#0B4650"],["burgundy","عنابي وذهبي","#FFF3E8","#E9A23B","#FFF5EE","#22050C","#5A1023"],["silver_night","فضي ليلي","#F4F7FF","#9DB4FF","#EEF2FF","#05070F","#1A2240"],["white_soft","أبيض هادئ","#FFFFFF","#FFFFFF","#F2F2F2","#0B0B0E","#26262E"],["rose","وردي ناعم","#FFF5F8","#FF8FB1","#FFF0F5","#1E0710","#4A1630"],["sand","رملي","#FFF8EC","#E8B07A","#FFF9F0","#1F140A","#4E3520"],["mono","أبيض وأسود","#FFFFFF","#FFFFFF","#FFFFFF","#000000","#1A1A1A"],["mushaf","مصحف ورقي (بدون توهج)","#2B1D0E","#000000","#3A2A16","#F3EAD3","#E2D1A6"]];
+// ---------- designs + filters (real previews rendered by our editor) ----------
 const state={};
-const paint=(el,t)=>{const glow=t[0]==='mushaf'?'none':`0 0 10px ${t[3]},0 0 22px ${t[3]}88`;el.style.background=`radial-gradient(120% 80% at 50% 0%,${t[6]},${t[5]})`;el.querySelector('.q,.mq').style.cssText=`color:${t[2]};text-shadow:${glow}`;el.querySelector('.t,.mt').style.color=t[4]};
-const tw=$('themes');
-TH.forEach((t,i)=>{
-  const b=document.createElement('button');b.type='button';b.className='th';b.setAttribute('aria-pressed',i===0);
-  b.innerHTML=`<div class="card"><div class="q">يُسْرًا</div><div class="t">فرجًا وسعة</div></div><span class="nm"></span>`;
-  b.querySelector('.nm').textContent=t[1];paint(b.querySelector('.card'),t);
-  b.onclick=()=>{tw.querySelectorAll('.th').forEach(x=>x.setAttribute('aria-pressed',x===b));state.theme=t;paint($('mini'),t);render()};
-  tw.appendChild(b);
-});
-state.theme=TH[0];paint($('mini'),TH[0]);
+const TPL_ORDER=['hadi','mutarjam','tabeea','tawahhoj','wasat','kalima','mushaf','sinema','bitaqa','layl','neon','sharit','mihrab','abyad'];
+function chooser(box,cls,items,key,onpick){
+  items.forEach(([k,n,img],i)=>{const b=document.createElement('button');b.type='button';b.className=cls;b.setAttribute('aria-pressed',i===0);
+    const im=document.createElement('img');im.alt='';im.loading='lazy';im.src=img;const sp=document.createElement('span');sp.textContent=n;b.append(im,sp);
+    b.onclick=()=>{box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));state[key]={k,v:n,img};onpick&&onpick();render()};box.appendChild(b)});
+  state[key]={k:items[0][0],v:items[0][1],img:items[0][2]};
+}
+fetch('media/tpl.json').then(r=>r.json()).then(J=>{
+  chooser($('tpls'),'tp',TPL_ORDER.filter(k=>J.tpl[k]).map(k=>[k,J.tpl[k].n,J.tpl[k].img]),'tpl',()=>{$('mini').src=state.tpl.img});
+  chooser($('filts'),'fl',Object.entries(J.filt).map(([k,v])=>[k,v.n,v.img]),'filt');$('mini').src=state.tpl.img;render();
+}).catch(()=>{state.tpl={k:'hadi',v:'هادي'};state.filt={k:'none',v:'بدون'};render()});
 
 // ---------- option groups ----------
 document.querySelectorAll('.opts').forEach(g=>{
   const k=g.dataset.k;
-  const pick=b=>{g.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));state[k]={v:b.dataset.v,p:+b.dataset.p||0};render()};
+  const pick=b=>{g.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));state[k]={v:b.dataset.v,p:+b.dataset.p||0,q:+b.dataset.q||0};render()};
   g.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>pick(b)));
   pick(g.querySelector('[aria-pressed="true"]')||g.querySelector('.opt'));
 });
@@ -398,22 +425,24 @@ file.onchange=setFile;
 ['dragleave','drop'].forEach(e=>drop.addEventListener(e,()=>drop.classList.remove('on')));
 drop.addEventListener('drop',ev=>{ev.preventDefault();if(ev.dataTransfer.files.length){file.files=ev.dataTransfer.files;setFile()}});
 
-['reader','cname','notes'].forEach(id=>$(id).addEventListener('input',render));
+['reader','cname','notes','handle'].forEach(id=>$(id).addEventListener('input',render));$('riw').addEventListener('change',render);
 
 // ---------- summary ----------
+const riwTxt=()=>$('riw').selectedOptions[0].textContent;
 const surahTxt=()=>sS.value===''?'—':`${N[sS.value]} (${sF.value===sT.value?'آية '+ar(sF.value):'الآيات '+ar(sF.value)+'–'+ar(sT.value)})`;
 function render(){
   if(!ready)return;
-  if(!state.size||!state.len||!state.taf||!state.theme)return;
+  if(!state.size||!state.len||!state.taf||!state.tpl||!state.qual)return;
   const f=file.files[0];
-  const rows=[['المقاس',state.size.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الألوان',state.theme[1]],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
+  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الرواية',riwTxt()],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
   const dl=$('sum');dl.innerHTML='';
   rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
   $('total').textContent=`${ar(state.len.p)} د.ك`;
 }
 function waText(code,uploaded){
   const L=[`السلام عليكم، طلب جديد من «رتّل» رقم ${code}:`,
-    `• المقاس: ${state.size.v}`,`• الطول: ${state.len.v}`,`• تحت الآيات: ${state.taf.v}`,`• الألوان: ${state.theme[1]}`,`• السورة: ${surahTxt()}`];
+    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• تحت الآيات: ${state.taf.v}`,`• الرواية: ${riwTxt()}`,`• السورة: ${surahTxt()}`];
+  if($('handle').value.trim())L.push(`• اسم الحساب: ${$('handle').value.trim()}`);
   if($('reader').value.trim())L.push(`• القارئ: ${$('reader').value.trim()}`);
   if($('notes').value.trim())L.push(`• ملاحظات: ${$('notes').value.trim()}`);
   L.push(`• المجموع: ${ar(state.len.p)} د.ك`);
@@ -450,7 +479,7 @@ $('form').addEventListener('submit',async e=>{
     }
     $('sendTxt').textContent='يحفظ الطلب…';
     await fs.setDoc(fs.doc(db,'orders',id),{
-      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.theme[1],
+      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
       surah:sS.value===''?'':N[sS.value],from:+sF.value||0,to:+sT.value||0,
       reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),notes:$('notes').value.trim().slice(0,500),
       price:state.len.p,fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
