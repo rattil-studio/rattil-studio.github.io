@@ -231,7 +231,7 @@ async function load(){loadExtras();
     acts.appendChild(del);
     const rv=document.createElement('button');rv.className='btn ghost';rv.textContent='رابط التقييم';
     rv.onclick=async()=>{rv.disabled=true;try{await setDoc(doc(db,'delivered',o.code),{at:serverTimestamp()});const u=new URL(`review.html?c=${o.code}`,location.href).href;
-      try{await navigator.clipboard.writeText(u)}catch(e){}const p=document.createElement('p');p.className='msg';p.textContent='انسخه وأرسله إلى العميل: '+u;acts.after(p);rv.textContent='انسخ الرابط ✓'}catch(e){rv.textContent='لم ينجح';rv.disabled=false}};
+      const m=`شكرًا لثقتك برتّل 🌙\nيسعدنا رأيك في مقطعك، يأخذ منك دقيقة:\n${u}`;try{await navigator.clipboard.writeText(m)}catch(e){}const p=document.createElement('p');p.className='msg';p.style.whiteSpace='pre-line';p.textContent='نُسخت الرسالة، الصقها للعميل في واتساب:\n'+m;acts.after(p);rv.textContent='نُسخت الرسالة ✓'}catch(e){rv.textContent='لم ينجح';rv.disabled=false}};
     acts.appendChild(rv);
     if(o.chunks)c.appendChild(designUI(o,d.id,c,getBlob));
     $('list').appendChild(c);
