@@ -272,13 +272,20 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <button type="button" class="opt" data-v="باقة ٥ مقاطع (كل واحد لين دقيقة)" data-p="4">باقة ٥ مقاطع<small>٤ د.ك</small></button>
           </div>
         </div>
-        <div class="f"><span class="lbl">تحت الآيات</span>
+        <div class="f"><span class="lbl">التفسير</span>
+          <p class="hint">شرح معنى الآية بالعربي، يطلع تحتها.</p>
           <div class="opts" data-k="taf">
-            <button type="button" class="opt" data-v="التفسير الميسر" aria-pressed="true">التفسير الميسر</button>
-            <button type="button" class="opt" data-v="التفسير المختصر">التفسير المختصر</button>
-            <button type="button" class="opt" data-v="تفسير السعدي">تفسير السعدي</button>
-            <button type="button" class="opt" data-v="ترجمة إنجليزية">ترجمة إنجليزية</button>
-            <button type="button" class="opt" data-v="تفسير إنجليزي">تفسير إنجليزي</button>
+            <button type="button" class="opt" data-v="التفسير الميسر" aria-pressed="true">الميسر</button>
+            <button type="button" class="opt" data-v="التفسير المختصر">المختصر</button>
+            <button type="button" class="opt" data-v="تفسير السعدي">السعدي</button>
+            <button type="button" class="opt" data-v="بدون">بدون تفسير</button>
+          </div>
+        </div>
+        <div class="f"><span class="lbl">الترجمة</span>
+          <p class="hint">معنى الآية بلغة ثانية. تقدر تختارها مع التفسير أو بروحها.</p>
+          <div class="opts" data-k="lang">
+            <button type="button" class="opt" data-v="بدون" aria-pressed="true">بدون ترجمة</button>
+            <button type="button" class="opt" data-v="ترجمة إنجليزية">إنجليزي</button>
             <button type="button" class="opt" data-v="ترجمة أردو">أردو</button>
             <button type="button" class="opt" data-v="ترجمة إندونيسية">إندونيسي</button>
             <button type="button" class="opt" data-v="ترجمة فرنسية">فرنسي</button>
@@ -286,7 +293,6 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <button type="button" class="opt" data-v="ترجمة ملايو">ملايو</button>
             <button type="button" class="opt" data-v="ترجمة إسبانية">إسباني</button>
             <button type="button" class="opt" data-v="ترجمة بنغالية">بنغالي</button>
-            <button type="button" class="opt" data-v="بدون">الآيات بس</button>
           </div>
         </div>
         <div class="f"><span class="lbl">التصميم</span>
@@ -482,14 +488,14 @@ function render(){
   if(!ready)return;
   if(!state.size||!state.len||!state.taf||!state.tpl||!state.qual)return;
   const f=file.files[0];
-  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الرواية',riwTxt()],['خلفية الصوت',state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
+  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['التفسير',state.taf.v],['الترجمة',state.lang?state.lang.v:'بدون'],['الرواية',riwTxt()],['خلفية الصوت',state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
   const dl=$('sum');dl.innerHTML='';
   rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
   $('total').textContent=`${ar(total())} د.ك`;
 }
 function waText(code,uploaded){
   const L=[`السلام عليكم، طلب جديد من «رتّل» رقم ${code}:`,
-    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• تحت الآيات: ${state.taf.v}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${state.bga?state.bga.v:'—'}`,`• الغلاف: ${$('pack').checked&&state.cover?state.cover.v:'بدون'}`,`• السورة: ${surahTxt()}`];
+    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• التفسير: ${state.taf.v}`,`• الترجمة: ${state.lang?state.lang.v:'بدون'}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${state.bga?state.bga.v:'—'}`,`• الغلاف: ${$('pack').checked&&state.cover?state.cover.v:'بدون'}`,`• السورة: ${surahTxt()}`];
   if($('handle').value.trim())L.push(`• اسم الحساب: ${$('handle').value.trim()}`);
   if($('reader').value.trim())L.push(`• القارئ: ${$('reader').value.trim()}`);
   if($('notes').value.trim())L.push(`• ملاحظات: ${$('notes').value.trim()}`);
@@ -517,7 +523,7 @@ const _ownPreview=()=>{const err=$('err');err.textContent='';
   if(sS.value===''){err.textContent='اختار السورة والآيات عشان نطلع لك المعاينة.';sS.focus();return}
   const f=file.files[0];if(!f){err.textContent='ارفع ملف التلاوة أول عشان تشوف المعاينة عليه.';return}
   if(purl)URL.revokeObjectURL(purl);purl=URL.createObjectURL(f);
-  const q=new URLSearchParams({demo:1,src:purl,surah:+sS.value+1,from:sF.value,to:sT.value,tpl:state.tpl?state.tpl.k:'hadi',filt:state.filt?state.filt.k:'none',mode:MODEQ(state.size.v),sub:SUBQ[state.taf.v]||'muyassar',handle:$('handle').value.trim(),reader:$('reader').value.trim()});
+  const q=new URLSearchParams({demo:1,src:purl,surah:+sS.value+1,from:sF.value,to:sT.value,tpl:state.tpl?state.tpl.k:'hadi',filt:state.filt?state.filt.k:'none',mode:MODEQ(state.size.v),sub:state.taf.v==='بدون'&&state.lang&&state.lang.v!=='بدون'?'tr':(SUBQ[state.taf.v]||'muyassar'),handle:$('handle').value.trim(),reader:$('reader').value.trim()});
   $('pframe').src='preview.html?'+q;$('pmodal').classList.add('on');document.body.style.overflow='hidden'};
 $('pclose').onclick=()=>{$('pmodal').classList.remove('on');document.body.style.overflow=''};
 $('pmodal').addEventListener('click',e=>{if(e.target.id==='pmodal'||e.target.classList.contains('pbox'))$('pclose').click()});
@@ -563,7 +569,7 @@ $('form').addEventListener('submit',async e=>{
     }
     $('sendTxt').textContent='يحفظ الطلب…';
     await fs.setDoc(fs.doc(db,'orders',id),{
-      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,bga:state.bga?state.bga.a:'sky',cover:$('pack').checked&&state.cover?state.cover.k:'',qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
+      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,lang:state.lang?state.lang.v:'بدون',theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,bga:state.bga?state.bga.a:'sky',cover:$('pack').checked&&state.cover?state.cover.k:'',qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
       surah:sS.value===''?'':N[sS.value],from:+sF.value||0,to:+sT.value||0,
       reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),notes:$('notes').value.trim().slice(0,500),
       price:total(),fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
