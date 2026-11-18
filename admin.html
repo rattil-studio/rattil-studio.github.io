@@ -230,7 +230,7 @@ async function load(){loadExtras();
       del.disabled=true;for(const x of await chunksOf(d.id))await deleteDoc(x.ref);await deleteDoc(d.ref);c.remove();};
     acts.appendChild(del);
     const rv=document.createElement('button');rv.className='btn ghost';rv.textContent='رابط التقييم';
-    rv.onclick=async()=>{rv.disabled=true;try{await setDoc(doc(db,'delivered',o.code),{at:serverTimestamp()});const u=`https://bynsr1.github.io/rattil/review.html?c=${o.code}`;
+    rv.onclick=async()=>{rv.disabled=true;try{await setDoc(doc(db,'delivered',o.code),{at:serverTimestamp()});const u=new URL(`review.html?c=${o.code}`,location.href).href;
       try{await navigator.clipboard.writeText(u)}catch(e){}const p=document.createElement('p');p.className='msg';p.textContent='انسخه وأرسله إلى العميل: '+u;acts.after(p);rv.textContent='انسخ الرابط ✓'}catch(e){rv.textContent='لم ينجح';rv.disabled=false}};
     acts.appendChild(rv);
     if(o.chunks)c.appendChild(designUI(o,d.id,c,getBlob));
