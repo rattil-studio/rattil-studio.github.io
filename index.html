@@ -305,8 +305,10 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <button type="button" class="opt" data-v="صورة أرسلها" data-a="image">صورتك<small>ترسلها بالواتساب، وتتقرّب ببطء</small></button>
           </div>
         </div>
-        <div class="f"><span class="lbl">إضافات</span>
-          <label class="agree" style="margin-top:0"><input type="checkbox" id="pack"> باقة النشر: غلاف للريل، ونص المنشور جاهز بالآيات والهاشتاقات، وملف ترجمة لليوتيوب (+٠٫٥ د.ك)</label>
+        <div class="f"><span class="lbl">غلاف الريل</span>
+          <label class="agree" style="margin-top:0"><input type="checkbox" id="pack"> أبي غلاف للمقطع (+٠٫٥ د.ك)</label>
+          <p class="hint" id="covHint" hidden style="margin-top:8px">اختار شكل الغلاف. اسم السورة والآيات واسم القارئ تنحط لحالها، والصورة من فيديوك.</p>
+          <div class="tpls" id="covers" role="group" aria-label="شكل الغلاف" hidden></div>
         </div>
         <div class="f"><span class="lbl">الجودة</span>
           <div class="opts" data-k="qual">
@@ -426,7 +428,7 @@ const applyF=()=>{const f=FCSS[state.filt&&state.filt.k]||'';$('mini').style.fil
 function chooser(box,cls,items,key,onpick){
   items.forEach(([k,n,img],i)=>{const b=document.createElement('button');b.type='button';b.className=cls;b.setAttribute('aria-pressed',i===0);
     const im=document.createElement('img');im.alt='';im.loading='lazy';im.src=img;const sp=document.createElement('span');sp.textContent=n;b.append(im,sp);
-    if(cls==='tp'){const pl=document.createElement('span');pl.className='play';pl.title='كبّر الصورة';pl.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>';pl.onclick=e=>{e.stopPropagation();b.click();openSample()};b.appendChild(pl)}
+    if(cls==='tp'||cls==='tp cv'){const pl=document.createElement('span');pl.className='play';pl.title='كبّر الصورة';pl.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>';pl.onclick=e=>{e.stopPropagation();b.click();cls==='tp cv'?openCover():openSample()};b.appendChild(pl)}
     b.onclick=()=>{box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));state[key]={k,v:n,img};onpick&&onpick();render()};box.appendChild(b)});
   state[key]={k:items[0][0],v:items[0][1],img:items[0][2]};
 }
@@ -480,14 +482,14 @@ function render(){
   if(!ready)return;
   if(!state.size||!state.len||!state.taf||!state.tpl||!state.qual)return;
   const f=file.files[0];
-  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الرواية',riwTxt()],['خلفية الصوت',state.bga?state.bga.v:'—'],['باقة النشر',$('pack').checked?'نعم':'لا'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
+  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الرواية',riwTxt()],['خلفية الصوت',state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
   const dl=$('sum');dl.innerHTML='';
   rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
   $('total').textContent=`${ar(total())} د.ك`;
 }
 function waText(code,uploaded){
   const L=[`السلام عليكم، طلب جديد من «رتّل» رقم ${code}:`,
-    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• تحت الآيات: ${state.taf.v}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${state.bga?state.bga.v:'—'}`,`• باقة النشر: ${$('pack').checked?'نعم':'لا'}`,`• السورة: ${surahTxt()}`];
+    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• تحت الآيات: ${state.taf.v}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${state.bga?state.bga.v:'—'}`,`• الغلاف: ${$('pack').checked&&state.cover?state.cover.v:'بدون'}`,`• السورة: ${surahTxt()}`];
   if($('handle').value.trim())L.push(`• اسم الحساب: ${$('handle').value.trim()}`);
   if($('reader').value.trim())L.push(`• القارئ: ${$('reader').value.trim()}`);
   if($('notes').value.trim())L.push(`• ملاحظات: ${$('notes').value.trim()}`);
@@ -500,10 +502,13 @@ function waText(code,uploaded){
 // ---------- live preview of the chosen design on the customer's own file ----------
 const SUBQ={"التفسير الميسر":"muyassar","التفسير المختصر":"muyassar","تفسير السعدي":"muyassar","ترجمة إنجليزية":"tr","تفسير إنجليزي":"tr","بدون":"none"};
 const total=()=>state.len.p+(state.size&&state.size.p||0)+($('pack').checked?.5:0);
-$('pack').addEventListener('change',render);
+let COV=null;
+$('pack').addEventListener('change',async()=>{const on=$('pack').checked;$('covers').hidden=$('covHint').hidden=!on;
+  if(on&&!COV){try{COV=await (await fetch('media/covers.json?v=1')).json();chooser($('covers'),'tp cv',Object.entries(COV).map(([k,v])=>[k,v.n,v.img]),'cover')}catch(e){}}render()});
 const MODEQ=v=>v.startsWith('ريلز')?'reel':v.startsWith('مربع')?'square':v.startsWith('يوتيوب')?'youtube':'original';
 let purl=null;
 let BIG=null;
+function openCover(){const k=state.cover&&state.cover.k;if(!k||!COV)return;const im=$('pimg');im.style.filter='';im.src=COV[k].big||COV[k].img;$('pcap').textContent='غلاف · '+COV[k].n;openModal()}
 function openModal(){$('pmodal').classList.add('on');document.body.style.overflow='hidden'}
 async function openSample(){const k=state.tpl?state.tpl.k:'hadi',im=$('pimg');im.src=state.tpl?state.tpl.img:'';im.style.filter=FCSS[state.filt&&state.filt.k]||'';$('pcap').textContent=`${state.tpl?state.tpl.v:''} · فلتر ${state.filt?state.filt.v:'بدون'}`;openModal();
   try{if(!BIG)BIG=await (await fetch('media/tplbig.json?v=28')).json();if(BIG[k]&&state.tpl&&state.tpl.k===k)im.src=BIG[k]}catch(e){}}
@@ -558,7 +563,7 @@ $('form').addEventListener('submit',async e=>{
     }
     $('sendTxt').textContent='يحفظ الطلب…';
     await fs.setDoc(fs.doc(db,'orders',id),{
-      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,bga:state.bga?state.bga.a:'sky',pack:$('pack').checked,qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
+      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,bga:state.bga?state.bga.a:'sky',cover:$('pack').checked&&state.cover?state.cover.k:'',qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
       surah:sS.value===''?'':N[sS.value],from:+sF.value||0,to:+sT.value||0,
       reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),notes:$('notes').value.trim().slice(0,500),
       price:total(),fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
