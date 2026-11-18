@@ -318,9 +318,9 @@ button.wa:disabled{opacity:.6;cursor:wait}
         </div>
         <div class="f"><span class="lbl">الجودة</span>
           <div class="opts" data-k="qual">
-            <button type="button" class="opt" data-v="Full HD" data-q="1" aria-pressed="true">Full HD<small>1080p</small></button>
-            <button type="button" class="opt" data-v="2K" data-q="1.3334">2K<small>أوضح</small></button>
-            <button type="button" class="opt" data-v="4K" data-q="2">4K<small>أعلى جودة</small></button>
+            <button type="button" class="opt" data-v="Full HD" data-q="1" aria-pressed="true">Full HD<small>بدون زيادة</small></button>
+            <button type="button" class="opt" data-v="2K" data-q="1.3334" data-p="0.5">2K<small>+٠٫٥ د.ك</small></button>
+            <button type="button" class="opt" data-v="4K" data-q="2" data-p="1">4K<small>+١ د.ك</small></button>
           </div>
         </div>
         <div class="f two">
@@ -507,7 +507,7 @@ function waText(code,uploaded){
 
 // ---------- live preview of the chosen design on the customer's own file ----------
 const SUBQ={"التفسير الميسر":"muyassar","التفسير المختصر":"muyassar","تفسير السعدي":"muyassar","ترجمة إنجليزية":"tr","تفسير إنجليزي":"tr","بدون":"none"};
-const total=()=>state.len.p+(state.size&&state.size.p||0)+($('pack').checked?.5:0);
+const total=()=>state.len.p+(state.size&&state.size.p||0)+(state.qual&&state.qual.p||0)+($('pack').checked?.5:0);
 let COV=null;
 $('pack').addEventListener('change',async()=>{const on=$('pack').checked;$('covers').hidden=$('covHint').hidden=!on;
   if(on&&!COV){try{COV=await (await fetch('media/covers.json?v=1')).json();chooser($('covers'),'tp cv',Object.entries(COV).map(([k,v])=>[k,v.n,v.img]),'cover')}catch(e){}}render()});
