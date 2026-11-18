@@ -29,12 +29,12 @@ button.send:disabled{opacity:.6}
 <body>
 <main class="box" id="box">
   <div class="logo">رتّ<span>ل</span></div>
-  <h1>وش رأيك في مقطعك؟</h1>
-  <p class="sub">رأيك يساعدنا نتحسّن، ويساعد غيرك يختار.</p>
+  <h1>ما رأيك في مقطعك؟</h1>
+  <p class="sub">رأيك يساعدنا على التحسّن، ويساعد غيرك على الاختيار.</p>
   <div class="stars" id="stars" role="radiogroup" aria-label="التقييم من ٥"></div>
   <label for="text">اكتب رأيك</label>
-  <textarea id="text" maxlength="400" placeholder="شنو عجبك؟ وشنو نقدر نحسّنه؟"></textarea>
-  <label for="name">اسمك (يطلع مع رأيك)</label>
+  <textarea id="text" maxlength="400" placeholder="ما الذي أعجبك؟ وما الذي يمكننا تحسينه؟"></textarea>
+  <label for="name">اسمك (يظهر مع رأيك)</label>
   <input id="name" maxlength="40" placeholder="مثلاً: أبو محمد">
   <button class="send" id="send">أرسل التقييم</button>
   <p class="msg" id="msg" role="status"></p>
@@ -45,14 +45,14 @@ const code=(new URLSearchParams(location.search).get('c')||'').replace(/[^A-Z0-9
 let stars=5;
 const sb=$('stars');for(let i=1;i<=5;i++){const b=document.createElement('button');b.type='button';b.textContent='★';b.setAttribute('role','radio');b.setAttribute('aria-label',i+' من ٥');b.onclick=()=>{stars=i;paint()};sb.appendChild(b)}
 const paint=()=>[...sb.children].forEach((b,i)=>{b.classList.toggle('on',i<stars);b.setAttribute('aria-checked',i+1===stars)});paint();
-if(!code){$('msg').textContent='الرابط ناقص. اطلب من رتّل رابط التقييم.';$('msg').className='msg err';$('send').disabled=true}
-$('send').onclick=async()=>{const text=$('text').value.trim();if(text.length<3){$('msg').textContent='اكتب رأيك بكلمتين على الأقل.';$('msg').className='msg err';return}
-  $('send').disabled=true;$('msg').className='msg';$('msg').textContent='يرسل…';
+if(!code){$('msg').textContent='الرابط غير مكتمل. اطلب رابط التقييم من رتّل.';$('msg').className='msg err';$('send').disabled=true}
+$('send').onclick=async()=>{const text=$('text').value.trim();if(text.length<3){$('msg').textContent='اكتب رأيك في كلمتين على الأقل.';$('msg').className='msg err';return}
+  $('send').disabled=true;$('msg').className='msg';$('msg').textContent='جارٍ الإرسال…';
   try{const {initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');const fs=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
     const db=fs.getFirestore(initializeApp({apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya"}));
     await fs.setDoc(fs.doc(db,'reviews',code),{code,stars,text:text.slice(0,400),name:$('name').value.trim().slice(0,40),approved:false,createdAt:fs.serverTimestamp()});
-    $('box').innerHTML='<div class="done"><div class="big">★</div><h1>شكراً لك</h1><p class="sub">وصلنا رأيك. جزاك الله خير.</p></div>'}
-  catch(e){$('msg').className='msg err';$('msg').textContent='ما قدرنا نرسله. يمكن الرابط قديم أو قيّمت قبل.';$('send').disabled=false}};
+    $('box').innerHTML='<div class="done"><div class="big">★</div><h1>شكراً لك</h1><p class="sub">وصلنا رأيك. جزاك الله خيرًا.</p></div>'}
+  catch(e){$('msg').className='msg err';$('msg').textContent='تعذّر الإرسال. ربما الرابط قديم، أو سبق أن قيّمت.';$('send').disabled=false}};
 </script>
 </body>
 </html>

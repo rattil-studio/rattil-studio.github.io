@@ -49,14 +49,14 @@ audio,video{width:100%;margin-top:12px;border-radius:12px;max-height:360px}
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><h1>طلبات رتّل</h1><p style="margin:6px 0 14px"><a class="btn" href="http://127.0.0.1:8765/new" target="_blank" rel="noopener">+ تلاوة من الواتساب أو ملف</a></p><button class="btn" id="login">دخول بجوجل</button></div>
-  <p class="dz" id="dz">المصمم: يفحص…</p>
-  <p class="msg" id="msg">سجّل دخولك بحساب جوجل حقك عشان تشوف الطلبات.</p>
+  <div class="top"><h1>طلبات رتّل</h1><p style="margin:6px 0 14px"><a class="btn" href="http://127.0.0.1:8765/new" target="_blank" rel="noopener">+ تلاوة من واتساب أو من ملف</a></p><button class="btn" id="login">الدخول بحساب Google</button></div>
+  <p class="dz" id="dz">المصمِّم: جارٍ الفحص…</p>
+  <p class="msg" id="msg">سجّل الدخول بحسابك في Google لعرض الطلبات.</p>
   <div id="list"></div>
   <h2 class="sec" id="revH" hidden>التقييمات</h2><div id="revs"></div>
   <h2 class="sec" id="galH" hidden>معرض الأعمال</h2>
-  <div class="card" id="galForm" hidden><p class="msg" style="margin-top:0">حط رابط المقطع من انستقرام أو تيك توك أو يوتيوب (بعد ما ياخذ إذن العميل)، ويطلع في الموقع.</p>
-    <div class="acts"><input id="gUrl" placeholder="رابط المقطع" style="flex:2;min-width:200px"><input id="gTitle" placeholder="وصف قصير، مثلاً: سورة يوسف · قالب شمسة" style="flex:2;min-width:200px"><button class="btn" id="gAdd">أضف للمعرض</button></div></div>
+  <div class="card" id="galForm" hidden><p class="msg" style="margin-top:0">ضع رابط المقطع من إنستغرام أو تيك توك أو يوتيوب (بعد أخذ إذن العميل)، وسيظهر في الموقع.</p>
+    <div class="acts"><input id="gUrl" placeholder="رابط المقطع" style="flex:2;min-width:200px"><input id="gTitle" placeholder="وصف قصير، مثلًا: سورة يوسف · قالب شمسة" style="flex:2;min-width:200px"><button class="btn" id="gAdd">أضف إلى المعرض</button></div></div>
   <div id="gals"></div>
 </div>
 <script type="module">
@@ -70,7 +70,7 @@ const ar=n=>Number(n).toLocaleString('ar-EG');
 let signedIn=false;
 const WK='http://127.0.0.1:8765';
 const N="الفاتحة البقرة آل_عمران النساء المائدة الأنعام الأعراف الأنفال التوبة يونس هود يوسف الرعد إبراهيم الحجر النحل الإسراء الكهف مريم طه الأنبياء الحج المؤمنون النور الفرقان الشعراء النمل القصص العنكبوت الروم لقمان السجدة الأحزاب سبأ فاطر يس الصافات ص الزمر غافر فصلت الشورى الزخرف الدخان الجاثية الأحقاف محمد الفتح الحجرات ق الذاريات الطور النجم القمر الرحمن الواقعة الحديد المجادلة الحشر الممتحنة الصف الجمعة المنافقون التغابن الطلاق التحريم الملك القلم الحاقة المعارج نوح الجن المزمل المدثر القيامة الإنسان المرسلات النبأ النازعات عبس التكوير الانفطار المطففين الانشقاق البروج الطارق الأعلى الغاشية الفجر البلد الشمس الليل الضحى الشرح التين العلق القدر البينة الزلزلة العاديات القارعة التكاثر العصر الهمزة الفيل قريش الماعون الكوثر الكافرون النصر المسد الإخلاص الفلق الناس".split(" ").map(s=>s.replace("_"," "));
-const THK={"كحلي وذهبي":"navy_gold","أزرق ملكي":"royal_blue","زمردي وذهبي":"emerald","رمضاني":"ramadan","فيروزي":"turquoise","عنابي وذهبي":"burgundy","فضي ليلي":"silver_night","أبيض هادئ":"white_soft","وردي ناعم":"rose","رملي":"sand","أبيض وأسود":"mono","مصحف ورقي (بدون توهج)":"mushaf"};
+const THK={"كحلي وذهبي":"navy_gold","أزرق ملكي":"royal_blue","زمردي وذهبي":"emerald","رمضاني":"ramadan","فيروزي":"turquoise","عنابي وذهبي":"burgundy","فضي ليلي":"silver_night","أبيض هادئ":"white_soft","وردي ناعم":"rose","رملي":"sand","أبيض وأسود":"mono","مصحف ورقي (دون توهج)":"mushaf"};
 const TAFK={"التفسير الميسر":"muyassar","التفسير المختصر":"mukhtasar","تفسير السعدي":"saadi","تفسير إنجليزي":"en","بدون":"none"};
 const SUBK={"التفسير الميسر":"muyassar","التفسير المختصر":"mukhtasar","تفسير السعدي":"saadi","تفسير إنجليزي":"en","ترجمة إنجليزية":"tr","ترجمة أردو":"ur","ترجمة إندونيسية":"id","ترجمة فرنسية":"fr","ترجمة تركية":"tu","ترجمة ملايو":"ms","ترجمة إسبانية":"es","ترجمة بنغالية":"bn","بدون":"none"};
 const QK={"Full HD":1,"2K":1.3334,"4K":2};
@@ -78,7 +78,7 @@ const modeOf=s=>s.startsWith('الثلاث')?'reel':s.startsWith('ريلز')?'re
 const RIW=[['hafs','حفص'],['shouba','شعبة'],['warsh','ورش'],['qaloon','قالون'],['doori','الدوري'],['soosi','السوسي'],['bazzi','البزي'],['qumbul','قنبل']];
 let wkOn=false;
 async function ping(){try{const r=await fetch(WK+'/ping',{cache:'no-store'});wkOn=r.ok}catch(e){wkOn=false}
-  $('dz').innerHTML=wkOn?'المصمم: <b>شغّال</b> على اللابتوب':'المصمم: مو شغّال. شغّل <b>start.bat</b> في مجلد rattil-worker عشان تقدر تصمم.'}
+  $('dz').innerHTML=wkOn?'المصمم: <b>يعمل</b> على الحاسوب':'المصمِّم: متوقف. شغّل <b>start.bat</b> في مجلد rattil-worker لتتمكن من التصميم.'}
 ping();setInterval(ping,15000);
 const RTH=[['r_plum','رتّل بنفسجي','#FFF6E6','#FFD27A','#1C0A22','#4A2457'],['r_dawn','فجر','#FFFFFF','#FF9E7A','#1E0C16','#7A3B45'],['r_gulf','خليج','#F2FBFF','#5FD3E6','#03161E','#0E4D5E'],['r_olive','زيتوني','#FBFFF2','#C9D86B','#10150A','#3A4420'],['r_ink','حبر','#FFFFFF','#9FB4FF','#05060D','#1B2142'],['r_amber','كهرماني','#FFF9EE','#FFB000','#140B02','#4A2C08'],
  ['navy_gold','كحلي وذهبي','#FFF8E6','#F0B446','#050A24','#14234F'],['royal_blue','أزرق ملكي','#FFFFFF','#4D8CFF','#030A2A','#0C2A7A'],['emerald','زمردي وذهبي','#F3FFF7','#3FD18A','#02140E','#0B3B2A'],['ramadan','رمضاني','#FFF4DC','#FFB347','#12062B','#3A1A5E'],['turquoise','فيروزي','#F0FFFF','#2EC4C6','#021A22','#0B4650'],['burgundy','عنابي وذهبي','#FFF3E8','#E9A23B','#22050C','#5A1023'],['silver_night','فضي ليلي','#F4F7FF','#9DB4FF','#05070F','#1A2240'],['white_soft','أبيض هادئ','#FFFFFF','#FFFFFF','#0B0B0E','#26262E'],['rose','وردي ناعم','#FFF5F8','#FF8FB1','#1E0710','#4A1630'],['sand','رملي','#FFF8EC','#E8B07A','#1F140A','#4E3520'],['mono','أبيض وأسود','#FFFFFF','#FFFFFF','#000000','#1A1A1A'],['mushaf','مصحف ورقي','#2B1D0E','#000000','#F3EAD3','#E2D1A6']];
@@ -96,8 +96,8 @@ function designUI(o,id,c,getBlob){
   let job=null,S=loadStyle(),mode=modeOf(o.size||''),t=1,seq=0,timer=null;
   if(THK[o.theme]&&!localStorage.getItem('rattil-style'))S.theme=THK[o.theme];
   open.onclick=async()=>{
-    if(!wkOn){await ping();if(!wkOn){prog.textContent='المصمم مو شغّال. شغّل start.bat وجرّب مرة ثانية.';return}}
-    open.disabled=true;open.textContent='يجهّز التلاوة…';
+    if(!wkOn){await ping();if(!wkOn){prog.textContent='المصمِّم متوقف. شغّل start.bat ثم حاول مرة أخرى.';return}}
+    open.disabled=true;open.textContent='جارٍ تجهيز التلاوة…';
     try{
       const blob=await getBlob();const sn=N.indexOf(o.surah)+1;
       const q=new URLSearchParams({code:o.code,tafsir:TAFK[o.taf]||'muyassar',riwayah:riw.value,reciter:o.reader||''});
@@ -106,10 +106,10 @@ function designUI(o,id,c,getBlob){
       const {id:jid,error}=await r.json();if(error)throw new Error(error);job=jid;
       const t0=Date.now();
       const tick=async()=>{const st=await (await fetch(`${WK}/status/${jid}`,{cache:'no-store'})).json();
-        if(st.state==='ready'){const u=WK+'/studio?'+new URLSearchParams({job:jid,tpl:o.tpl||'',filt:o.filt||'',mode:modeOf(o.size||''),q:QK[o.qual]||1,sub:(o.taf==='بدون'&&o.lang&&o.lang!=='بدون')?SUBK[o.lang]:(SUBK[o.taf]||'muyassar'),tr:(o.taf!=='بدون'&&o.lang&&o.lang!=='بدون')?SUBK[o.lang]:'',handle:o.handle||'',anim:o.bga||'',cover:o.cover||''});prog.innerHTML='';const a=document.createElement('a');a.href=u;a.target='_blank';a.className='btn';a.textContent='افتح المحرر';prog.appendChild(a);open.disabled=false;open.textContent='جهّز من جديد';window.open(u,'_blank');return}
-        if(st.state==='failed'){prog.textContent='ما قدر يتعرّف على التلاوة:\n'+(st.tail||'').slice(-300);open.disabled=false;open.textContent='جرّب مرة ثانية';return}
-        prog.textContent=`يسمع التلاوة ويرتّب الآيات… (${Math.floor((Date.now()-t0)/60000)} د)`;setTimeout(tick,4000)};tick();
-    }catch(e){prog.textContent='صار خطأ: '+e.message;open.disabled=false;open.textContent='افتح الاستوديو'}
+        if(st.state==='ready'){const u=WK+'/studio?'+new URLSearchParams({job:jid,tpl:o.tpl||'',filt:o.filt||'',mode:modeOf(o.size||''),q:QK[o.qual]||1,sub:(o.taf==='بدون'&&o.lang&&o.lang!=='بدون')?SUBK[o.lang]:(SUBK[o.taf]||'muyassar'),tr:(o.taf!=='بدون'&&o.lang&&o.lang!=='بدون')?SUBK[o.lang]:'',handle:o.handle||'',anim:o.bga||'',cover:o.cover||''});prog.innerHTML='';const a=document.createElement('a');a.href=u;a.target='_blank';a.className='btn';a.textContent='افتح المحرر';prog.appendChild(a);open.disabled=false;open.textContent='أعد التجهيز';window.open(u,'_blank');return}
+        if(st.state==='failed'){prog.textContent='تعذّر التعرّف على التلاوة:\n'+(st.tail||'').slice(-300);open.disabled=false;open.textContent='حاول مرة أخرى';return}
+        prog.textContent=`جارٍ الاستماع إلى التلاوة وترتيب الآيات… (${Math.floor((Date.now()-t0)/60000)} د)`;setTimeout(tick,4000)};tick();
+    }catch(e){prog.textContent='حدث خطأ: '+e.message;open.disabled=false;open.textContent='افتح الاستوديو'}
   };
   function grp(title,items,get,set){
     const g=document.createElement('div');g.className='sg';const h=document.createElement('div');h.className='sgt';h.textContent=title;g.appendChild(h);
@@ -121,11 +121,11 @@ function designUI(o,id,c,getBlob){
   function changed(){saveStyle(S);clearTimeout(timer);timer=setTimeout(preview,700)}
   let img,stat,vidBox,expBtn;
   async function preview(){
-    const my=++seq;stat.textContent='يحدّث المعاينة…';img.style.opacity=.55;
+    const my=++seq;stat.textContent='جارٍ تحديث المعاينة…';img.style.opacity=.55;
     try{const r=await fetch(`${WK}/preview/${job}?mode=${mode}&t=${t.toFixed(2)}`,{method:'POST',body:JSON.stringify(S),headers:{'Content-Type':'application/json'}});
       const d=await r.json();if(my!==seq)return;if(d.error)throw new Error(d.error);
       img.src=`${WK}/file/${job}/${d.image}`;img.onload=()=>{img.style.opacity=1};stat.textContent='';
-    }catch(e){if(my===seq){stat.textContent='ما زبطت المعاينة: '+e.message.slice(-200);img.style.opacity=1}}
+    }catch(e){if(my===seq){stat.textContent='تعذّرت المعاينة: '+e.message.slice(-200);img.style.opacity=1}}
   }
   function buildStudio(st){
     const wrap=document.createElement('div');wrap.className='studio';
@@ -137,7 +137,7 @@ function designUI(o,id,c,getBlob){
     t=st.phrases.length?(st.phrases[0].start+st.phrases[0].end)/2:1;
     left.append(img,stat,tl);
     const right=document.createElement('div');right.className='ctl';
-    const sw=document.createElement('div');sw.className='sg';sw.innerHTML='<div class="sgt">الألوان <small>(أول ٦ خاصة برتّل)</small></div>';
+    const sw=document.createElement('div');sw.className='sg';sw.innerHTML='<div class="sgt">الألوان <small>(الستة الأولى خاصة برتّل)</small></div>';
     const swr=document.createElement('div');swr.className='sws';
     RTH.forEach(([k,n,ay,gl,b0,b1],i)=>{const b=document.createElement('button');b.type='button';b.className='sw';b.title=n;b.setAttribute('aria-pressed',S.theme===k);
       b.innerHTML=`<i style="background:radial-gradient(circle at 50% 30%,${b1},${b0});color:${ay};text-shadow:0 0 8px ${gl}">آية</i><span></span>`;b.querySelector('span').textContent=n;
@@ -155,30 +155,30 @@ function designUI(o,id,c,getBlob){
       grp('التوهج',[[0.5,'خفيف'],[1,'متوسط'],[1.5,'قوي']],()=>S.glow,v=>S.glow=v),
       grp('حجم الآية',[[0.85,'صغير'],[1,'وسط'],[1.2,'كبير']],()=>S.size,v=>S.size=v),
       grp('خط التفسير',[['naskh','نسخ'],['tajawal','تجوّل'],['amiri','أميري'],['plex','الافتراضي']],()=>S.tafsir_font,v=>S.tafsir_font=v),
-      grp('مكان الكتابة',[['bottom','تحت'],['middle','بالنص']],()=>S.pos,v=>S.pos=v),
-      grp('الكلمات تضيء وحدة وحدة',[[true,'تشغيل'],[false,'إيقاف']],()=>S.words,v=>S.words=v),
+      grp('مكان الكتابة',[['bottom','تحت'],['middle','في الوسط']],()=>S.pos,v=>S.pos=v),
+      grp('الكلمات تضيء واحدة تلو الأخرى',[[true,'تشغيل'],[false,'إيقاف']],()=>S.words,v=>S.words=v),
       grp('اسم السورة والقارئ',[['ruqaa','رقعة'],['kufi','كوفي'],['amiri','أميري'],['off','بدون']],()=>S.title,v=>S.title=v),
       grp('الإطار',[[true,'تشغيل'],[false,'إيقاف']],()=>S.frame,v=>S.frame=v),
-      grp('الدخلة (اسم السورة بالبداية)',[[true,'تشغيل'],[false,'إيقاف']],()=>S.intro,v=>S.intro=v),
+      grp('المقدّمة (اسم السورة في البداية)',[[true,'تشغيل'],[false,'إيقاف']],()=>S.intro,v=>S.intro=v),
       grp('الخلفية (للتلاوة الصوتية)',[['pattern','زخرفة'],['stars','نجوم'],['bokeh','أضواء'],['gradient','تدرج'],['arch','قوس']],()=>S.bg,v=>S.bg=v)
     );
-    const og=document.createElement('div');og.className='sg';og.innerHTML='<div class="sgt">الختام (نص بآخر المقطع، مثل اسم حسابك)</div>';
-    const oi=document.createElement('input');oi.className='ti';oi.placeholder='اتركه فاضي إذا ما تبي ختام';oi.value=S.outro||'';oi.oninput=()=>{S.outro=oi.value;saveStyle(S)};og.appendChild(oi);right.appendChild(og);
-    const note=document.createElement('p');note.className='dz';note.textContent='الدخلة والختام والكلمات اللي تضيء تشوفها في الفيديو النهائي، مو في صورة المعاينة.';right.appendChild(note);
+    const og=document.createElement('div');og.className='sg';og.innerHTML='<div class="sgt">الخاتمة (نص في آخر المقطع، مثل اسم حسابك)</div>';
+    const oi=document.createElement('input');oi.className='ti';oi.placeholder='اتركه فارغًا إن لم تُرد خاتمة';oi.value=S.outro||'';oi.oninput=()=>{S.outro=oi.value;saveStyle(S)};og.appendChild(oi);right.appendChild(og);
+    const note=document.createElement('p');note.className='dz';note.textContent='تظهر المقدّمة والخاتمة والكلمات المضيئة في الفيديو النهائي، لا في صورة المعاينة.';right.appendChild(note);
     expBtn=document.createElement('button');expBtn.className='btn';expBtn.style.width='100%';expBtn.style.marginTop='14px';expBtn.textContent='صدّر الفيديو';
     vidBox=document.createElement('div');
-    expBtn.onclick=async()=>{expBtn.disabled=true;expBtn.textContent='يصدّر…';vidBox.innerHTML='';
+    expBtn.onclick=async()=>{expBtn.disabled=true;expBtn.textContent='جارٍ التصدير…';vidBox.innerHTML='';
       const r=await fetch(`${WK}/render/${job}?mode=${mode}`,{method:'POST',body:JSON.stringify(S),headers:{'Content-Type':'application/json'}});
       const d=await r.json();if(d.error){expBtn.textContent='صدّر الفيديو';expBtn.disabled=false;vidBox.textContent=d.error;return}
       const t0=Date.now();
       const tick=async()=>{const s2=await (await fetch(`${WK}/status/${job}`,{cache:'no-store'})).json();
-        if(s2.render==='done'){expBtn.disabled=false;expBtn.textContent='صدّر مرة ثانية';
+        if(s2.render==='done'){expBtn.disabled=false;expBtn.textContent='صدّر مرة أخرى';
           const v=document.createElement('video');v.controls=true;v.src=`${WK}/file/${job}/${s2.video}`;
-          const a=document.createElement('a');a.className='btn';a.textContent='نزّل الفيديو';a.href=v.src;a.download=`rattil-${o.code}.mp4`;
-          const p=document.createElement('p');p.className='dz';p.textContent='راجعه قبل لا ترسله: الآيات والتوقيت والتفسير.';
+          const a=document.createElement('a');a.className='btn';a.textContent='حمّل الفيديو';a.href=v.src;a.download=`rattil-${o.code}.mp4`;
+          const p=document.createElement('p');p.className='dz';p.textContent='راجعه قبل إرساله: الآيات والتوقيت والتفسير.';
           vidBox.append(v,p,a);return}
-        if(s2.render==='failed'){expBtn.disabled=false;expBtn.textContent='جرّب مرة ثانية';vidBox.textContent='ما زبط التصدير: '+(s2.tail||'').slice(-300);return}
-        expBtn.textContent=`يصدّر… (${Math.floor((Date.now()-t0)/1000)} ث)`;setTimeout(tick,3000)};tick();
+        if(s2.render==='failed'){expBtn.disabled=false;expBtn.textContent='حاول مرة أخرى';vidBox.textContent='تعذّر التصدير: '+(s2.tail||'').slice(-300);return}
+        expBtn.textContent=`جارٍ التصدير… (${Math.floor((Date.now()-t0)/1000)} ث)`;setTimeout(tick,3000)};tick();
     };
     right.append(expBtn,vidBox);
     wrap.append(left,right);box.appendChild(wrap);preview();
@@ -186,31 +186,31 @@ function designUI(o,id,c,getBlob){
   return box;
 }
 
-$('login').onclick=async()=>{if(signedIn){await signOut(auth);return}try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){$('msg').textContent='ما تم الدخول: '+e.code}};
-onAuthStateChanged(auth,u=>{signedIn=!!u;$('login').textContent=u?'خروج':'دخول بجوجل';$('login').className=u?'btn ghost':'btn';if(u)load();else{$('list').innerHTML='';$('msg').textContent='سجّل دخولك بحساب جوجل حقك عشان تشوف الطلبات.'}});
+$('login').onclick=async()=>{if(signedIn){await signOut(auth);return}try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){$('msg').textContent='لم يتم الدخول: '+e.code}};
+onAuthStateChanged(auth,u=>{signedIn=!!u;$('login').textContent=u?'خروج':'الدخول بحساب Google';$('login').className=u?'btn ghost':'btn';if(u)load();else{$('list').innerHTML='';$('msg').textContent='سجّل الدخول بحسابك في Google لعرض الطلبات.'}});
 async function chunksOf(id){const s=await getDocs(query(collection(db,'orders',id,'chunks'),orderBy('i')));return s.docs}
 async function loadExtras(){
   $('revH').hidden=$('galH').hidden=$('galForm').hidden=false;
   const rv=$('revs');rv.innerHTML='';try{const s=await getDocs(query(collection(db,'reviews'),orderBy('createdAt','desc')));
-    if(!s.size)rv.innerHTML='<p class="msg">ما فيه تقييمات للحين. بعد ما تسلّم أي طلب، اضغط «رابط التقييم» وأرسله للعميل.</p>';
+    if(!s.size)rv.innerHTML='<p class="msg">لا توجد تقييمات بعد. بعد تسليم أي طلب، اضغط «رابط التقييم» وأرسله إلى العميل.</p>';
     s.forEach(d=>{const r=d.data(),c=document.createElement('div');c.className='card';c.innerHTML='<h2><span></span><small></small></h2><p class="msg"></p><div class="acts"></div>';
-      c.querySelector('h2 span').textContent='★'.repeat(r.stars)+'☆'.repeat(5-r.stars)+'  '+(r.name||'عميل');c.querySelector('h2 small').textContent=r.approved?'منشور في الموقع':'ينتظر موافقتك';c.querySelector('p').textContent=r.text;
+      c.querySelector('h2 span').textContent='★'.repeat(r.stars)+'☆'.repeat(5-r.stars)+'  '+(r.name||'عميل');c.querySelector('h2 small').textContent=r.approved?'منشور في الموقع':'بانتظار موافقتك';c.querySelector('p').textContent=r.text;
       const a=c.querySelector('.acts');if(!r.approved){const ok=document.createElement('button');ok.className='btn';ok.textContent='انشره في الموقع';ok.onclick=async()=>{await updateDoc(d.ref,{approved:true});loadExtras()};a.appendChild(ok)}
-      const x=document.createElement('button');x.className='btn danger';x.textContent='احذف';x.onclick=async()=>{await deleteDoc(d.ref);c.remove()};a.appendChild(x);rv.appendChild(c)})}catch(e){rv.textContent='ما قدر يجيب التقييمات.'}
+      const x=document.createElement('button');x.className='btn danger';x.textContent='احذف';x.onclick=async()=>{await deleteDoc(d.ref);c.remove()};a.appendChild(x);rv.appendChild(c)})}catch(e){rv.textContent='تعذّر جلب التقييمات.'}
   const gl=$('gals');gl.innerHTML='';try{const s=await getDocs(query(collection(db,'gallery'),orderBy('createdAt','desc')));
     s.forEach(d=>{const g=d.data(),c=document.createElement('div');c.className='card';c.innerHTML='<h2><span></span></h2><p class="msg"></p><div class="acts"></div>';c.querySelector('h2 span').textContent=g.title||'مقطع';c.querySelector('p').textContent=g.url;
-      const x=document.createElement('button');x.className='btn danger';x.textContent='شيله من المعرض';x.onclick=async()=>{await deleteDoc(d.ref);c.remove()};c.querySelector('.acts').appendChild(x);gl.appendChild(c)})}catch(e){}
+      const x=document.createElement('button');x.className='btn danger';x.textContent='احذفه من المعرض';x.onclick=async()=>{await deleteDoc(d.ref);c.remove()};c.querySelector('.acts').appendChild(x);gl.appendChild(c)})}catch(e){}
 }
-$('gAdd').onclick=async()=>{const u=$('gUrl').value.trim(),t=$('gTitle').value.trim();if(!/^https:\/\/(www\.|vm\.)?(instagram\.com|tiktok\.com|youtube\.com|youtu\.be)\//.test(u)){alert('حط رابط من انستقرام أو تيك توك أو يوتيوب');return}
-  $('gAdd').disabled=true;try{await addDoc(collection(db,'gallery'),{url:u.slice(0,300),title:t.slice(0,80),createdAt:serverTimestamp()});$('gUrl').value=$('gTitle').value='';loadExtras()}catch(e){alert('ما زبط')}$('gAdd').disabled=false};
+$('gAdd').onclick=async()=>{const u=$('gUrl').value.trim(),t=$('gTitle').value.trim();if(!/^https:\/\/(www\.|vm\.)?(instagram\.com|tiktok\.com|youtube\.com|youtu\.be)\//.test(u)){alert('ضع رابطًا من إنستغرام أو تيك توك أو يوتيوب');return}
+  $('gAdd').disabled=true;try{await addDoc(collection(db,'gallery'),{url:u.slice(0,300),title:t.slice(0,80),createdAt:serverTimestamp()});$('gUrl').value=$('gTitle').value='';loadExtras()}catch(e){alert('لم ينجح')}$('gAdd').disabled=false};
 async function load(){loadExtras();
-  $('msg').textContent='يحمّل الطلبات…';$('list').innerHTML='';
-  let snap;try{snap=await getDocs(query(collection(db,'orders'),orderBy('createdAt','desc')))}catch(e){$('msg').textContent='هالحساب ما عنده صلاحية يشوف الطلبات.';return}
-  $('msg').textContent=snap.size?`${ar(snap.size)} طلب`:'ما فيه طلبات للحين.';
+  $('msg').textContent='جارٍ تحميل الطلبات…';$('list').innerHTML='';
+  let snap;try{snap=await getDocs(query(collection(db,'orders'),orderBy('createdAt','desc')))}catch(e){$('msg').textContent='هذا الحساب لا يملك صلاحية عرض الطلبات.';return}
+  $('msg').textContent=snap.size?`${ar(snap.size)} طلب`:'لا توجد طلبات بعد.';
   snap.forEach(d=>{
     const o=d.data(),c=document.createElement('div');c.className='card';
     const when=o.createdAt?.toDate?.().toLocaleString('ar-KW',{dateStyle:'medium',timeStyle:'short'})||'';
-    const rows=[['الاسم',o.cname||'—'],['السورة',o.surah?`${o.surah} (${ar(o.from)}–${ar(o.to)})`:'—'],['التصميم',o.theme],['الفلتر',o.filt||'—'],['الرواية',(RIW.find(x=>x[0]===o.riw)||['','حفص'])[1]],['المقاس',o.size],['الجودة',o.qual||'Full HD'],['الطول',o.len],['التفسير',o.taf],['الترجمة',o.lang||'—'],['الحساب',o.handle||'—'],['خلفية الصوت',{sky:'سماء ونجوم',aurora:'أضواء',image:'صورة يرسلها'}[o.bga]||'—'],['الغلاف',{khatt:'خط',shamsa:'شمسة',bitaqa:'بطاقة',aswad:'أسود',makhtuta:'مخطوطة',sada:'صدى',zujaj:'زجاج',mihrab:'محراب'}[o.cover]||(o.pack?'باقة النشر':'بدون')],['القارئ',o.reader||'—'],['ملاحظات',o.notes||'—'],['السعر',`${ar(o.price)} د.ك`],['الملف',o.chunks?`${o.fileName} · ${ar((o.bytes/1048576).toFixed(1))} ميجا`:'ما انرفع ملف']];
+    const rows=[['الاسم',o.cname||'—'],['السورة',o.surah?`${o.surah} (${ar(o.from)}–${ar(o.to)})`:'—'],['التصميم',o.theme],['الفلتر',o.filt||'—'],['الرواية',(RIW.find(x=>x[0]===o.riw)||['','حفص'])[1]],['المقاس',o.size],['الجودة',o.qual||'Full HD'],['الطول',o.len],['التفسير',o.taf],['الترجمة',o.lang||'—'],['الحساب',o.handle||'—'],['خلفية الصوت',{sky:'سماء ونجوم',aurora:'أضواء',image:'صورة يرسلها العميل'}[o.bga]||'—'],['الغلاف',{khatt:'خط',shamsa:'شمسة',bitaqa:'بطاقة',aswad:'أسود',makhtuta:'مخطوطة',sada:'صدى',zujaj:'زجاج',mihrab:'محراب'}[o.cover]||(o.pack?'باقة النشر':'بدون')],['القارئ',o.reader||'—'],['ملاحظات',o.notes||'—'],['السعر',`${ar(o.price)} د.ك`],['الملف',o.chunks?`${o.fileName} · ${ar((o.bytes/1048576).toFixed(1))} ميغابايت`:'لم يُرفع ملف']];
     c.innerHTML=`<h2><span></span><small></small></h2><dl></dl><div class="acts"></div>`;
     c.querySelector('h2 span').textContent='طلب '+o.code;c.querySelector('h2 small').textContent=when;
     const dl=c.querySelector('dl');rows.forEach(([a,b])=>{const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;dl.append(t,v)});
@@ -219,19 +219,19 @@ async function load(){loadExtras();
     const getBlob=()=>blobP||(blobP=chunksOf(d.id).then(xs=>new Blob(xs.map(x=>x.data().data.toUint8Array()),{type:o.mime||'application/octet-stream'})));
     if(o.chunks){
       const get=document.createElement('button');get.className='btn';get.textContent='افتح التلاوة';
-      get.onclick=async()=>{get.disabled=true;get.textContent='يحمّل…';
+      get.onclick=async()=>{get.disabled=true;get.textContent='جارٍ التحميل…';
         const blob=await getBlob(),url=URL.createObjectURL(blob);
         const m=document.createElement((o.mime||'').startsWith('video')?'video':'audio');m.controls=true;m.src=url;c.appendChild(m);
-        const a=document.createElement('a');a.className='btn ghost';a.href=url;a.download=o.fileName||('tilawa-'+o.code);a.textContent='نزّل الملف';get.replaceWith(a);};
+        const a=document.createElement('a');a.className='btn ghost';a.href=url;a.download=o.fileName||('tilawa-'+o.code);a.textContent='حمّل الملف';get.replaceWith(a);};
       acts.appendChild(get);
     }
     const del=document.createElement('button');del.className='btn danger';del.textContent='احذف الطلب';
-    del.onclick=async()=>{if(del.dataset.sure!=='1'){del.dataset.sure='1';del.textContent='متأكد؟ اضغط مرة ثانية';return}
+    del.onclick=async()=>{if(del.dataset.sure!=='1'){del.dataset.sure='1';del.textContent='هل أنت متأكد؟ اضغط مرة أخرى';return}
       del.disabled=true;for(const x of await chunksOf(d.id))await deleteDoc(x.ref);await deleteDoc(d.ref);c.remove();};
     acts.appendChild(del);
     const rv=document.createElement('button');rv.className='btn ghost';rv.textContent='رابط التقييم';
     rv.onclick=async()=>{rv.disabled=true;try{await setDoc(doc(db,'delivered',o.code),{at:serverTimestamp()});const u=`https://bynsr1.github.io/rattil/review.html?c=${o.code}`;
-      try{await navigator.clipboard.writeText(u)}catch(e){}const p=document.createElement('p');p.className='msg';p.textContent='انسخ وأرسله للعميل: '+u;acts.after(p);rv.textContent='انسخ الرابط ✓'}catch(e){rv.textContent='ما زبط';rv.disabled=false}};
+      try{await navigator.clipboard.writeText(u)}catch(e){}const p=document.createElement('p');p.className='msg';p.textContent='انسخه وأرسله إلى العميل: '+u;acts.after(p);rv.textContent='انسخ الرابط ✓'}catch(e){rv.textContent='لم ينجح';rv.disabled=false}};
     acts.appendChild(rv);
     if(o.chunks)c.appendChild(designUI(o,d.id,c,getBlob));
     $('list').appendChild(c);
