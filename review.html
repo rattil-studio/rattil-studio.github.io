@@ -54,14 +54,22 @@ const code=(new URLSearchParams(location.search).get('c')||'').replace(/[^A-Z0-9
 let stars=5;
 const sb=$('stars');for(let i=1;i<=5;i++){const b=document.createElement('button');b.type='button';b.textContent='★';b.setAttribute('role','radio');b.setAttribute('aria-label',i+' من ٥');b.onclick=()=>{stars=i;paint()};sb.appendChild(b)}
 const paint=()=>[...sb.children].forEach((b,i)=>{b.classList.toggle('on',i<stars);b.setAttribute('aria-checked',i+1===stars)});paint();
+const thanks=(again)=>{$('box').innerHTML='<div class="done"><div class="big">★</div><h1>شكرًا لك</h1><p class="sub">'+(again?'وصلنا تقييمك لهذا المقطع من قبل. كل مقطع يُقيَّم مرة واحدة.':'وصلنا رأيك. جزاك الله خيرًا.')+'</p></div>'};
+const KEY='rattil_reviewed_'+code;let seen=false;try{seen=localStorage.getItem(KEY)==='1'}catch(e){}
 if(!code){$('msg').textContent='الرابط غير مكتمل. اطلب رابط التقييم من رتّل.';$('msg').className='msg err';$('send').disabled=true}
+else if(seen)thanks(true)
 $('send').onclick=async()=>{const text=$('text').value.trim();if(text.length<3){$('msg').textContent='اكتب رأيك في كلمتين على الأقل.';$('msg').className='msg err';return}
   $('send').disabled=true;$('msg').className='msg';$('msg').textContent='جارٍ الإرسال…';
-  try{const {initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');const fs=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
-    const db=fs.getFirestore(initializeApp({apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya"}));
+  let fs,db;try{const {initializeApp,getApps}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');fs=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+    db=fs.getFirestore(getApps()[0]||initializeApp({apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya"}));
     await fs.setDoc(fs.doc(db,'reviews',code),{code,stars,text:text.slice(0,400),name:$('name').value.trim().slice(0,40),approved:false,createdAt:fs.serverTimestamp()});
-    $('box').innerHTML='<div class="done"><div class="big">★</div><h1>شكراً لك</h1><p class="sub">وصلنا رأيك. جزاك الله خيرًا.</p></div>'}
-  catch(e){$('msg').className='msg err';$('msg').textContent='تعذّر الإرسال. ربما الرابط قديم، أو سبق أن قيّمت.';$('send').disabled=false}};
+    try{localStorage.setItem(KEY,'1')}catch(e){}thanks(false)}
+  catch(e){
+    // the server accepts one review per order; a refusal on a valid link means it was already reviewed
+    if(e&&e.code==='permission-denied'){let ok=false;try{ok=(await fs.getDoc(fs.doc(db,'delivered',code))).exists()}catch(x){}
+      if(ok){try{localStorage.setItem(KEY,'1')}catch(x){}thanks(true);return}
+      $('msg').className='msg err';$('msg').textContent='هذا الرابط غير صالح. اطلب رابط التقييم من رتّل.';return}
+    $('msg').className='msg err';$('msg').textContent='تعذّر الإرسال. تأكد من الإنترنت ثم حاول مرة أخرى.';$('send').disabled=false}};
 </script>
 </body>
 </html>
