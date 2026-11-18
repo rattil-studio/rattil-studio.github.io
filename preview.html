@@ -164,6 +164,7 @@ const DEF={mode:'reel',
  shade:{on:true,str:.85,col:'#000000',h:.5},
  ayah:{size:52,w:.86,col:'#ffffff',glow:false,glowCol:'#ffd27a',glowStr:1,shadow:true,anim:'all',dimA:.3,x:.5,y:.72,lh:1.75,look:'plain',hiCol:'#ffe14d',stroke:'#000000',boxCol:'#000000',boxA:.72,lyrics:false,gold:false},
  player:{on:false,y:.8},wave:{on:false,y:.83,col:'#ffffff'},
+ fx:{shamsa:false,dust:false,sweep:false,numeral:false,paper:false,glass:false,col:'#e8c36a',gy0:.5,gy1:.86},
  sub:{src:'none',font:'Noto Naskh Arabic',size:24,col:'#e9e6df',caps:false,track:0,gap:26,lines:6},
  cal:{on:true,x:.5,y:.86,size:110,col:'#ffffff',glow:false},
  label:{on:false,text:'',font:'Cinzel',size:24,col:'#ffffff',track:4,x:.5,y:.8},
@@ -208,6 +209,18 @@ const TPL={
  mawja:{name:'موجة',o:{bg:{dim:.35},shade:{str:.7,h:.45},wave:{on:true,y:.84,col:'#ffffff'},ayah:{size:58,y:.62,glow:true,glowStr:.45,glowCol:'#ffffff'},sub:{src:'@tafsir',size:23,gap:34,lines:4},cal:{y:.11,size:100}}},
  fakhm:{name:'فخم',o:{bg:{fit:'frame',c1:'#0a0806'},shade:{on:false},ayah:{gold:true,shadow:false,size:54,y:.69,glow:true,glowCol:'#e8b84a',glowStr:.35},sub:{src:'@tafsir',font:'Amiri',col:'#cdbb94',size:24,gap:36,lines:4},
    cal:{y:.925,size:96,col:'#e8b84a'},decor:{frame:'double',divider:'diamond',col:'#c9a14a',op:.9}}},
+ shamsa:{name:'شمسة',sig:1,o:{bg:{type:'video',fit:'cover',dim:.55},filt:{warm:.15},shade:{col:'#06102a',str:.9,h:.6},fx:{shamsa:true,dust:true,col:'#e8c36a'},
+   ayah:{size:60,y:.56,gold:true,shadow:false,glow:true,glowCol:'#e8c36a',glowStr:.35,anim:'rise'},sub:{src:'@tafsir',font:'Amiri',col:'#e9dcc0',size:25,gap:50,lines:4},cal:{y:.12,size:110,col:'#e8c36a'},decor:{divider:'star',col:'#e8c36a',op:.9}}},
+ zujaj:{name:'زجاج',sig:1,o:{bg:{fit:'cover',dim:.05},shade:{on:false},fx:{glass:true,gy0:.53,gy1:.83},ayah:{size:54,y:.645,anim:'rise',col:'#ffffff',shadow:true},
+   sub:{src:'tr',font:'Inter',size:22,col:'#f4f4f4',gap:34,lines:4},cal:{y:.9,size:96},label:{on:true,font:'Inter',y:.5,size:18,track:7,col:'#ffffff'}}},
+ sahab:{name:'سحاب',sig:1,o:{bg:{fit:'frame',c1:'#f0eee9'},shade:{on:false},ayah:{col:'#1d1a17',shadow:false,size:52,y:.69,anim:'rise',w:.82},
+   sub:{src:'tr',font:'Cormorant Garamond',col:'#6d665d',size:26,gap:34,lines:4},cal:{col:'#1d1a17',y:.925,size:86},label:{on:true,font:'Cinzel',col:'#8b8378',y:.6,size:19,track:8},decor:{col:'#1d1a17',op:.25}}},
+ nur:{name:'نور',sig:1,o:{bg:{dim:.45},filt:{warm:.35,contrast:1.1,vig:.5},shade:{col:'#120a02',str:.85,h:.55},fx:{dust:true,sweep:true,col:'#ffd98a'},
+   ayah:{size:62,y:.6,col:'#fff7e6',glow:true,glowCol:'#ffcf70',glowStr:.6,anim:'karaoke',dimA:.3},sub:{src:'@tafsir',size:24,col:'#f3e7cf',gap:40,lines:4},cal:{y:.86,size:110,col:'#ffd98a',glow:true}}},
+ sada:{name:'صدى',sig:1,o:{bg:{type:'video',fit:'cover',dim:.62,gray:true},filt:{contrast:1.2},shade:{on:false},fx:{numeral:true,col:'#ff5a36'},
+   ayah:{size:60,y:.6,anim:'rise',col:'#ffffff',shadow:false},sub:{src:'tr',font:'Inter',size:22,col:'#d9d9d9',gap:60,lines:4},cal:{y:.1,size:84,col:'#ffffff'},label:{on:true,font:'Inter',y:.155,size:17,track:9,col:'#ff5a36'}}},
+ makhtuta:{name:'مخطوطة',sig:1,o:{bg:{fit:'frame',c1:'#efe0bd'},shade:{on:false},fx:{paper:true},ayah:{col:'#2a1608',shadow:false,size:50,y:.7,w:.76,anim:'karaoke',dimA:.28},
+   sub:{src:'@tafsir',font:'Aref Ruqaa',col:'#6b2a14',size:27,gap:34,lines:4},cal:{col:'#9b2f1f',y:.925,size:92},decor:{divider:'diamond',col:'#9b2f1f',op:.85}}},
  abyad:{name:'أبيض',o:{bg:{fit:'frame',c1:'#ffffff'},shade:{on:false},ayah:{col:'#111111',shadow:false,size:46,y:.71},sub:{src:'tr',font:'Cormorant Garamond',col:'#555555',size:25,gap:30,lines:4},
    label:{on:true,font:'Cinzel',col:'#111111',y:.61,size:20,track:6},cal:{col:'#111111',y:.915,size:88},decor:{col:'#111111',op:.35}}}
 };
@@ -277,7 +290,9 @@ function drawBase(c,preview){
     if(S.bg.fit==='blur'&&!(x===0&&y===0&&w===W&&h===H)){sm.width=Math.round(W/14);sm.height=Math.round(H/14);const r=Math.max(sm.width/vw(),sm.height/vh());smc.drawImage(vid,(sm.width-vw()*r)/2,(sm.height-vh()*r)/2,vw()*r,vh()*r);
       c.imageSmoothingQuality='high';c.drawImage(sm,0,0,W,H);c.fillStyle='rgba(0,0,0,.06)';c.fillRect(0,0,W,H)}
     else{c.fillStyle='#000';c.fillRect(0,0,W,H)}
-    if(S.bg.fit==='cover'){const r=Math.max(W/vw(),H/vh());c.drawImage(vid,(W-vw()*r)/2,(H-vh()*r)/2,vw()*r,vh()*r)}else c.drawImage(vid,x,y,w,h);
+    if(S.bg.fit==='cover'){const r=Math.max(W/vw(),H/vh()),ox=(W-vw()*r)/2,oy=(H-vh()*r)/2;c.drawImage(vid,ox,oy,vw()*r,vh()*r);
+      if(S.fx.glass){const[gx,gy,gw,gh]=glassRect();sm.width=Math.round(gw/16);sm.height=Math.round(gh/16);smc.drawImage(vid,(gx-ox)/r,(gy-oy)/r,gw/r,gh/r,0,0,sm.width,sm.height);c.imageSmoothingQuality='high';c.drawImage(sm,gx,gy,gw,gh)}}
+    else c.drawImage(vid,x,y,w,h);
     c.filter='none';warmOver(c,0,0,W,H);c.restore();return}
   if(S.bg.type==='image'&&IMG.bg){const im=IMG.bg,r=Math.max(W/im.width,H/im.height);c.save();c.filter=cssF();c.drawImage(im,(W-im.width*r)/2,(H-im.height*r)/2,im.width*r,im.height*r);c.filter='none';warmOver(c,0,0,W,H);c.restore();return}
   if(S.bg.type==='color'){c.fillStyle=S.bg.c1;c.fillRect(0,0,W,H);return}
@@ -297,7 +312,7 @@ function drawDivider(c,y,wid,a){const d=S.decor;if(d.divider==='none')return;c.s
   else{const g=d.divider==='star'?26:20;c.beginPath();c.moveTo(cx-hw,y);c.lineTo(cx-g,y);c.moveTo(cx+g,y);c.lineTo(cx+hw,y);c.stroke();
     if(d.divider==='star')star8(c,cx,y,12,true);else{diamond(c,cx,y,7);diamond(c,cx-g-8,y,3);diamond(c,cx+g+8,y,3)}}c.restore()}
 function drawStatic(c){ // dim, shade, pattern, frame, calligraphy, label, reciter, logo, custom
-  for(const k of['cal','label','reciter','logo','custom','player','wave'])delete hit[k];
+  for(const k of['cal','label','reciter','logo','custom','player','wave','glass'])delete hit[k];
   if(S.filt.vig>0){const g=c.createRadialGradient(W/2,H/2,Math.min(W,H)*.35,W/2,H/2,Math.hypot(W,H)*.55);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,`rgba(0,0,0,${S.filt.vig})`);c.fillStyle=g;c.fillRect(0,0,W,H)}
   if(S.bg.dim>0){c.fillStyle=`rgba(0,0,0,${S.bg.dim})`;c.fillRect(0,0,W,H)}
   if(S.shade.on){const y0=H*(1-S.shade.h);const g=c.createLinearGradient(0,y0,0,H);g.addColorStop(0,rgba(S.shade.col,0));g.addColorStop(.45,rgba(S.shade.col,S.shade.str*.6));g.addColorStop(1,rgba(S.shade.col,S.shade.str));c.fillStyle=g;c.fillRect(0,y0,W,H-y0)}
@@ -307,8 +322,9 @@ function drawStatic(c){ // dim, shade, pattern, frame, calligraphy, label, recit
   else if(box&&S.bg.fit==='frame'&&S.bg.type==='video'){const[x,y,w,h]=box,r=34*W/1080;c.save();c.fillStyle=S.bg.c1;
     for(const[cx,cy,sx,sy]of[[x,y,1,1],[x+w,y,-1,1],[x,y+h,1,-1],[x+w,y+h,-1,-1]]){const qx=Math.min(cx,cx+sx*r),qy=Math.min(cy,cy+sy*r);c.save();c.beginPath();c.rect(qx,qy,r,r);c.clip();c.beginPath();c.rect(qx-1,qy-1,r+2,r+2);c.arc(cx+sx*r,cy+sy*r,r,0,Math.PI*2);c.fill('evenodd');c.restore()}
     if(S.decor.frame==='none'){c.strokeStyle=S.decor.col;c.globalAlpha=S.decor.op*.7;c.lineWidth=2;c.beginPath();c.roundRect(x-12,y-12,w+24,h+24,r+10);c.stroke()}c.restore()}
+  if(S.fx.paper)drawPaper(c);if(S.fx.shamsa)drawShamsa(c);drawGlassFront(c);
   drawPattern(c);drawFrame(c);
-  drawPlayer(c);drawWave(c);
+  drawPlayer(c);drawWave(c);if(S.fx.dust)drawDust(c);
   const sc=W/1080;c.textAlign='center';c.textBaseline='middle';
   if(S.cal.on){const o=S.cal;c.direction='ltr';c.font=F(o.size*sc,'SurahNames');const t=calText();txt(c,[t],W*o.x,H*o.y,0,o.col,{glow:o.glow?.55:0,glowCol:S.ayah.glowCol,shadow:true});const w=c.measureText(t).width;hit.cal=[W*o.x-w/2,H*o.y-o.size*sc*.55,w,o.size*sc*1.1]}
   if(S.label.on){const o=S.label;c.direction='ltr';c.font=F(o.size*sc,o.font,'600');c.letterSpacing=(o.track*sc)+'px';const t=labelText();txt(c,[t],W*o.x,H*o.y,0,o.col,{shadow:true});const w=c.measureText(t).width;c.letterSpacing='0px';hit.label=[W*o.x-w/2,H*o.y-o.size*sc*.7,w,o.size*sc*1.4]}
@@ -320,6 +336,36 @@ function drawStatic(c){ // dim, shade, pattern, frame, calligraphy, label, recit
   c.direction='rtl';
 }
 // keep the ayah and its tafsir inside the free space between the other elements, shrinking them if needed
+function glassRect(){return[Math.round(W*.06),Math.round(H*S.fx.gy0),Math.round(W*.88),Math.round(H*(S.fx.gy1-S.fx.gy0))]}
+const RND=(i)=>{const x=Math.sin(i*12.9898+78.233)*43758.5453;return x-Math.floor(x)};
+function drawShamsa(c){const f=S.fx,sc=W/1080,cx=W/2,cy=H*S.ayah.y-(W>H?H*.05:H*.07),R=Math.min(W,H)*.42,a0=OT*.1;c.save();c.translate(cx,cy);c.rotate(a0);c.strokeStyle=f.col;c.fillStyle=f.col;
+  c.globalAlpha=.16;for(let k=0;k<3;k++){c.lineWidth=(2.2-k*.5)*sc;star16(c,R*(1-k*.18))}
+  c.globalAlpha=.12;for(let i=0;i<16;i++){c.save();c.rotate(i*Math.PI/8);c.beginPath();c.ellipse(0,-R*.62,R*.07,R*.2,0,0,7);c.stroke();c.restore()}
+  c.globalAlpha=.1;c.beginPath();c.arc(0,0,R*.98,0,7);c.stroke();c.beginPath();c.arc(0,0,R*1.04,0,7);c.stroke();
+  for(let i=0;i<32;i++){c.save();c.rotate(i*Math.PI/16);c.globalAlpha=.18;c.beginPath();c.arc(0,-R*1.01,3.2*sc,0,7);c.fill();c.restore()}
+  c.rotate(-a0*2);c.globalAlpha=.1;star16(c,R*.42);c.restore()}
+function star16(c,r){c.beginPath();for(let i=0;i<=32;i++){const a=i*Math.PI/16,rr=i%2?r*.78:r;c.lineTo(rr*Math.sin(a),-rr*Math.cos(a))}c.closePath();c.stroke();
+  c.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4;c.moveTo(0,0);c.lineTo(r*.78*Math.sin(a),-r*.78*Math.cos(a))}c.globalAlpha*=.6;c.stroke();c.globalAlpha/=.6}
+function drawDust(c){const sc=W/1080;c.save();for(let i=0;i<46;i++){const sp=12+RND(i)*28,x=RND(i+7)*W+Math.sin(OT*.4+i)*18*sc,y=((RND(i+3)*H-OT*sp*sc)%H+H)%H,r=(1+RND(i+11)*2.6)*sc,tw=.35+.65*Math.abs(Math.sin(OT*1.3+i*1.7));
+  const g=c.createRadialGradient(x,y,0,x,y,r*5);g.addColorStop(0,rgba(S.fx.col,.9*tw));g.addColorStop(1,rgba(S.fx.col,0));c.fillStyle=g;c.beginPath();c.arc(x,y,r*5,0,7);c.fill()}c.restore()}
+function drawPaper(c){c.save();if(box&&S.bg.type==='video'&&S.bg.fit==='frame'){c.beginPath();c.rect(0,0,W,H);c.rect(box[0],box[1],box[2],box[3]);c.clip('evenodd')}
+  const g=c.createRadialGradient(W/2,H*.45,W*.2,W/2,H*.5,Math.hypot(W,H)*.6);g.addColorStop(0,'#f3e6c8');g.addColorStop(.75,'#e6d2a6');g.addColorStop(1,'#bf9f68');c.fillStyle=g;c.fillRect(0,0,W,H);
+  for(let i=0;i<1400;i++){c.fillStyle=`rgba(${RND(i)>.5?'120,90,40':'255,250,235'},${.04+RND(i+5)*.06})`;c.fillRect(RND(i+1)*W,RND(i+2)*H,1+RND(i+3)*2.5,1+RND(i+4)*2.5)}
+  const m=W*.055,sc=W/1080;c.strokeStyle='#9b2f1f';c.globalAlpha=.75;c.lineWidth=3*sc;c.strokeRect(m,m,W-2*m,H-2*m);c.strokeStyle='#b8862e';c.lineWidth=1.6*sc;c.strokeRect(m+12*sc,m+12*sc,W-2*m-24*sc,H-2*m-24*sc);c.strokeRect(m-8*sc,m-8*sc,W-2*m+16*sc,H-2*m+16*sc);
+  c.globalAlpha=.9;c.fillStyle='#b8862e';for(const[x,y]of[[m,m],[W-m,m],[m,H-m],[W-m,H-m]]){c.save();c.translate(x,y);c.rotate(Math.PI/4);c.fillRect(-9*sc,-9*sc,18*sc,18*sc);c.restore()}
+  c.restore()}
+function drawMarginRosette(c){if(!S.fx.paper)return;const sc=W/1080,x=W*.055,y=H*S.ayah.y-30*sc,r=34*sc;c.save();c.fillStyle='#b8862e';c.strokeStyle='#9b2f1f';c.lineWidth=2*sc;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.stroke();
+  c.fillStyle='#f3e6c8';star8(c,x,y,r*.7,true);c.fillStyle='#9b2f1f';c.beginPath();c.arc(x,y,r*.22,0,7);c.fill();c.restore()}
+function drawGlassFront(c){if(!S.fx.glass||!(S.bg.type==='video'&&S.bg.fit==='cover'))return;const[gx,gy,gw,gh]=glassRect(),sc=W/1080;c.save();
+  c.fillStyle='rgba(255,255,255,.10)';c.fillRect(gx,gy,gw,gh);const g=c.createLinearGradient(gx,gy,gx+gw,gy+gh);g.addColorStop(0,'rgba(255,255,255,.22)');g.addColorStop(.4,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(255,255,255,.08)');c.fillStyle=g;c.fillRect(gx,gy,gw,gh);
+  c.strokeStyle='rgba(255,255,255,.45)';c.lineWidth=1.5*sc;c.strokeRect(gx+.75,gy+.75,gw-1.5,gh-1.5);c.fillStyle='rgba(255,255,255,.55)';c.fillRect(gx,gy,gw,2*sc);c.restore();hit.glass=[gx,gy,gw,gh]}
+function drawNumeral(c,sg){if(!S.fx.numeral||!sg)return;const sc=W/1080;c.save();c.direction='rtl';c.textAlign='center';c.textBaseline='middle';c.font=F(Math.min(W,H)*.62,'Reem Kufi','600');
+  c.fillStyle=rgba(S.fx.col,.16);c.fillText(arn(sg.ayah),W/2,H*S.ayah.y-H*.06);c.restore();
+  c.save();c.strokeStyle=rgba(S.fx.col,.45);c.lineWidth=1.2*sc;const y1=H*S.ayah.y-H*.2;c.beginPath();c.moveTo(W*.08,y1);c.lineTo(W*.92,y1);c.stroke();
+  c.fillStyle=S.fx.col;c.font=F(22*sc,'IBM Plex Mono','500');c.direction='ltr';c.textAlign='left';c.fillText(String(sg.ayah).padStart(3,'0')+' / '+String(D.surah_no).padStart(3,'0'),W*.08,y1+30*sc);c.restore()}
+function drawSweep(c,sg,a){if(!S.fx.sweep||!sg||!hit.ayah)return;const k=(OT-sg.start)%4;if(k>1.3)return;const[x,y,w,h]=hit.ayah;const p=k/1.3,bx=x+w+80-(w+260)*p;
+  c.save();c.globalCompositeOperation='lighter';c.globalAlpha=a*.85;const g=c.createLinearGradient(bx-120,0,bx+120,0);g.addColorStop(0,'rgba(255,240,200,0)');g.addColorStop(.5,'rgba(255,240,200,.55)');g.addColorStop(1,'rgba(255,240,200,0)');
+  c.beginPath();c.rect(x-20,y,w+40,h);c.clip();c.fillStyle=g;c.fillRect(bx-120,y,240,h);c.restore()}
 function drawPlayer(c){if(!S.player.on)return;const sc=W/1080,land=W>H;const w=land?W*.5:W*.86,h=(land?260:300)*sc,x=(W-w)/2,y=H*S.player.y-h/2;
   c.save();c.shadowColor='rgba(0,0,0,.35)';c.shadowBlur=40*sc;c.fillStyle='rgba(18,18,22,.62)';c.beginPath();c.roundRect(x,y,w,h,34*sc);c.fill();c.shadowBlur=0;c.strokeStyle='rgba(255,255,255,.12)';c.lineWidth=1.5;c.stroke();
   const art=h-64*sc,ax=x+w-32*sc-art,ay=y+32*sc;const g=c.createLinearGradient(ax,ay,ax+art,ay+art);g.addColorStop(0,S.bg.c2||'#3a2a55');g.addColorStop(1,S.decor.col||'#d9b46a');c.fillStyle=g;c.beginPath();c.roundRect(ax,ay,art,art,20*sc);c.fill();
@@ -355,6 +401,10 @@ function drawAyah(c,sg,lit,a){if(a<=0)return;const A=S.ayah;const{lines,lh,top,b
   const look={box:A.look==='box'?A.boxCol:null,boxA:A.boxA,stroke:A.look==='outline'?A.stroke:null,gold:A.gold};
   c.save();c.globalAlpha*=a;
   if(A.anim==='all'||lit===Infinity)txt(c,lines,cx,top,lh,A.col,{glow,glowCol:A.glowCol,shadow:A.shadow,...look});
+  else if(A.anim==='rise'){const wp=wordPlan(sg);let k=0;
+    lines.forEach((ln,i)=>{const ws=ln.split(' ');let right=cx+c.measureText(ln).width/2;const sp=c.measureText(' ').width;
+      ws.forEach(w=>{const ww=c.measureText(w).width,x=right-ww/2;right-=ww+sp;const st=wp[k]?wp[k].s:sg.start;k++;const pr=clamp((OT-st)/.35,0,1);if(pr<=0)return;const e=1-Math.pow(1-pr,3);
+        c.save();c.globalAlpha*=e;c.textAlign='center';txt(c,[w],x,top+i*lh+(1-e)*lh*.32,lh,A.col,{glow,glowCol:A.glowCol,shadow:A.shadow,...look});c.restore()})})}
   else if(A.anim==='color'){txt(c,lines,cx,top,lh,A.col,{shadow:A.shadow,...look});
     let left=lit;c.save();c.beginPath();lines.forEach((ln,i)=>{const ws=ln.split(' ');const n=Math.min(left,ws.length);left-=n;if(n<=0)return;const lw=c.measureText(ln).width;const pw=c.measureText(ws.slice(0,n).join(' ')).width;
       const x0=cx+lw/2-pw-6;c.rect(x0,top+i*lh-lh*.8,cx+lw/2+60-x0,lh*1.1)});c.clip();txt(c,lines,cx,top,lh,A.hiCol,{glow,glowCol:A.hiCol,stroke:look.stroke});c.restore()}
@@ -382,22 +432,23 @@ function drawIntroOutro(c,kind,a){if(a<=0)return;c.save();c.globalAlpha*=a;c.fil
 
 /* ---- what is visible at time t (shared by preview and export) ---- */
 const FI=.3,FO=.3;
-function plan(t){const p={seg:-1,lit:Infinity,aA:0,run:-1,sA:0,iA:0,oA:0,tick:(S.player.on||S.wave.on)?Math.floor(t*(S.wave.on?10:4)):0};
+function plan(t){const p={seg:-1,lit:Infinity,aA:0,run:-1,sA:0,iA:0,oA:0,tick:(S.player.on||S.wave.on||S.fx.shamsa||S.fx.dust)?Math.floor(t*(S.wave.on?10:8)):0,wp:0};
   for(let i=0;i<segs.length;i++){const s=segs[i];if(t>=s.start&&t<s.end){p.seg=i;const prev=segs[i-1],next=segs[i+1];
     const fi=prev&&s.start-prev.end<.05?.12:FI,fo=next&&next.start-s.end<.05?.12:FO;p.aA=clamp(Math.min((t-s.start)/fi,(s.end-t)/fo),0,1);
-    if(S.ayah.anim!=='all'){const wp=wordPlan(s);p.lit=Math.max(1,wp.filter(w=>t>=w.s).length)}break}}
+    if(S.ayah.anim!=='all'){const wp=wordPlan(s);p.lit=Math.max(1,wp.filter(w=>t>=w.s).length);if(S.ayah.anim==='rise')p.wp=q8(clamp((t-wp[p.lit-1].s)/.35,0,1))}
+    if(S.fx.sweep){const k=(t-s.start)%4;p.wp+=k<1.3?100+Math.floor(k*10):0}break}}
   const R=RUNS;for(let i=0;i<R.length;i++){const r=R[i];if(t>=r.start&&t<r.end){p.run=i;p.sA=clamp(Math.min((t-r.start)/FI,(r.end-t)/FO),0,1);break}}
   if(S.intro.on)p.iA=t<S.intro.dur?clamp((S.intro.dur-t)/.5,0,1):0;
   if(S.outro.on&&S.outro.text.trim())p.oA=t>DUR-S.outro.dur?clamp((t-(DUR-S.outro.dur))/.5,0,1):0;
   return p}
 const q8=v=>Math.round(v*8);
-const planKey=p=>[p.seg,p.lit===Infinity?-1:p.lit,q8(p.aA),p.run,q8(p.sA),q8(p.iA),q8(p.oA),p.tick].join(',');
+const planKey=p=>[p.seg,p.lit===Infinity?-1:p.lit,q8(p.aA),p.run,q8(p.sA),q8(p.iA),q8(p.oA),p.tick,p.wp].join(',');
 let RUNS=[];
 let OT=0;
 function drawOverlay(c,t){OT=t;const p=plan(t);drawStatic(c);const sg=segs[p.seg],run=RUNS[p.run];
   const cardSeg=sg||(run?segs.find(s=>s.start>=run.start-0.01&&s.start<run.end):null);
   drawCard(c,cardSeg,run?run.text:'',Math.max(p.aA,p.sA));
-  if(sg)drawAyah(c,sg,p.lit,p.aA);
+  if(sg){drawNumeral(c,sg);drawMarginRosette(c);drawAyah(c,sg,p.lit,p.aA);drawSweep(c,sg,p.aA)}
   if(S.ayah.lyrics&&sg){const A=S.ayah,sc=W/1080,i=p.seg,pr=segs[i-1],nx=segs[i+1];c.save();c.direction='rtl';c.textAlign='center';c.textBaseline='alphabetic';
     const AB=ayahBlock(c,sg);c.font=F(AB.size*.62,'Hafs');const gap=AB.size*1.25;
     if(pr&&sg.start-pr.end<8){const L=wrap(c,segText(pr),W*A.w);c.globalAlpha=.32*p.aA;txt(c,L.slice(-2),W*A.x,AB.top-gap-(Math.min(2,L.length)-1)*AB.size*.62*1.6,AB.size*.62*1.6,A.col,{shadow:A.shadow})}
@@ -523,7 +574,7 @@ function saveImgs(){const o={};for(const k in IMG)o[k]=IMG[k]._u;try{localStorag
 
 const PANELS={
  tpl(p){p.append(h3('اختار قالب'),hint('كل قالب شكل مختلف كامل. بعدها تقدر تغيّر أي شي.'));const g=document.createElement('div');g.className='tpl';
-  Object.entries(TPL).forEach(([k,t])=>{const b=document.createElement('button');b.type='button';b.className=S.tpl===k?'on':'';const c=document.createElement('canvas');c.width=180;c.height=260;const sp=document.createElement('span');sp.textContent=t.name;b.append(c,sp);
+  Object.entries(TPL).sort((a,b)=>(b[1].sig||0)-(a[1].sig||0)).forEach(([k,t])=>{const b=document.createElement('button');b.type='button';b.className=S.tpl===k?'on':'';const c=document.createElement('canvas');c.width=180;c.height=260;const sp=document.createElement('span');sp.textContent=(t.sig?'★ ':'')+t.name;b.append(c,sp);
    b.onclick=()=>{const keep={mode:S.mode,audio:S.audio,filt:S.filt,q:S.q,reciter:{text:S.reciter.text},custom:S.custom,logo:S.logo,outro:S.outro,intro:S.intro};S=merge(tplStyle(k),keep);if(!TPL[k].o.bg||!TPL[k].o.bg.fit)S.bg.fit='cover';onStyle();commit();renderPanel()};g.appendChild(b);thumbs.push([c,k])});
   p.append(g);drawThumbs()},
  text(p){const A=S.ayah;p.append(h3('شكل الآية'),
@@ -616,7 +667,7 @@ async function doExport(){
     await fetch(`${WK}/clear/${job}`,{method:'POST'});
     const QF=S.q.scale||1;const mk=()=>{const c=document.createElement('canvas');c.width=Math.round(W*QF/2)*2;c.height=Math.round(H*QF/2)*2;const x=c.getContext('2d');x.setTransform(c.width/W,0,0,c.height/H,0,0);return[c,x]};
     const up=async(n,c)=>{const b=await new Promise(r=>c.toBlob(r,'image/png'));const r=await fetch(`${WK}/layer/${job}?n=${n}`,{method:'POST',body:b});if(!r.ok)throw new Error('رفع')};
-    let base;if(D.has_video&&S.bg.type==='video')base={type:'video',fit:S.bg.fit,box:box.map(v=>Math.round(v*QF/2)*2),gray:S.bg.gray,c1:S.bg.c1.slice(1),filt:S.filt};else{const[c,x]=mk();drawBase(x);await up('BG',c);base={type:'image'}}
+    let base;if(D.has_video&&S.bg.type==='video')base={type:'video',fit:S.bg.fit,glass:S.fx.glass&&S.bg.fit==='cover'?glassRect().map(v=>Math.round(v*QF/2)*2):null,box:box.map(v=>Math.round(v*QF/2)*2),gray:S.bg.gray,c1:S.bg.c1.slice(1),filt:S.filt};else{const[c,x]=mk();drawBase(x);await up('BG',c);base={type:'image'}}
     // change points
     const step=1/30,pts=[];let prev=null;for(let t=0;t<DUR;t+=step){const k=planKey(plan(t));if(k!==prev){pts.push(+t.toFixed(4));prev=k}}
     mt.textContent=`${pts.length} لقطة`;const frames=[];let done=0,i=0;
@@ -637,7 +688,7 @@ async function buildDemo(){
   const sn=+QS.get('surah'),a0=+QS.get('from')||1,a1=Math.max(a0,+QS.get('to')||a0);
   const r=await (await fetch(`https://api.alquran.cloud/v1/surah/${sn}/editions/quran-uthmani,ar.muyassar,en.sahih?offset=${a0-1}&limit=${Math.min(40,a1-a0+1)}`)).json();
   const [Q,T,E]=r.data;const BS=['بِسْمِ','ٱللَّهِ','ٱلرَّحْمَٰنِ','ٱلرَّحِيمِ'];const groups={},tr={},words=[];
-  Q.ayahs.forEach((a,i)=>{let ws=a.text.split(' ').filter(Boolean);if(a.numberInSurah===1&&sn!==1&&sn!==9&&ws.slice(0,4).join(' ')===BS.join(' '))ws=ws.slice(4);
+  Q.ayahs.forEach((a,i)=>{let ws=a.text.replace(/\uFEFF/g,'').split(' ').filter(Boolean);if(a.numberInSurah===1&&sn!==1&&sn!==9&&ws.slice(0,4).join(' ')===BS.join(' '))ws=ws.slice(4);
     const n=a.numberInSurah;ws[ws.length-1]+=' '+String.fromCharCode(0x6DD)+arn(n);groups[n]=T.ayahs[i].text;tr[n]=E.ayahs[i].text;
     for(let k=0;k<ws.length;k+=8)words.push({ayah:n,text:ws.slice(k,k+8).join(' ')})});
   const dur=vid.duration||30,t0=.5,t1=Math.max(t0+1,dur-.4),tot=words.reduce((x,w)=>x+w.text.split(' ').length,0);let t=t0;
@@ -649,16 +700,17 @@ async function demoPeaks(){try{const buf=await (await fetch(QS.get('src'))).arra
   const ch=ab.getChannelData(0),step=Math.floor(ab.sampleRate/50),pk=[];for(let i=0;i<ch.length;i+=step){let m=0;for(let j=i;j<Math.min(i+step,ch.length);j+=4)m=Math.max(m,Math.abs(ch[j]));pk.push(m)}return{rate:ab.sampleRate/step,peaks:pk}}catch(e){return null}}
 (async()=>{
   if(DEMO){try{document.body.classList.add('demo');
-    const bar=document.createElement('div');bar.className='demobar';bar.textContent='معاينة: الآيات هني موزّعة على الوقت تقريبياً. في المقطع النهائي نركّب كل آية على صوت القارئ بالضبط.';document.querySelector('.app').prepend(bar);document.querySelector('.app').style.gridTemplateRows='auto 56px 1fr auto';
-    vid.src=QS.get('src');await new Promise((res,rej)=>{vid.onloadedmetadata=res;vid.onerror=()=>rej(new Error('ما قدرنا نفتح الملف'))});
-    D=await buildDemo();SIDE=D.side;DUR=D.duration;$('dur').textContent=fmt(DUR,0);$('meta').textContent=`معاينة · سورة ${D.surah}`;document.title='رتّل | معاينة';
-    const css=await (await fetch('https://fonts.googleapis.com/css2?family=Amiri+Quran')).text();const urls=css.match(/url\(([^)]+)\)/g).map(u=>u.slice(4,-1));
+    const SAMPLE=QS.get('sample')==='1';
+    const bar=document.createElement('div');bar.className='demobar';bar.textContent=SAMPLE?'مثال: جرّب القوالب والفلاتر على هالتلاوة وشوفها شغّالة. مقطعك يطلع بنفس الشكل على تلاوتك.':'معاينة: الآيات هني موزّعة على الوقت تقريبياً. في المقطع النهائي نركّب كل آية على صوت القارئ بالضبط.';document.querySelector('.app').prepend(bar);document.querySelector('.app').style.gridTemplateRows='auto 56px 1fr auto';
+    vid.src=SAMPLE?'media/demo.mp4':QS.get('src');await new Promise((res,rej)=>{vid.onloadedmetadata=res;vid.onerror=()=>rej(new Error('ما قدرنا نفتح الملف'))});
+    let PD=null;if(SAMPLE){PD=await (await fetch('media/demo.json')).json();D={...PD.D,segs:PD.segs}}else D=await buildDemo();SIDE=D.side;DUR=D.duration;$('dur').textContent=fmt(DUR,0);$('meta').textContent=`معاينة · سورة ${D.surah}`;document.title='رتّل | معاينة';
+    const urls=SAMPLE?['media/hafs.ttf']:(await (await fetch('https://fonts.googleapis.com/css2?family=Amiri+Quran')).text()).match(/url\(([^)]+)\)/g).map(u=>u.slice(4,-1));
     await Promise.all([...urls.map(u=>new FontFace('Hafs',`url(${u})`).load().then(x=>document.fonts.add(x))),new FontFace('SurahNames','url(https://raw.githubusercontent.com/quran/quran.com-frontend-next/production/public/fonts/quran/surah-names/v1/sura_names.woff2)').load().then(x=>document.fonts.add(x))]);
     await fontsReady();
     S=tplStyle(TPL[QS.get('tpl')]?QS.get('tpl'):'hadi');const fl=QS.get('filt');if(fl&&FILTERS[fl]){S.filt={...DEF.filt,...FILTERS[fl].o,name:fl};S.bg.gray=!!FILTERS[fl].gray}
-    const md=QS.get('mode');if(md&&(CANVAS[md]||md==='original'))S.mode=md;const sub=QS.get('sub');if(sub)S.sub.src=sub==='tr'||sub==='en'?'tr':sub==='none'?'none':'muyassar';if(S.sub.src!=='none'&&S.sub.src!=='tr')S.sub.src='muyassar';
+    const md=QS.get('mode');if(md&&(CANVAS[md]||md==='original'))S.mode=md;const sub=QS.get('sub');if(sub)S.sub.src=sub==='tr'||sub==='en'?'tr':sub==='none'?'none':'muyassar';if(S.sub.src!=='none'&&S.sub.src!=='tr')S.sub.src='muyassar';if(SAMPLE&&!sub)S.sub.src=tplStyle(TPL[QS.get('tpl')]?QS.get('tpl'):'hadi').sub.src.replace(/^(mukhtasar|saadi|en)$/,'muyassar');
     const hd=QS.get('handle');if(hd){S.outro.on=true;S.outro.text=hd}if(QS.get('reader'))S.reciter.text=QS.get('reader');
-    if(!D.has_video&&S.bg.type==='video')S.bg.type='gradient';segs=clone(D.segs);PEAKS=await demoPeaks();
+    if(!D.has_video&&S.bg.type==='video')S.bg.type='gradient';segs=clone(D.segs);PEAKS=SAMPLE?PD.peaks:await demoPeaks();
     ready=true;$('loading').remove();renderRail();renderPanel();renderSegbar();onStyle();fitTL();commit();
     vid.currentTime=segs[0]?segs[0].start+.3:0;vid.addEventListener('seeked',()=>{if(tab==='tpl')drawThumbs();if(tab==='filt')drawFThumbs()});requestAnimationFrame(frame);
   }catch(e){$('loading').textContent='ما قدرنا نسوي المعاينة: '+e.message}return}
