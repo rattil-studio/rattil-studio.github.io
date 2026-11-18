@@ -423,7 +423,7 @@ if(reduce)spans.forEach(s=>s.classList.add('on'));
 else setInterval(()=>{if(wi===spans.length){spans.forEach(s=>s.classList.remove('on'));wi=0;return}spans[wi++].classList.add('on')},750);
 
 // ---------- samples ----------
-const SAMPLES=[['sample1','سورة غافر'],['sample2','سورة ص · مع ترجمة'],['sample3','سورة فصلت · مع ترجمة'],['sample4','سورة الفاتحة · مع ترجمة'],['sample5','سورة الصافات · يوتيوب',true]];
+const SAMPLES=[['sample6','سورة الأنعام'],['sample1','سورة غافر'],['sample2','سورة ص · مع ترجمة'],['sample3','سورة فصلت · مع ترجمة'],['sample4','سورة الفاتحة · مع ترجمة'],['sample5','سورة الصافات · يوتيوب',true]];
 const reel=$('reel');
 SAMPLES.forEach(([f,cap,wide])=>{
   const fig=document.createElement('figure');if(wide)fig.className='wide';
