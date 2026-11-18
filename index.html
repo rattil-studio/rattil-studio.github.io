@@ -283,6 +283,9 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <button type="button" class="opt" data-v="ترجمة إندونيسية">إندونيسي</button>
             <button type="button" class="opt" data-v="ترجمة فرنسية">فرنسي</button>
             <button type="button" class="opt" data-v="ترجمة تركية">تركي</button>
+            <button type="button" class="opt" data-v="ترجمة ملايو">ملايو</button>
+            <button type="button" class="opt" data-v="ترجمة إسبانية">إسباني</button>
+            <button type="button" class="opt" data-v="ترجمة بنغالية">بنغالي</button>
             <button type="button" class="opt" data-v="بدون">الآيات بس</button>
           </div>
         </div>
@@ -293,6 +296,17 @@ button.wa:disabled{opacity:.6;cursor:wait}
         <div class="f"><span class="lbl">الفلتر</span>
           <p class="hint">يغيّر ألوان الفيديو نفسه. اختار واحد وشوف الصور فوق وفي الملخص كيف تتغيّر.</p>
           <div class="filts" id="filts" role="group" aria-label="الفلتر"></div>
+        </div>
+        <div class="f"><span class="lbl">إذا تلاوتك صوت بس (بدون فيديو)</span>
+          <p class="hint">نحط خلفية تتحرك بدل الفيديو. إذا تلاوتك فيديو، تجاهل هالخيار.</p>
+          <div class="opts" data-k="bga">
+            <button type="button" class="opt" data-v="سماء ونجوم" data-a="sky" aria-pressed="true">سماء ونجوم<small>نجوم تلمع وهلال</small></button>
+            <button type="button" class="opt" data-v="أضواء" data-a="aurora">أضواء<small>ألوان تتحرك بهدوء</small></button>
+            <button type="button" class="opt" data-v="صورة أرسلها" data-a="image">صورتك<small>ترسلها بالواتساب، وتتقرّب ببطء</small></button>
+          </div>
+        </div>
+        <div class="f"><span class="lbl">إضافات</span>
+          <label class="agree" style="margin-top:0"><input type="checkbox" id="pack"> باقة النشر: غلاف للريل، ونص المنشور جاهز بالآيات والهاشتاقات، وملف ترجمة لليوتيوب (+٠٫٥ د.ك)</label>
         </div>
         <div class="f"><span class="lbl">الجودة</span>
           <div class="opts" data-k="qual">
@@ -424,7 +438,7 @@ fetch('media/tpl.json?v=28').then(r=>r.json()).then(J=>{
 // ---------- option groups ----------
 document.querySelectorAll('.opts').forEach(g=>{
   const k=g.dataset.k;
-  const pick=b=>{g.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));state[k]={v:b.dataset.v,p:+b.dataset.p||0,q:+b.dataset.q||0};render()};
+  const pick=b=>{g.querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed',x===b));state[k]={v:b.dataset.v,p:+b.dataset.p||0,q:+b.dataset.q||0,a:b.dataset.a||''};render()};
   g.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>pick(b)));
   pick(g.querySelector('[aria-pressed="true"]')||g.querySelector('.opt'));
 });
@@ -466,14 +480,14 @@ function render(){
   if(!ready)return;
   if(!state.size||!state.len||!state.taf||!state.tpl||!state.qual)return;
   const f=file.files[0];
-  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الرواية',riwTxt()],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
+  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['تحت الآيات',state.taf.v],['الرواية',riwTxt()],['خلفية الصوت',state.bga?state.bga.v:'—'],['باقة النشر',$('pack').checked?'نعم':'لا'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'بترسلها بالواتساب']];
   const dl=$('sum');dl.innerHTML='';
   rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
   $('total').textContent=`${ar(total())} د.ك`;
 }
 function waText(code,uploaded){
   const L=[`السلام عليكم، طلب جديد من «رتّل» رقم ${code}:`,
-    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• تحت الآيات: ${state.taf.v}`,`• الرواية: ${riwTxt()}`,`• السورة: ${surahTxt()}`];
+    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• تحت الآيات: ${state.taf.v}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${state.bga?state.bga.v:'—'}`,`• باقة النشر: ${$('pack').checked?'نعم':'لا'}`,`• السورة: ${surahTxt()}`];
   if($('handle').value.trim())L.push(`• اسم الحساب: ${$('handle').value.trim()}`);
   if($('reader').value.trim())L.push(`• القارئ: ${$('reader').value.trim()}`);
   if($('notes').value.trim())L.push(`• ملاحظات: ${$('notes').value.trim()}`);
@@ -485,7 +499,8 @@ function waText(code,uploaded){
 
 // ---------- live preview of the chosen design on the customer's own file ----------
 const SUBQ={"التفسير الميسر":"muyassar","التفسير المختصر":"muyassar","تفسير السعدي":"muyassar","ترجمة إنجليزية":"tr","تفسير إنجليزي":"tr","بدون":"none"};
-const total=()=>state.len.p+(state.size&&state.size.p||0);
+const total=()=>state.len.p+(state.size&&state.size.p||0)+($('pack').checked?.5:0);
+$('pack').addEventListener('change',render);
 const MODEQ=v=>v.startsWith('ريلز')?'reel':v.startsWith('مربع')?'square':v.startsWith('يوتيوب')?'youtube':'original';
 let purl=null;
 let BIG=null;
@@ -543,7 +558,7 @@ $('form').addEventListener('submit',async e=>{
     }
     $('sendTxt').textContent='يحفظ الطلب…';
     await fs.setDoc(fs.doc(db,'orders',id),{
-      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
+      code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,bga:state.bga?state.bga.a:'sky',pack:$('pack').checked,qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
       surah:sS.value===''?'':N[sS.value],from:+sF.value||0,to:+sT.value||0,
       reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),notes:$('notes').value.trim().slice(0,500),
       price:total(),fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
