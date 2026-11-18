@@ -72,9 +72,9 @@ const WK='http://127.0.0.1:8765';
 const N="الفاتحة البقرة آل_عمران النساء المائدة الأنعام الأعراف الأنفال التوبة يونس هود يوسف الرعد إبراهيم الحجر النحل الإسراء الكهف مريم طه الأنبياء الحج المؤمنون النور الفرقان الشعراء النمل القصص العنكبوت الروم لقمان السجدة الأحزاب سبأ فاطر يس الصافات ص الزمر غافر فصلت الشورى الزخرف الدخان الجاثية الأحقاف محمد الفتح الحجرات ق الذاريات الطور النجم القمر الرحمن الواقعة الحديد المجادلة الحشر الممتحنة الصف الجمعة المنافقون التغابن الطلاق التحريم الملك القلم الحاقة المعارج نوح الجن المزمل المدثر القيامة الإنسان المرسلات النبأ النازعات عبس التكوير الانفطار المطففين الانشقاق البروج الطارق الأعلى الغاشية الفجر البلد الشمس الليل الضحى الشرح التين العلق القدر البينة الزلزلة العاديات القارعة التكاثر العصر الهمزة الفيل قريش الماعون الكوثر الكافرون النصر المسد الإخلاص الفلق الناس".split(" ").map(s=>s.replace("_"," "));
 const THK={"كحلي وذهبي":"navy_gold","أزرق ملكي":"royal_blue","زمردي وذهبي":"emerald","رمضاني":"ramadan","فيروزي":"turquoise","عنابي وذهبي":"burgundy","فضي ليلي":"silver_night","أبيض هادئ":"white_soft","وردي ناعم":"rose","رملي":"sand","أبيض وأسود":"mono","مصحف ورقي (بدون توهج)":"mushaf"};
 const TAFK={"التفسير الميسر":"muyassar","التفسير المختصر":"mukhtasar","تفسير السعدي":"saadi","تفسير إنجليزي":"en","بدون":"none"};
-const SUBK={"التفسير الميسر":"muyassar","التفسير المختصر":"mukhtasar","تفسير السعدي":"saadi","تفسير إنجليزي":"en","ترجمة إنجليزية":"tr","ترجمة أردو":"ur","ترجمة إندونيسية":"id","ترجمة فرنسية":"fr","ترجمة تركية":"tu","بدون":"none"};
+const SUBK={"التفسير الميسر":"muyassar","التفسير المختصر":"mukhtasar","تفسير السعدي":"saadi","تفسير إنجليزي":"en","ترجمة إنجليزية":"tr","ترجمة أردو":"ur","ترجمة إندونيسية":"id","ترجمة فرنسية":"fr","ترجمة تركية":"tu","ترجمة ملايو":"ms","ترجمة إسبانية":"es","ترجمة بنغالية":"bn","بدون":"none"};
 const QK={"Full HD":1,"2K":1.3334,"4K":2};
-const modeOf=s=>s.startsWith('ريلز')?'reel':s.startsWith('مربع')?'square':s.startsWith('يوتيوب')?'youtube':s.startsWith('مثل')?'original':'reel';
+const modeOf=s=>s.startsWith('الثلاث')?'reel':s.startsWith('ريلز')?'reel':s.startsWith('مربع')?'square':s.startsWith('يوتيوب')?'youtube':s.startsWith('مثل')?'original':'reel';
 const RIW=[['hafs','حفص'],['shouba','شعبة'],['warsh','ورش'],['qaloon','قالون'],['doori','الدوري'],['soosi','السوسي'],['bazzi','البزي'],['qumbul','قنبل']];
 let wkOn=false;
 async function ping(){try{const r=await fetch(WK+'/ping',{cache:'no-store'});wkOn=r.ok}catch(e){wkOn=false}
@@ -106,7 +106,7 @@ function designUI(o,id,c,getBlob){
       const {id:jid,error}=await r.json();if(error)throw new Error(error);job=jid;
       const t0=Date.now();
       const tick=async()=>{const st=await (await fetch(`${WK}/status/${jid}`,{cache:'no-store'})).json();
-        if(st.state==='ready'){const u=WK+'/studio?'+new URLSearchParams({job:jid,tpl:o.tpl||'',filt:o.filt||'',mode:modeOf(o.size||''),q:QK[o.qual]||1,sub:SUBK[o.taf]||'muyassar',handle:o.handle||''});prog.innerHTML='';const a=document.createElement('a');a.href=u;a.target='_blank';a.className='btn';a.textContent='افتح المحرر';prog.appendChild(a);open.disabled=false;open.textContent='جهّز من جديد';window.open(u,'_blank');return}
+        if(st.state==='ready'){const u=WK+'/studio?'+new URLSearchParams({job:jid,tpl:o.tpl||'',filt:o.filt||'',mode:modeOf(o.size||''),q:QK[o.qual]||1,sub:SUBK[o.taf]||'muyassar',handle:o.handle||'',anim:o.bga||''});prog.innerHTML='';const a=document.createElement('a');a.href=u;a.target='_blank';a.className='btn';a.textContent='افتح المحرر';prog.appendChild(a);open.disabled=false;open.textContent='جهّز من جديد';window.open(u,'_blank');return}
         if(st.state==='failed'){prog.textContent='ما قدر يتعرّف على التلاوة:\n'+(st.tail||'').slice(-300);open.disabled=false;open.textContent='جرّب مرة ثانية';return}
         prog.textContent=`يسمع التلاوة ويرتّب الآيات… (${Math.floor((Date.now()-t0)/60000)} د)`;setTimeout(tick,4000)};tick();
     }catch(e){prog.textContent='صار خطأ: '+e.message;open.disabled=false;open.textContent='افتح الاستوديو'}
@@ -210,7 +210,7 @@ async function load(){loadExtras();
   snap.forEach(d=>{
     const o=d.data(),c=document.createElement('div');c.className='card';
     const when=o.createdAt?.toDate?.().toLocaleString('ar-KW',{dateStyle:'medium',timeStyle:'short'})||'';
-    const rows=[['الاسم',o.cname||'—'],['السورة',o.surah?`${o.surah} (${ar(o.from)}–${ar(o.to)})`:'—'],['التصميم',o.theme],['الفلتر',o.filt||'—'],['الرواية',(RIW.find(x=>x[0]===o.riw)||['','حفص'])[1]],['المقاس',o.size],['الجودة',o.qual||'Full HD'],['الطول',o.len],['تحت الآيات',o.taf],['الحساب',o.handle||'—'],['القارئ',o.reader||'—'],['ملاحظات',o.notes||'—'],['السعر',`${ar(o.price)} د.ك`],['الملف',o.chunks?`${o.fileName} · ${ar((o.bytes/1048576).toFixed(1))} ميجا`:'ما انرفع ملف']];
+    const rows=[['الاسم',o.cname||'—'],['السورة',o.surah?`${o.surah} (${ar(o.from)}–${ar(o.to)})`:'—'],['التصميم',o.theme],['الفلتر',o.filt||'—'],['الرواية',(RIW.find(x=>x[0]===o.riw)||['','حفص'])[1]],['المقاس',o.size],['الجودة',o.qual||'Full HD'],['الطول',o.len],['تحت الآيات',o.taf],['الحساب',o.handle||'—'],['خلفية الصوت',{sky:'سماء ونجوم',aurora:'أضواء',image:'صورة يرسلها'}[o.bga]||'—'],['باقة النشر',o.pack?'نعم ✓':'لا'],['القارئ',o.reader||'—'],['ملاحظات',o.notes||'—'],['السعر',`${ar(o.price)} د.ك`],['الملف',o.chunks?`${o.fileName} · ${ar((o.bytes/1048576).toFixed(1))} ميجا`:'ما انرفع ملف']];
     c.innerHTML=`<h2><span></span><small></small></h2><dl></dl><div class="acts"></div>`;
     c.querySelector('h2 span').textContent='طلب '+o.code;c.querySelector('h2 small').textContent=when;
     const dl=c.querySelector('dl');rows.forEach(([a,b])=>{const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;dl.append(t,v)});
