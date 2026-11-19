@@ -174,6 +174,16 @@ button.wa:disabled{opacity:.6;cursor:wait}
 .tp span,.fl span{display:block;margin-top:6px;color:var(--soft)}
 .tp[aria-pressed="true"] img,.fl[aria-pressed="true"] img{border-color:var(--glow);transform:translateY(-2px)}
 .tp[aria-pressed="true"] span,.fl[aria-pressed="true"] span{color:var(--text);font-weight:600}
+.tpick{display:flex;align-items:center;gap:16px;background:var(--plum);border:1.5px solid var(--line);border-radius:18px;padding:12px;width:100%;cursor:pointer;text-align:right;color:var(--text);font:400 1rem "Readex Pro"}
+.tpick:hover{border-color:var(--glow)}.tpick img{width:64px;aspect-ratio:9/16;object-fit:cover;border-radius:10px;background:var(--plum-3);flex:none}
+.tpick .tn{flex:1;display:flex;flex-direction:column;gap:4px}.tpick .tn b{font:700 1.1rem "Alexandria"}.tpick .tn small{color:var(--soft);font-size:.85rem}
+.tpick .go{flex:none;border:1.5px solid var(--glow);color:var(--glow);border-radius:12px;padding:9px 14px;font:600 .9rem "Readex Pro"}
+#bgaF[hidden]{display:none!important}
+.tsheet{position:fixed;inset:0;z-index:90;background:rgba(8,3,12,.74);display:none;align-items:flex-end;justify-content:center}.tsheet.on{display:flex}
+.tsheet .in{background:var(--plum-2);width:min(760px,100%);max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;padding:0 18px 28px;overscroll-behavior:contain}
+.tsheet .hd{position:sticky;top:0;z-index:2;background:var(--plum-2);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 14px}
+.tsheet .hd h3{margin:0;font:700 1.25rem "Alexandria"}.tsheet .x{min-height:42px;min-width:42px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--text);font-size:1.1rem;cursor:pointer}
+@media (min-width:760px){.tsheet{align-items:center}.tsheet .in{border-radius:24px}}
 .filts{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px}
 .miniimg{display:block;width:150px;aspect-ratio:9/16;object-fit:cover;border-radius:14px;margin:14px auto 0;background:var(--plum-3)}
 .prevbtn{width:100%;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;border-radius:14px;border:1.5px solid var(--glow);background:transparent;color:var(--text);font:600 1rem "Readex Pro";cursor:pointer;transition:background .2s}
@@ -303,14 +313,13 @@ button.wa:disabled{opacity:.6;cursor:wait}
           </div>
         </div>
         <div class="f"><span class="lbl">التصميم</span>
-          <p class="hint">٢٨ تصميمًا، لكلٍّ منها شكل مختلف. ما عليه ★ من تصاميم رتّل الخاصة. تُريك الصورة شكل المقطع تمامًا، وعند اختيار فلتر يظهر عليها.</p>
-          <div class="tpls" id="tpls" role="group" aria-label="التصميم"></div>
+          <button type="button" class="tpick" id="tpick" aria-haspopup="dialog"><img id="tpImg" alt=""><span class="tn"><b id="tpName">…</b><small>٢٨ تصميمًا تختار منها</small></span><span class="go">غيّر التصميم</span></button>
         </div>
         <div class="f"><span class="lbl">الفلتر</span>
           <p class="hint">يغيّر ألوان الفيديو نفسه. اختر واحدًا وشاهد كيف تتغيّر الصور في الأعلى وفي الملخص.</p>
           <div class="filts" id="filts" role="group" aria-label="الفلتر"></div>
         </div>
-        <div class="f"><span class="lbl">إذا كانت تلاوتك صوتًا فقط (دون فيديو)</span>
+        <div class="f" id="bgaF"><span class="lbl">إذا كانت تلاوتك صوتًا فقط (دون فيديو)</span>
           <p class="hint">نضع خلفية متحركة بدل الفيديو. إذا كانت تلاوتك فيديو، فتجاهل هذا الخيار.</p>
           <div class="opts" data-k="bga">
             <button type="button" class="opt" data-v="سماء ونجوم" data-a="sky" aria-pressed="true">سماء ونجوم<small>نجوم تلمع وهلال</small></button>
@@ -342,7 +351,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <label class="drop" id="drop" for="file">
             <input type="file" id="file" accept="audio/*,video/*,.m4a,.mp3,.mov,.mp4,.opus,.ogg,.wav,.aac">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-            <span id="dropTxt"><b>ارفع ملف التلاوة</b><br>صوت أو فيديو، حتى ١٠٠ ميغابايت. بصوتك أو بصوت أي قارئ.</span>
+            <span id="dropTxt"><b>ارفع ملف التلاوة</b><br>صوت أو فيديو، حتى ٢٠٠ ميغابايت. بصوتك أو بصوت أي قارئ.</span>
           </label>
           <p class="hint" style="margin-top:8px">ملفك أكبر من ذلك؟ لا بأس، أكمل الطلب وأرسله إلينا عبر واتساب. تلاوتك صوت فقط دون فيديو؟ نُعدّها لك بخلفية متحركة (سماء ونجوم، أو أضواء، أو صورة تختارها).</p>
           <div class="rule" role="note"><b>تنبيه مهم:</b> نقبل التلاوة إذا كانت سليمة. فإن كان فيها خطأ في التشكيل، أو لحن جلي، أو أي خطأ يغيّر المعنى، فلا يمكننا قبول الطلب.</div>
@@ -408,7 +417,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
 <script type="module">
 const WA='96599384032';
 const FB={apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya",storageBucket:"ad3eya.firebasestorage.app",messagingSenderId:"1021494775776",appId:"1:1021494775776:web:938c4b98379299073de585"};
-const MAXB=100*1024*1024, CHUNK=900000;
+const MAXB=200*1024*1024, CHUNK=900000;
 const ar=n=>Number(n).toLocaleString('ar-EG',{maximumFractionDigits:3});
 const $=id=>document.getElementById(id);
 const file=$('file'),drop=$('drop');
@@ -437,16 +446,17 @@ SAMPLES.forEach(([f,cap,wide])=>{
 const state={};
 const TPL_ORDER=['shamsa','zujaj','sahab','nur','sada','makhtuta','hadi','mutarjam','tiktok','mushghil','polaroid','fakhm','tabeea','tawahhoj','tatabu','sundooq','mawja','aswad','wasat','kalima','mushaf','sinema','bitaqa','layl','neon','sharit','mihrab','abyad'];
 const FCSS={none:'',warm:'sepia(.28) saturate(1.15) contrast(1.05)',cool:'saturate(.9) hue-rotate(12deg) brightness(1.02)',cine:'contrast(1.18) saturate(.8) sepia(.12) brightness(.95)',gold:'sepia(.45) saturate(1.25) brightness(1.03)',soft:'contrast(.88) brightness(1.07) saturate(.88)',strong:'contrast(1.3) saturate(1.25)',bw:'grayscale(1) contrast(1.15)'};
-const applyF=()=>{const f=FCSS[state.filt&&state.filt.k]||'';$('mini').style.filter=f;document.querySelectorAll('#tpls img').forEach(i=>i.style.filter=f)};
+const applyF=()=>{const f=FCSS[state.filt&&state.filt.k]||'';$('mini').style.filter=f;document.querySelectorAll('#tpls img').forEach(i=>i.style.filter=f);$('tpImg').style.filter=f};
+let ZP=0;
 function chooser(box,cls,items,key,onpick){
   items.forEach(([k,n,img],i)=>{const b=document.createElement('button');b.type='button';b.className=cls;b.setAttribute('aria-pressed',i===0);
     const im=document.createElement('img');im.alt='';im.loading='lazy';im.src=img;const sp=document.createElement('span');sp.textContent=n;b.append(im,sp);
-    if(cls==='tp'||cls==='tp cv'){const pl=document.createElement('span');pl.className='play';pl.title='كبّر الصورة';pl.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>';pl.onclick=e=>{e.stopPropagation();b.click();cls==='tp cv'?openCover():openSample()};b.appendChild(pl)}
+    if(cls==='tp'||cls==='tp cv'){const pl=document.createElement('span');pl.className='play';pl.title='كبّر الصورة';pl.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>';pl.onclick=e=>{e.stopPropagation();ZP=1;b.click();ZP=0;cls==='tp cv'?openCover():openSample()};b.appendChild(pl)}
     b.onclick=()=>{box.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));state[key]={k,v:n,img};onpick&&onpick();render()};box.appendChild(b)});
   state[key]={k:items[0][0],v:items[0][1],img:items[0][2]};
 }
 fetch('media/tpl.json?v=28').then(r=>r.json()).then(J=>{
-  chooser($('tpls'),'tp',TPL_ORDER.filter(k=>J.tpl[k]).map(k=>[k,(J.tpl[k].sig?'★ ':'')+J.tpl[k].n,J.tpl[k].img]),'tpl',()=>{$('mini').src=state.tpl.img});
+  chooser($('tpls'),'tp',TPL_ORDER.filter(k=>J.tpl[k]).map(k=>[k,(J.tpl[k].sig?'★ ':'')+J.tpl[k].n,J.tpl[k].img]),'tpl',()=>{$('mini').src=state.tpl.img;tpCard();if(!ZP)closeSheet()});tpCard();
   chooser($('filts'),'fl',Object.entries(J.filt).map(([k,v])=>[k,v.n,v.img]),'filt',applyF);$('mini').src=state.tpl.img;render();
 }).catch(()=>{state.tpl={k:'hadi',v:'هادي'};state.filt={k:'none',v:'بدون'};render()});
 
@@ -472,12 +482,21 @@ function ayat(){
 }
 sS.onchange=()=>{sF.value='';sT.value='';ayat();$('err').textContent=''};sF.onchange=ayat;sT.onchange=render;ayat();
 
+function tpCard(){if(!state.tpl)return;$('tpImg').src=state.tpl.img||'';$('tpName').textContent=state.tpl.v;$('tpImg').style.filter=FCSS[state.filt&&state.filt.k]||''}
+let lastFocus=null;
+function openSheet(){lastFocus=document.activeElement;$('tsheet').classList.add('on');document.body.style.overflow='hidden';const on=$('tpls').querySelector('[aria-pressed="true"]');(on||$('tsX')).focus();on&&on.scrollIntoView({block:'center'})}
+function closeSheet(){if(!$('tsheet').classList.contains('on'))return;$('tsheet').classList.remove('on');document.body.style.overflow='';lastFocus&&lastFocus.focus()}
+$('tpick').onclick=openSheet;$('tsX').onclick=closeSheet;$('tsheet').addEventListener('click',e=>{if(e.target.id==='tsheet')closeSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('tsheet').classList.contains('on')&&!$('pmodal').classList.contains('on'))closeSheet()});
+
 // ---------- file ----------
 const fmtMB=b=>ar((b/1048576).toFixed(1))+' ميغابايت';
+const isVid=f=>!!f&&(/^video\//.test(f.type)||/\.(mp4|mov|m4v|webm|mkv|avi|3gp)$/i.test(f.name));
+const bgaOn=()=>!isVid(file.files[0]);
 function setFile(){
-  const f=file.files[0];
-  if(!f){drop.classList.remove('has');$('dropTxt').innerHTML='<b>ارفع ملف التلاوة</b><br>صوت أو فيديو، حتى ١٠٠ ميغابايت. بصوتك أو بصوت أي قارئ.';render();return}
-  if(f.size>MAXB){$('err').textContent=`الملف ${fmtMB(f.size)}، أكبر من ١٠٠ ميغابايت. أكمل الطلب دونه وأرسله عبر واتساب.`;file.value='';return setFile()}
+  const f=file.files[0];$('bgaF').hidden=isVid(f);
+  if(!f){drop.classList.remove('has');$('dropTxt').innerHTML='<b>ارفع ملف التلاوة</b><br>صوت أو فيديو، حتى ٢٠٠ ميغابايت. بصوتك أو بصوت أي قارئ.';render();return}
+  if(f.size>MAXB){$('err').textContent=`الملف ${fmtMB(f.size)}، أكبر من ٢٠٠ ميغابايت. أكمل الطلب دونه وأرسله عبر واتساب.`;file.value='';return setFile()}
   $('err').textContent='';drop.classList.add('has');
   const t=$('dropTxt');t.textContent='';const b=document.createElement('b');b.textContent=f.name;t.append(b,document.createElement('br'),`${fmtMB(f.size)} · اضغط لتغييره`);render();
 }
@@ -495,14 +514,14 @@ function render(){
   if(!ready)return;
   if(!state.size||!state.len||!state.taf||!state.tpl||!state.qual)return;
   const f=file.files[0];
-  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['التفسير',state.taf.v],['الترجمة',state.lang?state.lang.v:'بدون'],['الرواية',riwTxt()],['خلفية الصوت',state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'ستُرسَل عبر واتساب']];
+  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['التفسير',state.taf.v],['الترجمة',state.lang?state.lang.v:'بدون'],['الرواية',riwTxt()],['خلفية الصوت',bgaOn()&&state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'ستُرسَل عبر واتساب']];
   const dl=$('sum');dl.innerHTML='';
   rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
   $('total').textContent=`${ar(total())} د.ك`;
 }
 function waText(code,uploaded){
   const L=[`السلام عليكم، طلب جديد من «رتّل» رقم ${code}:`,
-    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• التفسير: ${state.taf.v}`,`• الترجمة: ${state.lang?state.lang.v:'بدون'}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${state.bga?state.bga.v:'—'}`,`• الغلاف: ${$('pack').checked&&state.cover?state.cover.v:'بدون'}`,`• السورة: ${surahTxt()}`];
+    `• التصميم: ${state.tpl.v}`,`• الفلتر: ${state.filt?state.filt.v:'بدون'}`,`• المقاس: ${state.size.v}`,`• الجودة: ${state.qual.v}`,`• الطول: ${state.len.v}`,`• التفسير: ${state.taf.v}`,`• الترجمة: ${state.lang?state.lang.v:'بدون'}`,`• الرواية: ${riwTxt()}`,`• خلفية التلاوة الصوتية: ${bgaOn()&&state.bga?state.bga.v:'—'}`,`• الغلاف: ${$('pack').checked&&state.cover?state.cover.v:'بدون'}`,`• السورة: ${surahTxt()}`];
   if($('handle').value.trim())L.push(`• اسم الحساب: ${$('handle').value.trim()}`);
   if($('reader').value.trim())L.push(`• القارئ: ${$('reader').value.trim()}`);
   if($('notes').value.trim())L.push(`• ملاحظات: ${$('notes').value.trim()}`);
@@ -593,6 +612,8 @@ $('form').addEventListener('submit',async e=>{
 });
 ready=true;render();
 </script>
+<div class="tsheet" id="tsheet" role="dialog" aria-modal="true" aria-labelledby="tsT"><div class="in"><div class="hd"><h3 id="tsT">اختر التصميم</h3><button type="button" class="x" id="tsX" aria-label="أغلق">✕</button></div>
+<p class="hint" style="margin:0 0 14px">ما عليه ★ من تصاميم رتّل الخاصة. اضغط على العدسة لترى الصورة كبيرة.</p><div class="tpls" id="tpls" role="group" aria-label="التصميم"></div></div></div>
 <div class="pmodal" id="pmodal" role="dialog" aria-modal="true" aria-label="معاينة المقطع"><button type="button" class="pclose" id="pclose">أغلق المعاينة ✕</button><div class="pbox"><img id="pimg" alt=""><p id="pcap"></p></div></div>
 </body>
 </html>
