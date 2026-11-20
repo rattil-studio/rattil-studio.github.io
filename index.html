@@ -365,6 +365,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <div><label for="reader">اسم القارئ (يظهر على المقطع)</label><input id="reader" placeholder="اختياري"></div>
           <div><label for="cname">اسمك</label><input id="cname" placeholder="لنتعرّف عليك"></div>
         </div>
+        <div class="f"><label for="phone">رقم واتساب (مطلوب)</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="مثلاً 99123456" required aria-describedby="phoneHint"><p class="hint" id="phoneHint">نرسل لك عليه المقطع عند جهوزه. إن لم يكن رقمًا كويتيًا فاكتبه مع رمز الدولة.</p></div>
         <div class="f"><label for="notes">ملاحظات</label><textarea id="notes" placeholder="أي شيء تودّ إخبارنا به: هدية لشخص، لون تحبه، شعار تريده…"></textarea></div>
       </div>
 
@@ -575,11 +576,14 @@ async function getFB(){
   const fs=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
   fb={fs,db:fs.getFirestore(initializeApp(FB))};return fb;
 }
+const AD=s=>s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+function normPhone(v){let d=AD(v||'').replace(/[^\d+]/g,'');if(d.startsWith('+'))d=d.slice(1);else if(d.startsWith('00'))d=d.slice(2);if(/^[569]\d{7}$/.test(d))d='965'+d;return /^\d{8,15}$/.test(d)?d:''}
 const code=()=>{const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<5;i++)s+=c[Math.floor(Math.random()*c.length)];return s};
 $('form').addEventListener('submit',async e=>{
   e.preventDefault();const err=$('err');err.textContent='';
   if(sS.value===''){err.textContent='اختر السورة أولًا.';sS.focus();return}
   if(!$('agree').checked){err.textContent='أكّد أنك قرأت تنبيه سلامة التلاوة.';$('agree').focus();return}
+  const ph=normPhone($('phone').value);if(!ph){err.textContent='اكتب رقم واتساب صحيحًا لنرسل لك المقطع عليه.';$('phone').focus();return}
   const btn=$('send');btn.disabled=true;
   const f=file.files[0];const id=code();
   try{
@@ -597,7 +601,7 @@ $('form').addEventListener('submit',async e=>{
     await fs.setDoc(fs.doc(db,'orders',id),{
       code:id,size:state.size.v,len:state.len.v,taf:state.taf.v,lang:state.lang?state.lang.v:'بدون',theme:state.tpl.v,tpl:state.tpl.k,filt:state.filt?state.filt.k:'none',riw:$('riw').value,bga:state.bga?state.bga.a:'sky',cover:$('pack').checked&&state.cover?state.cover.k:'',qual:state.qual.v,handle:$('handle').value.trim().slice(0,40),
       surah:sS.value===''?'':N[sS.value],from:+sF.value||0,to:+sT.value||0,
-      reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),notes:$('notes').value.trim().slice(0,500),
+      reader:$('reader').value.trim().slice(0,60),cname:$('cname').value.trim().slice(0,60),phone:normPhone($('phone').value),notes:$('notes').value.trim().slice(0,500),
       price:total(),fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
       createdAt:fs.serverTimestamp()
     });

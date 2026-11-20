@@ -210,11 +210,12 @@ async function load(){loadExtras();
   snap.forEach(d=>{
     const o=d.data(),c=document.createElement('div');c.className='card';
     const when=o.createdAt?.toDate?.().toLocaleString('ar-KW',{dateStyle:'medium',timeStyle:'short'})||'';
-    const rows=[['الاسم',o.cname||'—'],['السورة',o.surah?`${o.surah} (${ar(o.from)}–${ar(o.to)})`:'—'],['التصميم',o.theme],['الفلتر',o.filt||'—'],['الرواية',(RIW.find(x=>x[0]===o.riw)||['','حفص'])[1]],['المقاس',o.size],['الجودة',o.qual||'Full HD'],['الطول',o.len],['التفسير',o.taf],['الترجمة',o.lang||'—'],['الحساب',o.handle||'—'],['خلفية الصوت',{sky:'سماء ونجوم',aurora:'أضواء',image:'صورة يرسلها العميل'}[o.bga]||'—'],['الغلاف',{khatt:'خط',shamsa:'شمسة',bitaqa:'بطاقة',aswad:'أسود',makhtuta:'مخطوطة',sada:'صدى',zujaj:'زجاج',mihrab:'محراب'}[o.cover]||(o.pack?'باقة النشر':'بدون')],['القارئ',o.reader||'—'],['ملاحظات',o.notes||'—'],['السعر',`${ar(o.price)} د.ك`],['الملف',o.chunks?`${o.fileName} · ${ar((o.bytes/1048576).toFixed(1))} ميغابايت`:'لم يُرفع ملف']];
+    const rows=[['الاسم',o.cname||'—'],['واتساب',o.phone?'+'+o.phone:'—'],['السورة',o.surah?`${o.surah} (${ar(o.from)}–${ar(o.to)})`:'—'],['التصميم',o.theme],['الفلتر',o.filt||'—'],['الرواية',(RIW.find(x=>x[0]===o.riw)||['','حفص'])[1]],['المقاس',o.size],['الجودة',o.qual||'Full HD'],['الطول',o.len],['التفسير',o.taf],['الترجمة',o.lang||'—'],['الحساب',o.handle||'—'],['خلفية الصوت',{sky:'سماء ونجوم',aurora:'أضواء',image:'صورة يرسلها العميل'}[o.bga]||'—'],['الغلاف',{khatt:'خط',shamsa:'شمسة',bitaqa:'بطاقة',aswad:'أسود',makhtuta:'مخطوطة',sada:'صدى',zujaj:'زجاج',mihrab:'محراب'}[o.cover]||(o.pack?'باقة النشر':'بدون')],['القارئ',o.reader||'—'],['ملاحظات',o.notes||'—'],['السعر',`${ar(o.price)} د.ك`],['الملف',o.chunks?`${o.fileName} · ${ar((o.bytes/1048576).toFixed(1))} ميغابايت`:'لم يُرفع ملف']];
     c.innerHTML=`<h2><span></span><small></small></h2><dl></dl><div class="acts"></div>`;
     c.querySelector('h2 span').textContent='طلب '+o.code;c.querySelector('h2 small').textContent=when;
     const dl=c.querySelector('dl');rows.forEach(([a,b])=>{const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;dl.append(t,v)});
     const acts=c.querySelector('.acts');
+    if(o.phone){const w=document.createElement('a');w.className='btn';w.target='_blank';w.rel='noopener';w.href='https://wa.me/'+o.phone+'?text='+encodeURIComponent(`السلام عليكم${o.cname?' '+o.cname:''} 🌙\nوصلنا طلبك في رتّل، رقم الطلب ${o.code}.`);w.textContent='راسله واتساب';acts.append(w)}
     let blobP=null;
     const getBlob=()=>blobP||(blobP=chunksOf(d.id).then(xs=>new Blob(xs.map(x=>x.data().data.toUint8Array()),{type:o.mime||'application/octet-stream'})));
     if(o.chunks){
