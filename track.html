@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>رتّل | تابع طلبك</title>
+<meta name="description" content="اكتب رقم طلبك ورقم واتساب لتعرف أين وصل مقطعك.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="رتّل">
+<meta property="og:title" content="تابع طلبك من رتّل"><meta property="og:description" content="اعرف أين وصل مقطعك.">
+<meta property="og:image" content="https://rattil-studio.github.io/media/og.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;600&family=Alexandria:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--plum:#1d0f22;--plum-2:#2a1630;--line:#4a2d52;--text:#f6eefa;--soft:#cdb6d6;--glow:#f0b446;--ok:#7fd8a0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(120% 70% at 50% 0%,#3b1d45,var(--plum));color:var(--text);font:400 16px/1.7 "Readex Pro",system-ui,sans-serif;min-height:100vh;display:grid;place-items:center;padding:24px 14px}
+.box{width:min(460px,100%);background:var(--plum-2);border:1.5px solid var(--line);border-radius:24px;padding:28px 24px}
+.logo{font:800 1.7rem "Alexandria";color:var(--glow);text-decoration:none;display:inline-block}
+h1{font:700 1.35rem "Alexandria";margin:14px 0 4px}p.sub{color:var(--soft);font-size:.95rem}
+label{display:block;color:var(--soft);font-size:.9rem;margin:18px 0 6px}
+input,select{font:inherit;color:var(--text);background:var(--plum);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;width:100%}
+input:focus,select:focus{outline:none;border-color:var(--glow)}
+#code{text-transform:uppercase;letter-spacing:.12em;font:700 1.2rem "Alexandria";text-align:center}
+.phw{display:flex;gap:8px}.phw select{width:122px;flex:none;direction:ltr;text-align:left;white-space:nowrap;overflow:hidden;-webkit-appearance:none;appearance:none}.phw input{flex:1;min-width:0}
+button.go{width:100%;margin-top:22px;min-height:52px;border:0;border-radius:14px;background:var(--glow);color:#1d0f22;font:700 1.05rem "Alexandria";cursor:pointer}button.go:disabled{opacity:.6}
+.msg{margin-top:14px;min-height:24px;color:var(--soft)}.msg.err{color:#ffb4b4}
+.res{margin-top:24px;border-top:1.5px dashed var(--line);padding-top:20px}
+.res h2{font:700 1.15rem "Alexandria";margin-bottom:4px}.res .when{color:var(--soft);font-size:.85rem}
+ol.steps{list-style:none;margin:20px 0 4px;position:relative}
+ol.steps li{position:relative;padding:0 38px 22px 0}
+ol.steps li::before{content:"";position:absolute;right:11px;top:26px;bottom:0;width:2px;background:var(--line)}
+ol.steps li:last-child{padding-bottom:0}ol.steps li:last-child::before{display:none}
+ol.steps .dot{position:absolute;right:0;top:2px;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);background:var(--plum);display:grid;place-items:center;font-size:13px;color:#1d0f22}
+ol.steps li.done .dot{background:var(--ok);border-color:var(--ok)}ol.steps li.done::before{background:var(--ok)}
+ol.steps li.now .dot{border-color:var(--glow);box-shadow:0 0 0 5px rgba(240,180,70,.18)}
+ol.steps b{display:block;font:600 1rem "Alexandria"}ol.steps li:not(.done):not(.now) b{color:var(--soft);font-weight:400}
+ol.steps span{display:block;color:var(--soft);font-size:.9rem}
+.wa{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;min-height:50px;border-radius:14px;background:#25d366;color:#08210f;font:700 1rem "Alexandria";text-decoration:none}
+@media (prefers-reduced-motion:no-preference){ol.steps li.now .dot{animation:p 1.8s ease-in-out infinite}@keyframes p{50%{box-shadow:0 0 0 9px rgba(240,180,70,.06)}}}
+</style>
+</head>
+<body>
+<main class="box">
+  <a class="logo" href="./">رتّل</a>
+  <h1>تابع طلبك</h1>
+  <p class="sub">اكتب رقم الطلب الموجود في فاتورتك، ورقم الواتساب الذي طلبت به.</p>
+  <form id="f" novalidate>
+    <label for="code">رقم الطلب</label>
+    <input id="code" maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="مثلاً B7WYH" dir="ltr">
+    <label for="phone">رقم واتساب</label>
+    <div class="phw" dir="ltr"><select id="cc" aria-label="رمز الدولة"><option value="965">‎+965 🇰🇼     الكويت</option><option value="966">‎+966 🇸🇦     السعودية</option><option value="971">‎+971 🇦🇪     الإمارات</option><option value="974">‎+974 🇶🇦     قطر</option><option value="973">‎+973 🇧🇭     البحرين</option><option value="968">‎+968 🇴🇲     عُمان</option><option value="20">‎+20 🇪🇬     مصر</option><option value="962">‎+962 🇯🇴     الأردن</option><option value="964">‎+964 🇮🇶     العراق</option><option value="961">‎+961 🇱🇧     لبنان</option><option value="963">‎+963 🇸🇾     سوريا</option><option value="970">‎+970 🇵🇸     فلسطين</option><option value="967">‎+967 🇾🇪     اليمن</option><option value="249">‎+249 🇸🇩     السودان</option><option value="218">‎+218 🇱🇾     ليبيا</option><option value="216">‎+216 🇹🇳     تونس</option><option value="213">‎+213 🇩🇿     الجزائر</option><option value="212">‎+212 🇲🇦     المغرب</option><option value="222">‎+222 🇲🇷     موريتانيا</option><option value="252">‎+252 🇸🇴     الصومال</option><option value="90">‎+90 🇹🇷     تركيا</option><option value="92">‎+92 🇵🇰     باكستان</option><option value="91">‎+91 🇮🇳     الهند</option><option value="880">‎+880 🇧🇩     بنغلاديش</option><option value="62">‎+62 🇮🇩     إندونيسيا</option><option value="60">‎+60 🇲🇾     ماليزيا</option><option value="44">‎+44 🇬🇧     بريطانيا</option><option value="1">‎+1 🇺🇸     أمريكا وكندا</option><option value="49">‎+49 🇩🇪     ألمانيا</option><option value="33">‎+33 🇫🇷     فرنسا</option><option value="46">‎+46 🇸🇪     السويد</option><option value="31">‎+31 🇳🇱     هولندا</option><option value="61">‎+61 🇦🇺     أستراليا</option></select><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" dir="ltr" placeholder="99123456"></div>
+    <button class="go" id="go">اعرض حالة الطلب</button>
+  </form>
+  <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  <section class="res" id="res" hidden aria-live="polite"></section>
+</main>
+<script type="module">
+const $=id=>document.getElementById(id);
+const WA='96599384032';
+const AD=s=>s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+function normPhone(v){let d=AD(v||'').replace(/[^\d+]/g,'');const cc=($('cc')&&$('cc').value)||'965';
+  if(d.startsWith('+'))d=d.slice(1);else if(d.startsWith('00'))d=d.slice(2);   // typed with its own country code
+  else{d=d.replace(/^0+/,'');if(d.startsWith(cc)&&d.length>cc.length+6)d=d;else d=cc+d}
+  if(d.startsWith('965')&&!/^965[2569]\d{7}$/.test(d))return'';
+  return /^\d{8,15}$/.test(d)&&d.length>=(cc.length+6)?d:''}
+const STEPS=[['new','استلمنا طلبك','ننتظر رسالتك على واتساب لنؤكد الطلب ونتفق على الدفع.'],['confirmed','أكّدنا الطلب','سنبدأ العمل على مقطعك قريبًا.'],['working','جارٍ التصميم','نعمل الآن على مقطعك، ونراجع كل آية قبل التسليم.'],['ready','مقطعك جاهز','أرسلناه لك على واتساب. نسأل الله أن ينفع به.']];
+async function sid(code,phone){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(code+':'+phone));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+const q=new URLSearchParams(location.search);if(q.get('c'))$('code').value=q.get('c').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
+let fb=null;async function getFB(){if(fb)return fb;const {initializeApp,getApps}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');const fs=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+  fb={fs,db:fs.getFirestore(getApps()[0]||initializeApp({apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya"}))};return fb}
+const err=t=>{$('msg').className='msg err';$('msg').textContent=t};
+$('f').addEventListener('submit',async e=>{e.preventDefault();$('res').hidden=true;$('msg').className='msg';$('msg').textContent='';
+  const code=$('code').value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(code.length<5){err('اكتب رقم الطلب كما هو في الفاتورة.');$('code').focus();return}
+  const ph=normPhone($('phone').value);if(!ph){err('اكتب رقم واتساب صحيحًا.');$('phone').focus();return}
+  $('go').disabled=true;$('msg').textContent='جارٍ البحث…';
+  try{const {fs,db}=await getFB();const d=await fs.getDoc(fs.doc(db,'status',await sid(code,ph)));$('msg').textContent='';
+    if(!d.exists()){err('لم نجد طلبًا بهذا الرقم. تأكد من رقم الطلب ورقم الواتساب، أو راسلنا على واتساب.');show404(code);return}
+    show(code,d.data())}
+  catch(x){console.error(x);err('تعذّر البحث. تأكد من الإنترنت ثم حاول مرة أخرى.')}
+  finally{$('go').disabled=false}});
+function waBtn(code,txt){const a=document.createElement('a');a.className='wa';a.target='_blank';a.rel='noopener';a.href=`https://wa.me/${WA}?text=${encodeURIComponent('السلام عليكم، بخصوص طلبي رقم '+code)}`;a.textContent=txt;return a}
+function show404(code){const r=$('res');r.innerHTML='';r.append(waBtn(code,'راسلنا على واتساب'));r.hidden=false}
+function show(code,o){const r=$('res');r.innerHTML='';const k=Math.max(0,STEPS.findIndex(s=>s[0]===o.s));
+  const h=document.createElement('h2');h.textContent='طلب '+code;const w=document.createElement('p');w.className='when';
+  const t=o.t&&o.t.toDate?o.t.toDate():null;w.textContent=t?'آخر تحديث: '+t.toLocaleString('ar-KW',{dateStyle:'medium',timeStyle:'short'}):'';
+  const ol=document.createElement('ol');ol.className='steps';
+  STEPS.forEach(([id,ti,de],i)=>{const li=document.createElement('li');if(i<k||(i===k&&id==='ready'))li.className='done';else if(i===k)li.className='now';
+    if(i===k)li.setAttribute('aria-current','step');const dot=document.createElement('i');dot.className='dot';dot.setAttribute('aria-hidden','true');if(li.className==='done')dot.textContent='✓';
+    const b=document.createElement('b');b.textContent=ti;li.append(dot,b);if(i===k){const s=document.createElement('span');s.textContent=de;li.append(s)}ol.append(li)});
+  r.append(h,w,ol);if(o.s==='new')r.append(waBtn(code,'أكمل الطلب عبر واتساب'));else if(o.s!=='ready')r.append(waBtn(code,'اسألنا عن طلبك'));r.hidden=false;r.querySelector('h2').scrollIntoView({behavior:'smooth',block:'nearest'})}
+</script>
+</body>
+</html>

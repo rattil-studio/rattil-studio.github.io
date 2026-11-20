@@ -218,7 +218,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
 <div class="wrap">
   <nav>
     <div class="logo">رتّ<span>ل</span></div>
-    <a class="navbtn" href="#order">اطلب مقطعك</a>
+    <div style="display:flex;align-items:center;gap:14px"><a href="track.html" style="color:var(--soft);font-size:.9rem;text-decoration:none">تابع طلبك</a><a class="navbtn" href="#order">اطلب مقطعك</a></div>
   </nav>
 
   <header class="hero">
@@ -426,7 +426,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
 
 <footer>
   <div class="logo" style="font-size:1.3rem">رتّ<span style="color:var(--glow)">ل</span></div>
-  <p style="margin-top:6px">واتساب: <span dir="ltr">+965 9938 4032</span></p>
+  <p style="margin-top:6px">واتساب: <span dir="ltr">+965 9938 4032</span> · <a href="track.html" style="color:var(--glow)">تابع طلبك</a></p>
 </footer>
 
 <script type="module">
@@ -588,7 +588,7 @@ let invLast=null;
 function showInv(o){invLast=o;$('invNo').textContent=o.code;$('invDate').textContent=o.date;$('invTot').textContent=o.total;const dl=$('invRows');dl.innerHTML='';
   o.rows.forEach(([a,b])=>{const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;if(a==='واتساب')v.dir='ltr';dl.append(t,v)});
   $('invWarn').textContent=o.up?'وصلتنا التلاوة. أرسل لنا رسالة على واتساب لنؤكد طلبك ونتفق على الدفع، وبعدها نبدأ العمل.':'أرسل لنا رسالة على واتساب، وأرسل التلاوة فيها، لنؤكد طلبك ونتفق على الدفع. لن نبدأ العمل قبلها.';
-  $('invWa').href=o.wa;$('inv').classList.add('on');document.body.style.overflow='hidden';$('invWa').focus({preventScroll:true});$('inv').scrollTop=0}
+  $('invWa').href=o.wa;$('invTrack').href='track.html?c='+o.code;$('inv').classList.add('on');document.body.style.overflow='hidden';$('invWa').focus({preventScroll:true});$('inv').scrollTop=0}
 function closeInv(){$('inv').classList.remove('on');document.body.style.overflow='';pendBanner()}
 $('invX').onclick=closeInv;$('invSave').onclick=()=>window.print();
 $('invWa').addEventListener('click',()=>{try{const o=JSON.parse(localStorage.getItem('rattil_last')||'null');if(o){o.sent=1;localStorage.setItem('rattil_last',JSON.stringify(o))}}catch(e){}});
@@ -610,6 +610,7 @@ function normPhone(v){let d=AD(v||'').replace(/[^\d+]/g,'');const cc=($('cc')&&$
   else{d=d.replace(/^0+/,'');if(d.startsWith(cc)&&d.length>cc.length+6)d=d;else d=cc+d}
   if(d.startsWith('965')&&!/^965[2569]\d{7}$/.test(d))return'';
   return /^\d{8,15}$/.test(d)&&d.length>=(cc.length+6)?d:''}
+async function sid(code,phone){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(code+':'+phone));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 const code=()=>{const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<5;i++)s+=c[Math.floor(Math.random()*c.length)];return s};
 $('form').addEventListener('submit',async e=>{
   e.preventDefault();const err=$('err');err.textContent='';
@@ -637,6 +638,7 @@ $('form').addEventListener('submit',async e=>{
       price:total(),fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
       createdAt:fs.serverTimestamp()
     });
+    try{await fs.setDoc(fs.doc(db,'status',await sid(id,normPhone($('phone').value))),{s:'new',t:fs.serverTimestamp()})}catch(e){console.warn('status',e)}
     btn.hidden=true;const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,!!f))}`;
     wa.innerHTML=btn.querySelector('svg').outerHTML+' أكمل الطلب عبر واتساب';
     $('note').textContent=`حُفظ طلبك برقم ${id}. لإكماله أرسل لنا رسالة على واتساب.`;
@@ -658,6 +660,7 @@ ready=true;render();pendBanner();
   <div class="warn" role="status"><strong>طلبك لم يكتمل بعد</strong><span id="invWarn"></span></div>
   <a class="wa" id="invWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>أكمل الطلب عبر واتساب</a>
   <div class="row2"><button type="button" id="invSave">احفظ الفاتورة</button><button type="button" class="x" id="invX">أغلق</button></div>
+  <p style="text-align:center;margin-top:14px;font-size:.9rem;color:var(--soft)">تابع حالة طلبك في أي وقت من <a id="invTrack" href="track.html" style="color:var(--glow)">صفحة «تابع طلبك»</a> برقم الطلب ورقم الواتساب.</p>
 </div></div>
 <div class="tsheet" id="tsheet" role="dialog" aria-modal="true" aria-labelledby="tsT"><div class="in"><div class="hd"><h3 id="tsT">اختر التصميم</h3><button type="button" class="x" id="tsX" aria-label="أغلق">✕</button></div>
 <p class="hint" style="margin:0 0 14px">ما عليه ★ من تصاميم رتّل الخاصة. اضغط على العدسة لترى الصورة كبيرة.</p><div class="tpls" id="tpls" role="group" aria-label="التصميم"></div></div></div>
