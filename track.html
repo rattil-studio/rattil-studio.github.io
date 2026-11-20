@@ -34,6 +34,8 @@ ol.steps li.done .dot{background:var(--ok);border-color:var(--ok)}ol.steps li.do
 ol.steps li.now .dot{border-color:var(--glow);box-shadow:0 0 0 5px rgba(240,180,70,.18)}
 ol.steps b{display:block;font:600 1rem "Alexandria"}ol.steps li:not(.done):not(.now) b{color:var(--soft);font-weight:400}
 ol.steps span{display:block;color:var(--soft);font-size:.9rem}
+.cancel{width:100%;margin-top:10px;min-height:46px;border-radius:14px;border:1.5px solid #6b3040;background:transparent;color:#ffb4b4;font:500 .95rem "Readex Pro";cursor:pointer}.cancel.sure{background:#6b3040;color:#fff}
+.gone{margin-top:18px;border:1.5px solid #6b3040;background:rgba(107,48,64,.25);border-radius:16px;padding:14px 16px}.gone b{display:block;font:700 1.05rem "Alexandria";color:#ffb4b4}.gone span{color:var(--soft);font-size:.92rem}
 .wa{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px;min-height:50px;border-radius:14px;background:#25d366;color:#08210f;font:700 1rem "Alexandria";text-decoration:none}
 @media (prefers-reduced-motion:no-preference){ol.steps li.now .dot{animation:p 1.8s ease-in-out infinite}@keyframes p{50%{box-shadow:0 0 0 9px rgba(240,180,70,.06)}}}
 </style>
@@ -67,12 +69,13 @@ async function sid(code,phone){const b=await crypto.subtle.digest('SHA-256',new 
 const q=new URLSearchParams(location.search);if(q.get('c'))$('code').value=q.get('c').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);
 let fb=null;async function getFB(){if(fb)return fb;const {initializeApp,getApps}=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');const fs=await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
   fb={fs,db:fs.getFirestore(getApps()[0]||initializeApp({apiKey:"AIzaSyCItsJ7A-egrSZc40lK_3z1H_Vj_l8xfJ8",authDomain:"ad3eya.firebaseapp.com",projectId:"ad3eya"}))};return fb}
+let LAST=null;
 const err=t=>{$('msg').className='msg err';$('msg').textContent=t};
 $('f').addEventListener('submit',async e=>{e.preventDefault();$('res').hidden=true;$('msg').className='msg';$('msg').textContent='';
   const code=$('code').value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(code.length<5){err('اكتب رقم الطلب كما هو في الفاتورة.');$('code').focus();return}
   const ph=normPhone($('phone').value);if(!ph){err('اكتب رقم واتساب صحيحًا.');$('phone').focus();return}
   $('go').disabled=true;$('msg').textContent='جارٍ البحث…';
-  try{const {fs,db}=await getFB();const d=await fs.getDoc(fs.doc(db,'status',await sid(code,ph)));$('msg').textContent='';
+  try{const {fs,db}=await getFB();const id=await sid(code,ph);LAST={id};const d=await fs.getDoc(fs.doc(db,'status',id));$('msg').textContent='';
     if(!d.exists()){err('لم نجد طلبًا بهذا الرقم. تأكد من رقم الطلب ورقم الواتساب، أو راسلنا على واتساب.');show404(code);return}
     show(code,d.data())}
   catch(x){console.error(x);err('تعذّر البحث. تأكد من الإنترنت ثم حاول مرة أخرى.')}
@@ -86,7 +89,14 @@ function show(code,o){const r=$('res');r.innerHTML='';const k=Math.max(0,STEPS.f
   STEPS.forEach(([id,ti,de],i)=>{const li=document.createElement('li');if(i<k||(i===k&&id==='ready'))li.className='done';else if(i===k)li.className='now';
     if(i===k)li.setAttribute('aria-current','step');const dot=document.createElement('i');dot.className='dot';dot.setAttribute('aria-hidden','true');if(li.className==='done')dot.textContent='✓';
     const b=document.createElement('b');b.textContent=ti;li.append(dot,b);if(i===k){const s=document.createElement('span');s.textContent=de;li.append(s)}ol.append(li)});
-  r.append(h,w,ol);if(o.s==='new')r.append(waBtn(code,'أكمل الطلب عبر واتساب'));else if(o.s!=='ready')r.append(waBtn(code,'اسألنا عن طلبك'));r.hidden=false;r.querySelector('h2').scrollIntoView({behavior:'smooth',block:'nearest'})}
+  if(o.s==='cancelled'){const g=document.createElement('div');g.className='gone';g.innerHTML='<b>أُلغي هذا الطلب</b><span>لن نعمل عليه. إن ألغيته بالخطأ فراسلنا على واتساب.</span>';r.append(h,w,g,waBtn(code,'راسلنا على واتساب'));r.hidden=false;return}
+  r.append(h,w,ol);if(o.s==='new')r.append(waBtn(code,'أكمل الطلب عبر واتساب'));else if(o.s!=='ready')r.append(waBtn(code,'اسألنا عن طلبك'));
+  if(o.s==='new'){const c=document.createElement('button');c.type='button';c.className='cancel';c.textContent='ألغِ الطلب';let armed=false,tm=null;
+    c.onclick=async()=>{if(!armed){armed=true;c.classList.add('sure');c.textContent='متأكد؟ اضغط مرة ثانية لإلغاء الطلب';tm=setTimeout(()=>{armed=false;c.classList.remove('sure');c.textContent='ألغِ الطلب'},6000);return}
+      clearTimeout(tm);c.disabled=true;c.textContent='جارٍ الإلغاء…';
+      try{const {fs,db}=await getFB();await fs.updateDoc(fs.doc(db,'status',LAST.id),{s:'cancelled',t:fs.serverTimestamp()});show(code,{s:'cancelled',t:{toDate:()=>new Date()}})}
+      catch(x){console.error(x);c.disabled=false;c.classList.remove('sure');armed=false;c.textContent='ألغِ الطلب';err('تعذّر الإلغاء. ربما أكّدنا طلبك قبل قليل، راسلنا على واتساب.')}};
+    const n=document.createElement('p');n.className='when';n.style.marginTop='8px';n.textContent='يمكنك إلغاء الطلب ما دمنا لم نؤكده بعد.';r.append(c,n)}r.hidden=false;r.querySelector('h2').scrollIntoView({behavior:'smooth',block:'nearest'})}
 </script>
 </body>
 </html>

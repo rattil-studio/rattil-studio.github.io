@@ -188,7 +188,7 @@ function designUI(o,id,c,getBlob){
 
 $('login').onclick=async()=>{if(signedIn){await signOut(auth);return}try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){$('msg').textContent='لم يتم الدخول: '+e.code}};
 onAuthStateChanged(auth,u=>{signedIn=!!u;$('login').textContent=u?'خروج':'الدخول بحساب Google';$('login').className=u?'btn ghost':'btn';if(u)load();else{$('list').innerHTML='';$('msg').textContent='سجّل الدخول بحسابك في Google لعرض الطلبات.'}});
-const STS=[['new','استلمنا الطلب'],['confirmed','تم التأكيد'],['working','جارٍ التصميم'],['ready','جاهز وأُرسل']];
+const STS=[['new','استلمنا الطلب'],['confirmed','تم التأكيد'],['working','جارٍ التصميم'],['ready','جاهز وأُرسل'],['cancelled','ملغي']];
 async function sidOf(code,phone){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(code+':'+phone));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function chunksOf(id){const s=await getDocs(query(collection(db,'orders',id,'chunks'),orderBy('i')));return s.docs}
 async function loadExtras(){
@@ -218,7 +218,7 @@ async function load(){loadExtras();
     const dl=c.querySelector('dl');rows.forEach(([a,b])=>{const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;dl.append(t,v)});
     const acts=c.querySelector('.acts');
     if(o.phone){const st=document.createElement('select');st.className='btn ghost';st.setAttribute('aria-label','حالة الطلب للعميل');st.innerHTML='<option value="">حالة الطلب…</option>'+STS.map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
-      sidOf(o.code,o.phone).then(async id=>{try{const x=await getDoc(doc(db,'status',id));st.value=x.exists()?x.data().s:''}catch(e){}});
+      sidOf(o.code,o.phone).then(async id=>{try{const x=await getDoc(doc(db,'status',id));st.value=x.exists()?x.data().s:'';if(st.value==='cancelled'){c.style.opacity='.6';const tg=document.createElement('span');tg.textContent=' · ألغاه العميل';tg.style.color='#ff9a9a';c.querySelector('h2 span').after(tg)}}catch(e){}});
       st.onchange=async()=>{if(!st.value)return;st.disabled=true;try{await setDoc(doc(db,'status',await sidOf(o.code,o.phone)),{s:st.value,t:serverTimestamp()})}catch(e){alert('تعذّر تحديث الحالة')}st.disabled=false};acts.append(st)}
     if(o.phone){const w=document.createElement('a');w.className='btn';w.target='_blank';w.rel='noopener';w.href='https://wa.me/'+o.phone+'?text='+encodeURIComponent(`السلام عليكم${o.cname?' '+o.cname:''} 🌙\nوصلنا طلبك في رتّل، رقم الطلب ${o.code}.`);w.textContent='راسله واتساب';acts.append(w)}
     let blobP=null;
