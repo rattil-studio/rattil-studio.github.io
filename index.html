@@ -191,6 +191,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
 .inv .row2{display:flex;gap:10px;margin-top:10px}.inv .row2 button{flex:1;min-height:46px;border-radius:14px;border:1.5px solid var(--line);background:transparent;color:var(--text);font:500 .95rem "Readex Pro";cursor:pointer}
 .pend{display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(232,180,90,.12);border:1.5px solid var(--glow);border-radius:16px;padding:12px 16px;margin:0 0 18px}.pend.on{display:flex}.pend button{border:0;background:var(--glow);color:#1a0b06;border-radius:12px;min-height:42px;padding:0 14px;font:700 .9rem "Alexandria";cursor:pointer}
 @media print{body>*:not(.inv){display:none!important}.inv{position:static;display:block!important;background:#fff;padding:0}.inv .paper{border:0;color:#111;background:#fff}.inv .row2,.inv .wa,.inv .x{display:none!important}.inv dt,.inv .top small{color:#555}.inv .brand,.inv .tot b,.inv .warn strong{color:#8a5a12}}
+.phw{display:flex;gap:8px}.phw select{width:122px;flex:none;direction:ltr;text-align:left;padding-right:30px;padding-left:12px;background-position:right 10px center;text-overflow:clip;white-space:nowrap;overflow:hidden}.phw input{flex:1;min-width:0}
 .tsheet{position:fixed;inset:0;z-index:90;background:rgba(8,3,12,.74);display:none;align-items:flex-end;justify-content:center}.tsheet.on{display:flex}
 .tsheet .in{background:var(--plum-2);width:min(760px,100%);max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;padding:0 18px 28px;overscroll-behavior:contain}
 .tsheet .hd{position:sticky;top:0;z-index:2;background:var(--plum-2);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 14px}
@@ -378,7 +379,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <div><label for="reader">اسم القارئ (يظهر على المقطع)</label><input id="reader" placeholder="اختياري"></div>
           <div><label for="cname">اسمك</label><input id="cname" placeholder="لنتعرّف عليك"></div>
         </div>
-        <div class="f"><label for="phone">رقم واتساب (مطلوب)</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="مثلاً 99123456" required aria-describedby="phoneHint"><p class="hint" id="phoneHint">نرسل لك عليه المقطع عند جهوزه. إن لم يكن رقمًا كويتيًا فاكتبه مع رمز الدولة.</p></div>
+        <div class="f"><label for="phone">رقم واتساب (مطلوب)</label><div class="phw" dir="ltr"><select id="cc" aria-label="رمز الدولة"><option value="965">‎+965 🇰🇼     الكويت</option><option value="966">‎+966 🇸🇦     السعودية</option><option value="971">‎+971 🇦🇪     الإمارات</option><option value="974">‎+974 🇶🇦     قطر</option><option value="973">‎+973 🇧🇭     البحرين</option><option value="968">‎+968 🇴🇲     عُمان</option><option value="20">‎+20 🇪🇬     مصر</option><option value="962">‎+962 🇯🇴     الأردن</option><option value="964">‎+964 🇮🇶     العراق</option><option value="961">‎+961 🇱🇧     لبنان</option><option value="963">‎+963 🇸🇾     سوريا</option><option value="970">‎+970 🇵🇸     فلسطين</option><option value="967">‎+967 🇾🇪     اليمن</option><option value="249">‎+249 🇸🇩     السودان</option><option value="218">‎+218 🇱🇾     ليبيا</option><option value="216">‎+216 🇹🇳     تونس</option><option value="213">‎+213 🇩🇿     الجزائر</option><option value="212">‎+212 🇲🇦     المغرب</option><option value="222">‎+222 🇲🇷     موريتانيا</option><option value="252">‎+252 🇸🇴     الصومال</option><option value="90">‎+90 🇹🇷     تركيا</option><option value="92">‎+92 🇵🇰     باكستان</option><option value="91">‎+91 🇮🇳     الهند</option><option value="880">‎+880 🇧🇩     بنغلاديش</option><option value="62">‎+62 🇮🇩     إندونيسيا</option><option value="60">‎+60 🇲🇾     ماليزيا</option><option value="44">‎+44 🇬🇧     بريطانيا</option><option value="1">‎+1 🇺🇸     أمريكا وكندا</option><option value="49">‎+49 🇩🇪     ألمانيا</option><option value="33">‎+33 🇫🇷     فرنسا</option><option value="46">‎+46 🇸🇪     السويد</option><option value="31">‎+31 🇳🇱     هولندا</option><option value="61">‎+61 🇦🇺     أستراليا</option></select><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" dir="ltr" placeholder="99123456" required aria-describedby="phoneHint"></div><p class="hint" id="phoneHint">اختر دولتك ثم اكتب رقمك. نرسل لك عليه المقطع عند جهوزه.</p></div>
         <div class="f"><label for="notes">ملاحظات</label><textarea id="notes" placeholder="أي شيء تودّ إخبارنا به: هدية لشخص، لون تحبه، شعار تريده…"></textarea></div>
       </div>
 
@@ -604,7 +605,11 @@ async function getFB(){
   fb={fs,db:fs.getFirestore(initializeApp(FB))};return fb;
 }
 const AD=s=>s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-function normPhone(v){let d=AD(v||'').replace(/[^\d+]/g,'');if(d.startsWith('+'))d=d.slice(1);else if(d.startsWith('00'))d=d.slice(2);if(/^[569]\d{7}$/.test(d))d='965'+d;return /^\d{8,15}$/.test(d)?d:''}
+function normPhone(v){let d=AD(v||'').replace(/[^\d+]/g,'');const cc=($('cc')&&$('cc').value)||'965';
+  if(d.startsWith('+'))d=d.slice(1);else if(d.startsWith('00'))d=d.slice(2);   // typed with its own country code
+  else{d=d.replace(/^0+/,'');if(d.startsWith(cc)&&d.length>cc.length+6)d=d;else d=cc+d}
+  if(d.startsWith('965')&&!/^965[2569]\d{7}$/.test(d))return'';
+  return /^\d{8,15}$/.test(d)&&d.length>=(cc.length+6)?d:''}
 const code=()=>{const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<5;i++)s+=c[Math.floor(Math.random()*c.length)];return s};
 $('form').addEventListener('submit',async e=>{
   e.preventDefault();const err=$('err');err.textContent='';
