@@ -596,7 +596,35 @@ function showInv(o){invLast=o;$('invNo').textContent=o.code;$('invDate').textCon
   $('invWarn').textContent=o.up?'وصلتنا التلاوة. أرسل لنا رسالة على واتساب لنؤكد طلبك ونتفق على الدفع، وبعدها نبدأ العمل.':'أرسل لنا رسالة على واتساب، وأرسل التلاوة فيها، لنؤكد طلبك ونتفق على الدفع. لن نبدأ العمل قبلها.';
   $('invWa').href=o.wa;$('invTrack').href='track.html?c='+o.code;$('inv').classList.add('on');document.body.style.overflow='hidden';$('invWa').focus({preventScroll:true});$('inv').scrollTop=0}
 function closeInv(){$('inv').classList.remove('on');document.body.style.overflow='';pendBanner()}
-$('invX').onclick=closeInv;$('invSave').onclick=()=>window.print();
+$('invX').onclick=closeInv;$('invSave').onclick=()=>invLast&&saveInv(invLast);
+// the invoice as an image: phones (and in-app browsers) cannot print, but they can save a picture
+async function invImage(o){const S=2,W=720,pad=56,rh=58,H=330+o.rows.length*rh+300;const c=document.createElement('canvas');c.width=W*S;c.height=H*S;const x=c.getContext('2d');x.scale(S,S);
+  try{await document.fonts.ready}catch(e){}
+  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#3a1c45');g.addColorStop(1,'#1d0f22');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.direction='rtl';x.textBaseline='middle';const R=W-pad,L=pad;
+  x.fillStyle='#f0b446';x.font='800 64px Alexandria, sans-serif';x.textAlign='right';x.fillText('رتّل',R,82);
+  x.fillStyle='#cdb6d6';x.font='400 24px "Readex Pro", sans-serif';x.fillText('فاتورة طلب',R,136);
+  x.textAlign='left';x.fillText('رقم الطلب',L,70);x.fillStyle='#f6eefa';x.font='700 44px Alexandria, sans-serif';x.direction='ltr';x.fillText(o.code,L,112);x.direction='rtl';
+  x.fillStyle='#cdb6d6';x.font='400 20px "Readex Pro", sans-serif';x.fillText(o.date,L,152);
+  const dash=y=>{x.save();x.strokeStyle='#5a3a63';x.setLineDash([10,8]);x.lineWidth=2;x.beginPath();x.moveTo(L,y);x.lineTo(R,y);x.stroke();x.restore()};dash(190);
+  let y=240;o.rows.forEach(([a,b])=>{x.textAlign='right';x.fillStyle='#cdb6d6';x.font='400 25px "Readex Pro", sans-serif';x.fillText(a,R,y);x.textAlign='left';x.fillStyle='#f6eefa';
+    if(a==='واتساب'){x.direction='ltr';x.fillText(b,L,y);x.direction='rtl'}else{let t=String(b);while(x.measureText(t).width>W*.55&&t.length>4)t=t.slice(0,-2);if(t!==String(b))t+='…';x.fillText(t,L,y)}y+=rh});
+  dash(y-8);y+=44;x.textAlign='right';x.fillStyle='#f6eefa';x.font='700 32px Alexandria, sans-serif';x.fillText('المجموع',R,y);x.textAlign='left';x.fillStyle='#f0b446';x.font='800 44px Alexandria, sans-serif';x.fillText(o.total,L,y);
+  y+=70;x.fillStyle='rgba(240,180,70,.13)';x.strokeStyle='#f0b446';x.lineWidth=2;x.beginPath();x.roundRect(L,y,R-L,120,20);x.fill();x.stroke();
+  x.textAlign='right';x.fillStyle='#f0b446';x.font='700 26px Alexandria, sans-serif';x.fillText(o.sent?'أرسلت لنا على واتساب':'طلبك لم يكتمل بعد',R-24,y+40);
+  x.fillStyle='#f6eefa';x.font='400 21px "Readex Pro", sans-serif';{const lab='أكمله عبر واتساب: ';x.fillText(lab,R-24,y+84);const lw=x.measureText(lab).width;x.direction='ltr';x.textAlign='right';x.fillText('+965 9938 4032',R-24-lw,y+84);x.direction='rtl'}
+  x.fillStyle='#cdb6d6';x.font='400 20px "Readex Pro", sans-serif';x.textAlign='center';{const lab='تابع طلبك: ',u='rattil-studio.github.io/track.html';const lw=x.measureText(lab).width;x.direction='ltr';const uw=x.measureText(u).width;const tot=lw+uw,x0=W/2-tot/2;x.textAlign='left';x.fillText(u,x0,H-44);x.direction='rtl';x.textAlign='right';x.fillText(lab,x0+tot,H-44)}
+  return new Promise(r=>c.toBlob(r,'image/png'))}
+async function saveInv(o){const b=$('invSave'),t0=b.textContent;b.disabled=true;b.textContent='جارٍ التجهيز…';
+  try{const blob=await invImage(o);const f=new File([blob],`rattil-${o.code}.png`,{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'فاتورة رتّل '+o.code})}catch(e){if(e.name!=='AbortError')showInvImg(blob)}}
+    else if(!/iPhone|iPad|Android|Instagram|FBAN|FBAV/i.test(navigator.userAgent)){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=f.name;document.body.append(a);a.click();a.remove()}
+    else showInvImg(blob)}
+  catch(e){console.error(e);showInvImg(null)}finally{b.disabled=false;b.textContent=t0}}
+function showInvImg(blob){let v=$('invImg');if(!v){v=document.createElement('div');v.id='invImg';v.style.cssText='position:fixed;inset:0;z-index:99;background:rgba(8,3,12,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:20px';document.body.append(v)}
+  v.innerHTML='';const p=document.createElement('p');p.style.cssText='color:#f6eefa;text-align:center;margin:0';p.textContent=blob?'اضغط مطوّلًا على الصورة واختر «حفظ الصورة».':'تعذّر تجهيز الصورة. التقط صورة للشاشة بدلًا منها.';
+  const cl=document.createElement('button');cl.type='button';cl.textContent='رجوع';cl.style.cssText='min-height:46px;padding:0 28px;border-radius:14px;border:1.5px solid #4a2d52;background:transparent;color:#f6eefa;font:inherit';cl.onclick=()=>v.remove();
+  if(blob){const im=document.createElement('img');im.src=URL.createObjectURL(blob);im.alt='فاتورة الطلب';im.style.cssText='max-width:100%;max-height:72vh;border-radius:16px';v.append(p,im,cl)}else v.append(p,cl)}
 $('invWa').addEventListener('click',()=>{try{const o=JSON.parse(localStorage.getItem('rattil_last')||'null');if(o){o.sent=1;localStorage.setItem('rattil_last',JSON.stringify(o))}}catch(e){}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('inv').classList.contains('on'))closeInv()});
 function pendBanner(){let o=null;try{o=JSON.parse(localStorage.getItem('rattil_last')||'null')}catch(e){}const b=$('pend');if(!b)return;
