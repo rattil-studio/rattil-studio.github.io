@@ -179,6 +179,18 @@ button.wa:disabled{opacity:.6;cursor:wait}
 .tpick .tn{flex:1;display:flex;flex-direction:column;gap:4px}.tpick .tn b{font:700 1.1rem "Alexandria"}.tpick .tn small{color:var(--soft);font-size:.85rem}
 .tpick .go{flex:none;border:1.5px solid var(--glow);color:var(--glow);border-radius:12px;padding:9px 14px;font:600 .9rem "Readex Pro"}
 #bgaF[hidden]{display:none!important}
+.inv{position:fixed;inset:0;z-index:95;background:rgba(8,3,12,.8);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:24px 14px}.inv.on{display:flex}
+.inv .paper{background:var(--plum-2);border:1.5px solid var(--line);border-radius:24px;width:min(520px,100%);padding:26px 22px 22px;margin:auto 0}
+.inv .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1.5px dashed var(--line);padding-bottom:16px;margin-bottom:14px}
+.inv .brand{font:800 2rem "Alexandria";color:var(--glow);line-height:1}.inv .top small{display:block;color:var(--soft);font-size:.85rem;margin-top:6px}
+.inv .no{text-align:left}.inv .no b{display:block;font:700 1.5rem "Alexandria";letter-spacing:.06em;direction:ltr}
+.inv dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:9px 16px;font-size:.95rem}.inv dt{color:var(--soft)}.inv dd{margin:0;text-align:left}
+.inv .tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1.5px dashed var(--line);margin-top:16px;padding-top:14px;font:700 1.15rem "Alexandria"}.inv .tot b{color:var(--glow);font-size:1.6rem}
+.inv .warn{background:rgba(232,180,90,.12);border:1.5px solid var(--glow);border-radius:16px;padding:14px 16px;margin:18px 0 16px;line-height:1.75}.inv .warn strong{display:block;color:var(--glow);font:700 1.05rem "Alexandria";margin-bottom:4px}
+.inv .wa{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:16px;background:#25d366;color:#08210f;font:700 1.1rem "Alexandria";text-decoration:none}
+.inv .row2{display:flex;gap:10px;margin-top:10px}.inv .row2 button{flex:1;min-height:46px;border-radius:14px;border:1.5px solid var(--line);background:transparent;color:var(--text);font:500 .95rem "Readex Pro";cursor:pointer}
+.pend{display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(232,180,90,.12);border:1.5px solid var(--glow);border-radius:16px;padding:12px 16px;margin:0 0 18px}.pend.on{display:flex}.pend button{border:0;background:var(--glow);color:#1a0b06;border-radius:12px;min-height:42px;padding:0 14px;font:700 .9rem "Alexandria";cursor:pointer}
+@media print{body>*:not(.inv){display:none!important}.inv{position:static;display:block!important;background:#fff;padding:0}.inv .paper{border:0;color:#111;background:#fff}.inv .row2,.inv .wa,.inv .x{display:none!important}.inv dt,.inv .top small{color:#555}.inv .brand,.inv .tot b,.inv .warn strong{color:#8a5a12}}
 .tsheet{position:fixed;inset:0;z-index:90;background:rgba(8,3,12,.74);display:none;align-items:flex-end;justify-content:center}.tsheet.on{display:flex}
 .tsheet .in{background:var(--plum-2);width:min(760px,100%);max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;padding:0 18px 28px;overscroll-behavior:contain}
 .tsheet .hd{position:sticky;top:0;z-index:2;background:var(--plum-2);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 14px}
@@ -271,6 +283,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
   <div class="wrap">
     <h2>صمّم طلبك</h2>
     <p class="lead">اختر ما تريد وارفع التلاوة، ثم أكمل الطلب عبر واتساب.</p>
+    <div class="pend" id="pend" role="status" style="margin-top:24px"><span></span><button type="button">اعرض الفاتورة</button></div>
     <form class="order" id="form" style="margin-top:30px">
       <div>
         <div class="f"><span class="lbl">المقاس</span>
@@ -511,11 +524,12 @@ drop.addEventListener('drop',ev=>{ev.preventDefault();if(ev.dataTransfer.files.l
 // ---------- summary ----------
 const riwTxt=()=>$('riw').selectedOptions[0].textContent;
 const surahTxt=()=>sS.value===''?'—':`${N[sS.value]} (${sF.value===sT.value?'آية '+ar(sF.value):'الآيات '+ar(sF.value)+'–'+ar(sT.value)})`;
+function sumRows(){const f=file.files[0];return[['السورة',surahTxt()],['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['التفسير',state.taf.v],['الترجمة',state.lang?state.lang.v:'بدون'],['الرواية',riwTxt()],['خلفية الصوت',bgaOn()&&state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['التلاوة',f?'مرفوعة مع الطلب':'ستُرسَل عبر واتساب']]}
 function render(){
   if(!ready)return;
   if(!state.size||!state.len||!state.taf||!state.tpl||!state.qual)return;
   const f=file.files[0];
-  const rows=[['التصميم',state.tpl.v],['الفلتر',state.filt?state.filt.v:'بدون'],['المقاس',state.size.v],['الجودة',state.qual.v],['الطول',state.len.v],['التفسير',state.taf.v],['الترجمة',state.lang?state.lang.v:'بدون'],['الرواية',riwTxt()],['خلفية الصوت',bgaOn()&&state.bga?state.bga.v:'—'],['الغلاف',$('pack').checked&&state.cover?state.cover.v:'بدون'],['السورة',surahTxt()],['التلاوة',f?'مرفوعة مع الطلب':'ستُرسَل عبر واتساب']];
+  const rows=sumRows();
   const dl=$('sum');dl.innerHTML='';
   rows.forEach(([a,b])=>{const d=document.createElement('div');const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;d.append(t,v);dl.appendChild(d)});
   $('total').textContent=`${ar(total())} د.ك`;
@@ -568,6 +582,19 @@ setTimeout(async()=>{try{const {fs,db}=await getFB();
   r.forEach(d=>{const x=d.data(),c=document.createElement('div');c.className='rv';c.innerHTML='<div class="st"></div><p></p><b></b>';c.querySelector('.st').textContent='★'.repeat(x.stars)+'☆'.repeat(5-x.stars);c.querySelector('p').textContent=x.text;c.querySelector('b').textContent=x.name||'عميل';rl.appendChild(c)});
   if(rl.children.length)$('reviews').hidden=false}catch(e){console.warn(e)}},0);
 
+// ---------- invoice ----------
+let invLast=null;
+function showInv(o){invLast=o;$('invNo').textContent=o.code;$('invDate').textContent=o.date;$('invTot').textContent=o.total;const dl=$('invRows');dl.innerHTML='';
+  o.rows.forEach(([a,b])=>{const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;if(a==='واتساب')v.dir='ltr';dl.append(t,v)});
+  $('invWarn').textContent=o.up?'وصلتنا التلاوة. أرسل لنا رسالة على واتساب لنؤكد طلبك ونتفق على الدفع، وبعدها نبدأ العمل.':'أرسل لنا رسالة على واتساب، وأرسل التلاوة فيها، لنؤكد طلبك ونتفق على الدفع. لن نبدأ العمل قبلها.';
+  $('invWa').href=o.wa;$('inv').classList.add('on');document.body.style.overflow='hidden';$('invWa').focus({preventScroll:true});$('inv').scrollTop=0}
+function closeInv(){$('inv').classList.remove('on');document.body.style.overflow='';pendBanner()}
+$('invX').onclick=closeInv;$('invSave').onclick=()=>window.print();
+$('invWa').addEventListener('click',()=>{try{const o=JSON.parse(localStorage.getItem('rattil_last')||'null');if(o){o.sent=1;localStorage.setItem('rattil_last',JSON.stringify(o))}}catch(e){}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('inv').classList.contains('on'))closeInv()});
+function pendBanner(){let o=null;try{o=JSON.parse(localStorage.getItem('rattil_last')||'null')}catch(e){}const b=$('pend');if(!b)return;
+  if(o&&!o.sent&&Date.now()-o.t<3*864e5){b.querySelector('span').textContent=`طلبك ${o.code} لم يكتمل بعد. أكمله عبر واتساب.`;b.querySelector('button').onclick=()=>showInv(o);b.classList.add('on')}else b.classList.remove('on')}
+
 // ---------- submit ----------
 let fb=null;
 async function getFB(){
@@ -605,17 +632,28 @@ $('form').addEventListener('submit',async e=>{
       price:total(),fileName:f?f.name.slice(0,120):'',mime:f?(f.type||'').slice(0,60):'',bytes:f?f.size:0,chunks,
       createdAt:fs.serverTimestamp()
     });
-    btn.hidden=true;const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,!!f))}`;setTimeout(()=>{location.href=wa.href},400); // open WhatsApp straight away; the green button stays in case it did not open
-    wa.innerHTML=btn.querySelector('svg').outerHTML+' أكمل عبر واتساب';
-    $('note').textContent=`حُفظ طلبك برقم ${id}${f?' ووصلتنا التلاوة':''}. سيُفتح واتساب الآن، وإن لم يُفتح فاضغط الزر الأخضر.`;
+    btn.hidden=true;const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,!!f))}`;
+    wa.innerHTML=btn.querySelector('svg').outerHTML+' أكمل الطلب عبر واتساب';
+    $('note').textContent=`حُفظ طلبك برقم ${id}. لإكماله أرسل لنا رسالة على واتساب.`;
+    const inv={code:id,date:new Date().toLocaleString('ar-KW',{dateStyle:'medium',timeStyle:'short'}),rows:[['الاسم',$('cname').value.trim()||'—'],['واتساب','+'+normPhone($('phone').value)],...sumRows()],total:`${ar(total())} د.ك`,wa:wa.href,up:!!f,t:Date.now()};
+    try{localStorage.setItem('rattil_last',JSON.stringify(inv))}catch(e){}
+    showInv(inv);
   }catch(x){
     console.error(x);err.textContent='حدث خطأ أثناء الرفع. حاول مرة أخرى، أو أكمل عبر واتساب وأرسل التلاوة هناك.';
     const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,false))}`;wa.textContent='أكمل عبر واتساب';
     btn.disabled=false;$('sendTxt').textContent='حاول مرة أخرى';
   }
 });
-ready=true;render();
+ready=true;render();pendBanner();
 </script>
+<div class="inv" id="inv" role="dialog" aria-modal="true" aria-labelledby="invT"><div class="paper">
+  <div class="top"><div><div class="brand">رتّل</div><small id="invT">فاتورة طلب</small></div><div class="no"><small>رقم الطلب</small><b id="invNo"></b><small id="invDate"></small></div></div>
+  <dl id="invRows"></dl>
+  <div class="tot"><span>المجموع</span><b id="invTot"></b></div>
+  <div class="warn" role="status"><strong>طلبك لم يكتمل بعد</strong><span id="invWarn"></span></div>
+  <a class="wa" id="invWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.4z"/></svg>أكمل الطلب عبر واتساب</a>
+  <div class="row2"><button type="button" id="invSave">احفظ الفاتورة</button><button type="button" class="x" id="invX">أغلق</button></div>
+</div></div>
 <div class="tsheet" id="tsheet" role="dialog" aria-modal="true" aria-labelledby="tsT"><div class="in"><div class="hd"><h3 id="tsT">اختر التصميم</h3><button type="button" class="x" id="tsX" aria-label="أغلق">✕</button></div>
 <p class="hint" style="margin:0 0 14px">ما عليه ★ من تصاميم رتّل الخاصة. اضغط على العدسة لترى الصورة كبيرة.</p><div class="tpls" id="tpls" role="group" aria-label="التصميم"></div></div></div>
 <div class="pmodal" id="pmodal" role="dialog" aria-modal="true" aria-label="معاينة المقطع"><button type="button" class="pclose" id="pclose">أغلق المعاينة ✕</button><div class="pbox"><img id="pimg" alt=""><p id="pcap"></p></div></div>
