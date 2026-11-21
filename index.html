@@ -147,6 +147,7 @@ select:focus{outline:none;border-color:var(--glow)}
 .th .nm{display:block;margin-top:6px;color:var(--soft)}
 .th[aria-pressed="true"] .card{border-color:var(--glow);transform:translateY(-2px)}
 .th[aria-pressed="true"] .nm{color:var(--text);font-weight:600}
+.drop[hidden]{display:none}
 .drop{display:flex;align-items:center;gap:14px;border:1.5px dashed var(--line);border-radius:16px;padding:18px;cursor:pointer;background:var(--plum);transition:border-color .2s}
 .drop:hover,.drop.on{border-color:var(--glow)}
 .drop input{position:absolute;width:1px;height:1px;opacity:0}
@@ -331,13 +332,14 @@ button.wa:disabled{opacity:.6;cursor:wait}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
             <span id="dropTxt"><b>ارفع ملف التلاوة</b><br>صوت أو فيديو، حتى ٢٠٠ ميغابايت. بصوتك أو بصوت أي قارئ.</span>
           </label>
-          <p class="hint" style="margin-top:8px">ملفك أكبر من ذلك؟ لا بأس، أكمل الطلب وأرسله إلينا عبر واتساب.</p>
+          <label class="agree" style="margin-top:12px"><input type="checkbox" id="viaWa"> سأرسل التلاوة عبر واتساب بدل رفعها هنا</label>
+          <p class="hint" id="viaHint" style="margin-top:6px">ملفك كبير أو ليس معك الآن؟ اختر هذا وأرسله لنا بعد الطلب.</p>
           <div class="rule" role="note"><b>تنبيه مهم:</b> نقبل التلاوة إذا كانت سليمة. فإن كان فيها خطأ في التشكيل، أو لحن جلي، أو أي خطأ يغيّر المعنى، فلا يمكننا قبول الطلب.</div>
           <label class="agree"><input type="checkbox" id="agree"> قرأت التنبيه وأؤكد أن التلاوة سليمة</label>
         </div>
         <div class="f" id="durF"><span class="lbl">مدة التلاوة</span>
           <p id="durAuto" hidden style="color:var(--glow);font-weight:600;margin:0 0 6px"></p>
-          <div id="durMan"><label for="mins" class="hint" style="display:block">لم ترفع الملف؟ اكتب مدته التقريبية بالدقائق. السعر النهائي حسب مدة الملف.</label>
+          <div id="durMan" hidden><label for="mins" class="hint" style="display:block">اكتب المدة التقريبية للتلاوة بالدقائق. السعر النهائي حسب مدة الملف.</label>
             <input id="mins" type="number" inputmode="numeric" min="1" step="1" value="1" style="max-width:140px" dir="ltr"></div>
           <p class="hint" style="margin-top:8px">السعر: ١ د.ك حتى أقل من دقيقتين، ثم كل دقيقة كاملة بدينار.</p>
         </div>
@@ -592,7 +594,7 @@ function show(i,quiet){cur=i;reach=Math.max(reach,i);STEPS.forEach((f,j)=>f.hidd
   $('send').hidden=i<STEPS.length-1;$('sendTxt').textContent='أرسل الطلب';$('err').textContent='';document.querySelectorAll('.serr').forEach(x=>x.textContent='');if(quiet)return;
   const top=$('stepper').getBoundingClientRect().top;if(top<0||top>innerHeight*.4)$('stepper').scrollIntoView({block:'start'});const lg=STEPS[i].querySelector('legend');if(lg){lg.tabIndex=-1;lg.focus({preventScroll:true})}}
 function okStep(i){const se=STEPS[i].querySelector('.serr');const err={set textContent(v){$('err').textContent=v;if(se)se.textContent=v}};err.textContent='';
-  if(i===0){if(sS.value===''){err.textContent='اختر السورة والآيات.';sS.focus();return false}if(!$('agree').checked){err.textContent='أكّد أنك قرأت تنبيه سلامة التلاوة.';$('agree').focus();return false}}
+  if(i===0){if(sS.value===''){err.textContent='اختر السورة والآيات.';sS.focus();return false}if(!file.files[0]&&!$('viaWa').checked){err.textContent='ارفع ملف التلاوة، أو اختر أنك سترسلها عبر واتساب.';drop.focus();return false}if(!$('agree').checked){err.textContent='أكّد أنك قرأت تنبيه سلامة التلاوة.';$('agree').focus();return false}}
   return true}
 document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>{if(okStep(cur))show(cur+1)});
 document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>show(cur-1));
@@ -606,11 +608,14 @@ const minsOf=()=>DURS>0?DURS/60:Math.max(1,Math.floor(+($('mins').value)||1));
 const lenPrice=()=>Math.max(1,Math.floor(minsOf()+1e-9));
 const mmss=t=>{t=Math.round(t);return ar(Math.floor(t/60))+':'+ar(String(t%60).padStart(2,'0'))};
 const lenTxt=()=>DURS>0?`${mmss(DURS)} دقيقة`:`نحو ${ar(Math.max(1,Math.floor(+$('mins').value||1)))} دقيقة (حسب الملف)`;
-function readDur(f){DURS=0;$('durAuto').hidden=true;$('durMan').hidden=false;if(!f){render();return}
+function readDur(f){DURS=0;$('durAuto').hidden=true;$('durMan').hidden=!$('viaWa').checked;if(!f){render();return}
   const u=URL.createObjectURL(f),m=document.createElement(isVid(f)?'video':'audio');m.preload='metadata';
   m.onloadedmetadata=()=>{const d=m.duration;URL.revokeObjectURL(u);if(isFinite(d)&&d>0){DURS=d;$('durAuto').textContent=`مدة تلاوتك ${mmss(d)}، السعر ${ar(lenPrice())} د.ك`;$('durAuto').hidden=false;$('durMan').hidden=true}render()};
   m.onerror=()=>{URL.revokeObjectURL(u);render()};m.src=u}
 $('mins').addEventListener('input',render);
+$('viaWa').addEventListener('change',()=>{const on=$('viaWa').checked;drop.hidden=on;$('viaHint').textContent=on?'بعد إرسال الطلب، أرسل ملف التلاوة في محادثة واتساب. اكتب مدته التقريبية في الأسفل.':'ملفك كبير أو ليس معك الآن؟ اختر هذا وأرسله لنا بعد الطلب.';
+  if(on&&file.files[0]){file.value='';setFile()}else readDur(file.files[0]||null);document.querySelectorAll('.serr').forEach(x=>x.textContent='');render()});
+
 // ---------- surah / ayah selects ----------
 const N="الفاتحة البقرة آل_عمران النساء المائدة الأنعام الأعراف الأنفال التوبة يونس هود يوسف الرعد إبراهيم الحجر النحل الإسراء الكهف مريم طه الأنبياء الحج المؤمنون النور الفرقان الشعراء النمل القصص العنكبوت الروم لقمان السجدة الأحزاب سبأ فاطر يس الصافات ص الزمر غافر فصلت الشورى الزخرف الدخان الجاثية الأحقاف محمد الفتح الحجرات ق الذاريات الطور النجم القمر الرحمن الواقعة الحديد المجادلة الحشر الممتحنة الصف الجمعة المنافقون التغابن الطلاق التحريم الملك القلم الحاقة المعارج نوح الجن المزمل المدثر القيامة الإنسان المرسلات النبأ النازعات عبس التكوير الانفطار المطففين الانشقاق البروج الطارق الأعلى الغاشية الفجر البلد الشمس الليل الضحى الشرح التين العلق القدر البينة الزلزلة العاديات القارعة التكاثر العصر الهمزة الفيل قريش الماعون الكوثر الكافرون النصر المسد الإخلاص الفلق الناس".split(" ").map(s=>s.replace("_"," "));
 const A=[7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
@@ -639,8 +644,8 @@ const bgaOn=()=>kindA()!=='reader';
 function setFile(){
   const f=file.files[0];if(f){const want=isVid(f)?(kindA()==='audio'?'reader':kindA()):(kindA()==='scene'?'scene':'audio');if(want!==kindA()){const b=document.querySelector(`[data-k="kind"] .opt[data-a="${want}"]`);b&&b.click()}}
   if(!f){readDur(null);drop.classList.remove('has');$('dropTxt').innerHTML='<b>ارفع ملف التلاوة</b><br>صوت أو فيديو، حتى ٢٠٠ ميغابايت. بصوتك أو بصوت أي قارئ.';render();return}
-  if(f.size>MAXB){$('err').textContent=`الملف ${fmtMB(f.size)}، أكبر من ٢٠٠ ميغابايت. أكمل الطلب دونه وأرسله عبر واتساب.`;file.value='';return setFile()}
-  $('err').textContent='';drop.classList.add('has');readDur(f);
+  if(f.size>MAXB){const m=`الملف ${fmtMB(f.size)}، أكبر من ٢٠٠ ميغابايت. اختر «سأرسل التلاوة عبر واتساب» وأرسله بعد الطلب.`;$('err').textContent=m;const se=document.querySelector('.wstep[data-step="0"] .serr');if(se)se.textContent=m;file.value='';return setFile()}
+  $('err').textContent='';document.querySelectorAll('.serr').forEach(x=>x.textContent='');drop.classList.add('has');readDur(f);
   const t=$('dropTxt');t.textContent='';const b=document.createElement('b');b.textContent=f.name;t.append(b,document.createElement('br'),`${fmtMB(f.size)} · اضغط لتغييره`);render();
 }
 file.onchange=setFile;
@@ -672,7 +677,7 @@ function waText(code,uploaded){
   L.push(`• العلامة المائية: ${$('nowm').checked?'بدون علامة (+١ د.ك)':'مع علامة رتّل'}`);
   L.push(`• المجموع: ${ar(total())} د.ك`);
   if($('cname').value.trim())L.push(`\nاسمي: ${$('cname').value.trim()}`);
-  L.push(uploaded?'\nرفعتُ التلاوة من الموقع.':'\nسأرسل إليكم التلاوة الآن.');
+  L.push(uploaded?'\nرفعتُ التلاوة من الموقع.':'\nسأرسل ملف التلاوة في هذه المحادثة الآن.');
   return L.join('\n');
 }
 
@@ -721,7 +726,7 @@ setTimeout(async()=>{try{const {fs,db}=await getFB();
 let invLast=null;
 function showInv(o){invLast=o;$('invNo').textContent=o.code;$('invDate').textContent=o.date;$('invTot').textContent=o.total;const dl=$('invRows');dl.innerHTML='';
   o.rows.forEach(([a,b])=>{const t=document.createElement('dt');t.textContent=a;const v=document.createElement('dd');v.textContent=b;if(a==='واتساب')v.dir='ltr';dl.append(t,v)});
-  $('invWarn').textContent=o.up?'وصلتنا التلاوة. أرسل لنا رسالة على واتساب لنؤكد طلبك ونتفق على الدفع، وبعدها نبدأ العمل.':'أرسل لنا رسالة على واتساب، وأرسل التلاوة فيها، لنؤكد طلبك ونتفق على الدفع. لن نبدأ العمل قبلها.';
+  $('invWarn').textContent=o.up?'وصلتنا التلاوة. أرسل لنا رسالة على واتساب لنؤكد طلبك ونتفق على الدفع، وبعدها نبدأ العمل.':'لا تنسَ إرسال ملف التلاوة في محادثة واتساب. اضغط الزر في الأسفل، ثم أرفق الملف في المحادثة لنؤكد طلبك ونتفق على الدفع. لن نبدأ العمل قبلها.';
   $('invWa').href=o.wa;$('invTrack').href='track.html?c='+o.code;$('inv').classList.add('on');document.body.style.overflow='hidden';$('invWa').focus({preventScroll:true});$('inv').scrollTop=0}
 function closeInv(){$('inv').classList.remove('on');document.body.style.overflow='';pendBanner()}
 $('invX').onclick=closeInv;$('invSave').onclick=()=>invLast&&saveInv(invLast);
