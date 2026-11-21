@@ -798,7 +798,7 @@ $('form').addEventListener('submit',async e=>{
     });
     try{await fs.setDoc(fs.doc(db,'status',await sid(id,normPhone($('phone').value))),{s:'new',t:fs.serverTimestamp()})}catch(e){console.warn('status',e)}
     btn.hidden=true;const wa=$('wa');wa.hidden=false;wa.href=`https://wa.me/${WA}?text=${encodeURIComponent(waText(id,!!f))}`;
-    wa.innerHTML=btn.querySelector('svg').outerHTML+' أكمل الطلب عبر واتساب';
+    wa.textContent='أكمل الطلب عبر واتساب';
     $('note').textContent=`حُفظ طلبك برقم ${id}. لإكماله أرسل لنا رسالة على واتساب.`;
     const inv={code:id,date:new Date().toLocaleString('ar-KW',{dateStyle:'medium',timeStyle:'short'}),rows:[['الاسم',$('cname').value.trim()||'—'],['واتساب','+'+normPhone($('phone').value)],...sumRows()],total:`${ar(total())} د.ك`,wa:wa.href,up:!!f,t:Date.now()};
     try{localStorage.setItem('rattil_last',JSON.stringify(inv))}catch(e){}
