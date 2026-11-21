@@ -235,6 +235,8 @@ button.wa:disabled{opacity:.6;cursor:wait}
 .mtot{display:none}
 @media (max-width:820px){.mtot{display:flex;position:sticky;bottom:0;z-index:5;justify-content:space-between;align-items:center;margin:18px -4px 0;padding:12px 16px;background:var(--plum-2);border:1.5px solid var(--line);border-radius:16px}
   .mtot b{color:var(--glow);font:700 1.15rem "Alexandria"}.stepper span{font-size:.7rem}}
+.sendbtn{display:flex;justify-content:center;align-items:center;width:100%;margin-top:18px;min-height:56px;border:0;border-radius:16px;background:var(--glow);color:var(--glow-ink);font:700 1.08rem "Alexandria";cursor:pointer}
+.sendbtn[hidden]{display:none}
 .agree{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:.9rem;color:var(--text);cursor:pointer}
 .agree input{width:18px;height:18px;accent-color:var(--glow)}
 </style>
@@ -349,6 +351,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
         <div class="f">
           <div><label for="riw">الرواية</label><select id="riw"><option value="hafs">حفص عن عاصم</option><option value="shouba">شعبة عن عاصم</option><option value="warsh">ورش عن نافع</option><option value="qaloon">قالون عن نافع</option><option value="doori">الدوري عن أبي عمرو</option><option value="soosi">السوسي عن أبي عمرو</option><option value="bazzi">البزي عن ابن كثير</option><option value="qumbul">قنبل عن ابن كثير</option></select></div>
         </div>
+          <p class="err serr" role="alert"></p>
           <div class="stepnav"><span></span><button type="button" class="next" data-next>التالي</button></div>
         </fieldset>
         <fieldset class="wstep" data-step="1" hidden>
@@ -365,6 +368,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <p class="hint">يغيّر ألوان الفيديو نفسه. اختر واحدًا وشاهد كيف تتغيّر الصور في الأعلى وفي الملخص.</p>
           <div class="filts" id="filts" role="group" aria-label="الفلتر"></div>
         </div>
+          <p class="err serr" role="alert"></p>
           <div class="stepnav"><button type="button" class="back" data-back>السابق</button><button type="button" class="next" data-next>التالي</button></div>
         </fieldset>
         <fieldset class="wstep" data-step="2" hidden>
@@ -415,6 +419,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <div><label for="handle">اسم حسابك (يظهر في آخر المقطع)</label><input id="handle" placeholder="اختياري، مثلاً ‎@quran_kw" dir="auto"></div>
         </div>
         <div class="f"><label class="agree" style="margin-top:0"><input type="checkbox" id="rnShow"> أظهر اسم القارئ أعلى المقطع</label></div>
+          <p class="err serr" role="alert"></p>
           <div class="stepnav"><button type="button" class="back" data-back>السابق</button><button type="button" class="next" data-next>التالي</button></div>
         </fieldset>
         <fieldset class="wstep" data-step="3" hidden>
@@ -444,6 +449,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
           <p class="hint" id="covHint" hidden style="margin-top:8px">اختر شكل الغلاف. يُضاف اسم السورة والآيات واسم القارئ تلقائيًا، والصورة من فيديوك.</p>
           <div class="tpls" id="covers" role="group" aria-label="شكل الغلاف" hidden></div>
         </div>
+          <p class="err serr" role="alert"></p>
           <div class="stepnav"><button type="button" class="back" data-back>السابق</button><button type="button" class="next" data-next>التالي</button></div>
         </fieldset>
         <fieldset class="wstep" data-step="4" hidden>
@@ -451,8 +457,9 @@ button.wa:disabled{opacity:.6;cursor:wait}
         <div class="f">
           <div><label for="cname">اسمك</label><input id="cname" placeholder="لنتعرّف عليك"></div>
         </div>
-        <div class="f"><label for="phone">رقم واتساب (مطلوب)</label><div class="phw" dir="ltr"><select id="cc" aria-label="رمز الدولة"><option value="965">‎+965 🇰🇼     الكويت</option><option value="966">‎+966 🇸🇦     السعودية</option><option value="971">‎+971 🇦🇪     الإمارات</option><option value="974">‎+974 🇶🇦     قطر</option><option value="973">‎+973 🇧🇭     البحرين</option><option value="968">‎+968 🇴🇲     عُمان</option><option value="20">‎+20 🇪🇬     مصر</option><option value="962">‎+962 🇯🇴     الأردن</option><option value="964">‎+964 🇮🇶     العراق</option><option value="961">‎+961 🇱🇧     لبنان</option><option value="963">‎+963 🇸🇾     سوريا</option><option value="970">‎+970 🇵🇸     فلسطين</option><option value="967">‎+967 🇾🇪     اليمن</option><option value="249">‎+249 🇸🇩     السودان</option><option value="218">‎+218 🇱🇾     ليبيا</option><option value="216">‎+216 🇹🇳     تونس</option><option value="213">‎+213 🇩🇿     الجزائر</option><option value="212">‎+212 🇲🇦     المغرب</option><option value="222">‎+222 🇲🇷     موريتانيا</option><option value="252">‎+252 🇸🇴     الصومال</option><option value="90">‎+90 🇹🇷     تركيا</option><option value="92">‎+92 🇵🇰     باكستان</option><option value="91">‎+91 🇮🇳     الهند</option><option value="880">‎+880 🇧🇩     بنغلاديش</option><option value="62">‎+62 🇮🇩     إندونيسيا</option><option value="60">‎+60 🇲🇾     ماليزيا</option><option value="44">‎+44 🇬🇧     بريطانيا</option><option value="1">‎+1 🇺🇸     أمريكا وكندا</option><option value="49">‎+49 🇩🇪     ألمانيا</option><option value="33">‎+33 🇫🇷     فرنسا</option><option value="46">‎+46 🇸🇪     السويد</option><option value="31">‎+31 🇳🇱     هولندا</option><option value="61">‎+61 🇦🇺     أستراليا</option></select><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" dir="ltr" placeholder="99123456" required aria-describedby="phoneHint"></div><p class="hint" id="phoneHint">اختر دولتك ثم اكتب رقمك. نرسل لك عليه المقطع عند جهوزه.</p></div>
+        <div class="f"><label for="phone">رقم واتساب (مطلوب)</label><div class="phw" dir="ltr"><select id="cc" aria-label="رمز الدولة"><option value="965">‎+965 🇰🇼     الكويت</option><option value="966">‎+966 🇸🇦     السعودية</option><option value="971">‎+971 🇦🇪     الإمارات</option><option value="974">‎+974 🇶🇦     قطر</option><option value="973">‎+973 🇧🇭     البحرين</option><option value="968">‎+968 🇴🇲     عُمان</option><option value="20">‎+20 🇪🇬     مصر</option><option value="962">‎+962 🇯🇴     الأردن</option><option value="964">‎+964 🇮🇶     العراق</option><option value="961">‎+961 🇱🇧     لبنان</option><option value="963">‎+963 🇸🇾     سوريا</option><option value="970">‎+970 🇵🇸     فلسطين</option><option value="967">‎+967 🇾🇪     اليمن</option><option value="249">‎+249 🇸🇩     السودان</option><option value="218">‎+218 🇱🇾     ليبيا</option><option value="216">‎+216 🇹🇳     تونس</option><option value="213">‎+213 🇩🇿     الجزائر</option><option value="212">‎+212 🇲🇦     المغرب</option><option value="222">‎+222 🇲🇷     موريتانيا</option><option value="252">‎+252 🇸🇴     الصومال</option><option value="90">‎+90 🇹🇷     تركيا</option><option value="92">‎+92 🇵🇰     باكستان</option><option value="91">‎+91 🇮🇳     الهند</option><option value="880">‎+880 🇧🇩     بنغلاديش</option><option value="62">‎+62 🇮🇩     إندونيسيا</option><option value="60">‎+60 🇲🇾     ماليزيا</option><option value="44">‎+44 🇬🇧     بريطانيا</option><option value="1">‎+1 🇺🇸     أمريكا وكندا</option><option value="49">‎+49 🇩🇪     ألمانيا</option><option value="33">‎+33 🇫🇷     فرنسا</option><option value="46">‎+46 🇸🇪     السويد</option><option value="31">‎+31 🇳🇱     هولندا</option><option value="61">‎+61 🇦🇺     أستراليا</option></select><input id="phone" type="tel" inputmode="tel" autocomplete="tel-national" dir="ltr" placeholder="99123456" aria-required="true" aria-describedby="phoneHint"></div><p class="hint" id="phoneHint">اختر دولتك ثم اكتب رقمك. نرسل لك عليه المقطع عند جهوزه.</p></div>
         <div class="f"><label for="notes">ملاحظات</label><textarea id="notes" placeholder="أي شيء تودّ إخبارنا به: هدية لشخص، لون تحبه، شعار تريده…"></textarea></div>
+          <p class="err serr" role="alert"></p>
           <div class="stepnav"><button type="button" class="back" data-back>السابق</button><button type="submit" class="next">أرسل الطلب</button></div>
         </fieldset>
         <div class="mtot" aria-hidden="true"><span>المجموع</span><b id="mtotal"></b></div>
@@ -465,10 +472,7 @@ button.wa:disabled{opacity:.6;cursor:wait}
         <div class="total"><span>المجموع</span><b id="total"></b></div>
         <div class="bar" id="bar" hidden><i id="barFill"></i></div>
         <button type="button" class="prevbtn" id="prevBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M11 8v6M8 11h6"/></svg> شاهد التصميم بحجم كبير</button>
-        <button type="submit" class="wa" id="send">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a.9.9 0 0 0-.7.3 2.8 2.8 0 0 0-.9 2.1 4.9 4.9 0 0 0 1 2.6 11.2 11.2 0 0 0 4.3 3.8c1.6.7 2.2.7 3 .6a2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"/></svg>
-          <span id="sendTxt">أرسل الطلب</span>
-        </button>
+        <button type="submit" class="sendbtn" id="send" hidden><span id="sendTxt">أرسل الطلب</span></button>
         <a class="wa" id="wa" href="#" target="_blank" rel="noopener" hidden>أكمل عبر واتساب</a>
         <p class="err" id="err" role="status"></p>
         <p class="note" id="note">نحفظ طلبك ونرفع التلاوة، ثم تتواصل معنا عبر واتساب لنتفق على الدفع وموعد التسليم.</p>
@@ -585,9 +589,9 @@ $('rnShow').addEventListener('change',render);
 let cur=0,reach=0;const STEPS=[...document.querySelectorAll('.wstep')];
 function show(i,quiet){cur=i;reach=Math.max(reach,i);STEPS.forEach((f,j)=>f.hidden=j!==i);
   document.querySelectorAll('#stepper li').forEach((li,j)=>{li.toggleAttribute('aria-current',false);if(j===i)li.setAttribute('aria-current','step');li.classList.toggle('done',j<reach&&j!==i);li.querySelector('button').disabled=j>reach});
-  $('sendTxt').textContent=i<STEPS.length-1?'التالي':'أرسل الطلب';$('err').textContent='';if(quiet)return;
+  $('send').hidden=i<STEPS.length-1;$('sendTxt').textContent='أرسل الطلب';$('err').textContent='';document.querySelectorAll('.serr').forEach(x=>x.textContent='');if(quiet)return;
   const top=$('stepper').getBoundingClientRect().top;if(top<0||top>innerHeight*.4)$('stepper').scrollIntoView({block:'start'});const lg=STEPS[i].querySelector('legend');if(lg){lg.tabIndex=-1;lg.focus({preventScroll:true})}}
-function okStep(i){const err=$('err');err.textContent='';
+function okStep(i){const se=STEPS[i].querySelector('.serr');const err={set textContent(v){$('err').textContent=v;if(se)se.textContent=v}};err.textContent='';
   if(i===0){if(sS.value===''){err.textContent='اختر السورة والآيات.';sS.focus();return false}if(!$('agree').checked){err.textContent='أكّد أنك قرأت تنبيه سلامة التلاوة.';$('agree').focus();return false}}
   return true}
 document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>{if(okStep(cur))show(cur+1)});
@@ -767,10 +771,9 @@ function normPhone(v){let d=AD(v||'').replace(/[^\d+]/g,'');const cc=($('cc')&&$
 async function sid(code,phone){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(code+':'+phone));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 const code=()=>{const c='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<5;i++)s+=c[Math.floor(Math.random()*c.length)];return s};
 $('form').addEventListener('submit',async e=>{
-  e.preventDefault();const err=$('err');err.textContent='';
+  e.preventDefault();const se=STEPS[STEPS.length-1].querySelector('.serr');const err={set textContent(v){$('err').textContent=v;if(se)se.textContent=v}};err.textContent='';
   if(cur<STEPS.length-1){if(okStep(cur))show(cur+1);return}
-  if(sS.value===''){show(0);err.textContent='اختر السورة أولًا.';sS.focus();return}
-  if(!$('agree').checked){show(0);err.textContent='أكّد أنك قرأت تنبيه سلامة التلاوة.';$('agree').focus();return}
+  if(!okStep(0)){show(0);okStep(0);return}
   const ph=normPhone($('phone').value);if(!ph){err.textContent='اكتب رقم واتساب صحيحًا لنرسل لك المقطع عليه.';$('phone').focus();return}
   const btn=$('send');btn.disabled=true;document.querySelectorAll('.stepnav .next').forEach(x=>x.disabled=true);$('send').scrollIntoView({block:'center'});
   const f=file.files[0];const id=code();
